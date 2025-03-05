@@ -12,13 +12,17 @@
             --dark-color: #2c2c2c;
             --light-color: #f7fff7;
             --hover-color: #ff8e8e;
-            --ur-color: #ffd700;
-            --ssr-color: #c0c0c0;
+            /* Changed UR color to light red */
+            --ur-color: #ff9999;
+            /* Changed SSR color to yellow gold */
+            --ssr-color: #ffd700;
             --skill1-color: #a9a9a9; /* Grey */
             --skill2-color: #90ee90; /* Green */
             --skill3-color: #87cefa; /* Blue */
             --skill4-color: #da70d6; /* Purple */
             --skill5-color: #ffd700; /* Gold */
+            --purple-equip: #a374db; /* Purple equipment */
+            --gold-equip: #ffd700; /* Gold equipment */
         }
 
         * {
@@ -117,6 +121,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* Updated border colors for UR and SSR */
         .character-card.ur {
             border: 2px solid var(--ur-color);
         }
@@ -131,12 +136,14 @@
             position: relative;
         }
 
+        /* Updated background colors for UR and SSR headers */
         .ur .character-header {
             background-color: var(--ur-color);
         }
 
         .ssr .character-header {
             background-color: var(--ssr-color);
+            color: #2c2c2c; /* Darker text for better contrast on gold */
         }
 
         .character-info {
@@ -289,12 +296,15 @@
             color: white;
         }
 
+        /* Updated member-type colors */
         .member-type.ur {
             background-color: var(--ur-color);
+            color: #2c2c2c;
         }
 
         .member-type.ssr {
             background-color: var(--ssr-color);
+            color: #2c2c2c;
         }
 
         .calculator {
@@ -485,6 +495,96 @@
             display: block;
         }
 
+        /* Equipment styles */
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .equipment-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .equipment-card.gold {
+            border: 2px solid var(--gold-equip);
+        }
+
+        .equipment-card.purple {
+            border: 2px solid var(--purple-equip);
+        }
+
+        .equipment-header {
+            padding: 0.75rem;
+            color: white;
+            position: relative;
+        }
+
+        .gold .equipment-header {
+            background-color: var(--gold-equip);
+            color: #2c2c2c;
+        }
+
+        .purple .equipment-header {
+            background-color: var(--purple-equip);
+        }
+
+        .equipment-info {
+            padding: 1rem;
+        }
+
+        .equipment-stats {
+            margin-top: 0.5rem;
+        }
+
+        .equipment-type-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+
+        .gold .equipment-type-badge {
+            background-color: white;
+            color: var(--gold-equip);
+        }
+
+        .purple .equipment-type-badge {
+            background-color: white;
+            color: var(--purple-equip);
+        }
+
+        /* Equipment selector styles */
+        .equipment-selector {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .equipment-selector h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .equipment-dropdown {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             .calculator-grid {
                 grid-template-columns: 1fr;
@@ -506,112 +606,527 @@
                 flex-wrap: wrap;
             }
         }
+        
+        .char-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .char-table th, .char-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        .char-table th {
+            background-color: var(--secondary-color);
+            color: white;
+            position: sticky;
+            top: 120px;
+            z-index: 10;
+        }
+        
+        .char-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .char-table tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        /* Genre Colors */
+        .rnb {
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .rock {
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .pop {
+            border-left: 5px solid #ffe66d;
+        }
+        
+        .edm {
+            border-left: 5px solid #a374db;
+        }
+        
+        .hiphop {
+            border-left: 5px solid #66c6ba;
+        }
+        
+        /* Updated UR and SSR row styling */
+        .ur-row {
+            background-color: rgba(255, 153, 153, 0.1) !important;
+        }
+        
+        .ur-row:hover {
+            background-color: rgba(255, 153, 153, 0.2) !important;
+        }
+        
+        .ur-badge {
+            background-color: var(--ur-color);
+            color: #333;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .ssr-badge {
+            background-color: var(--ssr-color);
+            color: #333;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Music Game Team Builder</h1>
-        <p>Build the perfect musical team with optimized synergy bonuses</p>
+        <h1>Top Girl Team Builder</h1>
+        <p>Build the perfect Top Girl team with optimized synergy bonuses</p>
     </header>
 
     <nav>
         <a href="#characters">Characters</a>
         <a href="#calculator">Team Calculator</a>
         <a href="#recommended-teams">Recommended Teams</a>
+        <a href="#equipment">Equipment</a>
         <a href="#game-info">Game Info</a>
         <a href="#skills">Skills & Bonuses</a>
     </nav>
 
     <main>
-        <section id="game-info">
-            <h2>Game Information</h2>
+        <!-- New Equipment Section -->
+        <section id="equipment">
+            <h2>Equipment</h2>
+            <p>Enhance your team with Jewelry, Cars, and Properties that boost your characters' stats.</p>
+            
             <div class="tabs">
-                <div class="tab active" data-tab="basics">Basics</div>
-                <div class="tab" data-tab="character-types">Character Types</div>
-                <div class="tab" data-tab="synergy">Synergy Bonuses</div>
-                <div class="tab" data-tab="skills">Skills</div>
+                <div class="tab active" data-tab="jewelry">Jewelry</div>
+                <div class="tab" data-tab="cars">Cars</div>
+                <div class="tab" data-tab="properties">Properties</div>
+                <div class="tab" data-tab="equipment-table">Equipment Table</div>
             </div>
-
-            <div class="tab-content active" id="basics-content">
-                <h3>Core Game Mechanics</h3>
-                <p>In this music game, you'll build a team of 5 characters with unique skills, stats, and synergies to compete and perform.</p>
-                <ul>
-                    <li>Characters have two main stats: <strong>Base Sing</strong> (attack) and <strong>Base Dance</strong> (defense)</li>
-                    <li>Characters have different positions: Vocalist, Dancer, and Center</li>
-                    <li>Characters belong to different genres and get synergy bonuses when teamed together</li>
-                    <li>Characters have unique skills that enhance team performance</li>
-                    <li>Teams consist of 5 characters with an optimal mix of skills and stats</li>
-                </ul>
-            </div>
-
-            <div class="tab-content" id="character-types-content">
-                <h3>Character Types</h3>
-                <p>Characters come in two primary types:</p>
-                <ul>
-                    <li><strong>UR Characters</strong>: The strongest characters with max level 120</li>
-                    <li><strong>SSR Characters</strong>: Strong characters but not as powerful as UR</li>
-                </ul>
-                <p><strong>Important Rules:</strong></p>
-                <ul>
-                    <li>Only 2 UR characters can be on a team at a time</li>
-                    <li>UR characters can link with high-level SSR characters for additional bonuses</li>
-                </ul>
-            </div>
-
-            <div class="tab-content" id="synergy-content">
-                <h3>Genre Synergy Bonuses</h3>
-                <p>Characters get bonuses based on genre combinations:</p>
-                <ul>
-                    <li><strong>3 characters of the same genre:</strong> +2% to Sing and Dance</li>
-                    <li><strong>4 characters of the same genre:</strong> +4% to Sing and Dance</li>
-                    <li><strong>5 characters of the same genre:</strong> +6% to Sing and Dance</li>
-                </ul>
-                <p>Available genres in the game:</p>
-                <ul>
-                    <li>R&B</li>
-                    <li>ROCK</li>
-                    <li>POP</li>
-                    <li>EDM</li>
-                    <li>HipHop</li>
-                </ul>
-            </div>
-
-            <div class="tab-content" id="skills-content">
-                <h3>Skills System</h3>
-                <p>Skills have 5 tiers, with higher levels providing stronger effects:</p>
-                <div class="skill-legend">
-                    <div class="skill-level">
-                        <div class="skill-level-color" style="background-color: var(--skill1-color);"></div>
-                        <span>Level 1 (Grey)</span>
+            
+            <div class="tab-content active" id="jewelry-content">
+                <h3>Jewelry</h3>
+                <p>Jewelry items provide smaller stat boosts but are more affordable.</p>
+                
+                <div class="equipment-grid">
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Ring</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+2,015</strong> Sing</p>
+                                <p><strong>+11,000</strong> Fans</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-level">
-                        <div class="skill-level-color" style="background-color: var(--skill2-color);"></div>
-                        <span>Level 2 (Green)</span>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Choker</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+2,015</strong> Dance</p>
+                                <p><strong>+11,000</strong> Fans</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-level">
-                        <div class="skill-level-color" style="background-color: var(--skill3-color);"></div>
-                        <span>Level 3 (Blue)</span>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Heels</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+806</strong> Management</p>
+                                <p><strong>+11,000</strong> Fans</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-level">
-                        <div class="skill-level-color" style="background-color: var(--skill4-color);"></div>
-                        <span>Level 4 (Purple)</span>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Watch</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+1,640</strong> Sing</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-level">
-                        <div class="skill-level-color" style="background-color: var(--skill5-color);"></div>
-                        <span>Level 5 (Gold)</span>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Bracelet</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+1,640</strong> Dance</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Lingerie</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+656</strong> Management</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <p>Specific skill info corrections:</p>
-                <ul>
-                    <li>Leilani has 50% increase to Normal Damage (not 20%)</li>
-                    <li>Cindy reduces skill damage, not increases Rally Cap</li>
-                </ul>
+            </div>
+            
+            <div class="tab-content" id="cars-content">
+                <h3>Cars</h3>
+                <p>Cars provide medium stat boosts and fan capacity increases.</p>
+                
+                <div class="equipment-grid">
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Audi</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+5,905</strong> Sing</p>
+                                <p><strong>+25,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Lamborghini</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+5,905</strong> Dance</p>
+                                <p><strong>+25,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Lexus</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+2,362</strong> Management</p>
+                                <p><strong>+25,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Lotus</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+4,030</strong> Sing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Beetle</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+4,030</strong> Dance</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Cooper</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+1,612</strong> Management</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="properties-content">
+                <h3>Properties</h3>
+                <p>Properties provide the largest stat boosts and fan capacity increases.</p>
+                
+                <div class="equipment-grid">
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Villa</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+11,810</strong> Sing</p>
+                                <p><strong>+50,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Park Mansion</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+11,810</strong> Dance</p>
+                                <p><strong>+50,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Country Manor</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+4,724</strong> Management</p>
+                                <p><strong>+50,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Penthouse</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+8,060</strong> Sing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Loft</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+8,060</strong> Dance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="equipment-table-content">
+                <h3>Equipment Table</h3>
+                <p>Complete overview of all equipment items and their stats.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Rarity</th>
+                            <th>Sing</th>
+                            <th>Dance</th>
+                            <th>Management</th>
+                            <th>Fans</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Jewelry -->
+                        <tr>
+                            <td>Jewelry</td>
+                            <td>Ring</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td><td>+2,015</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+11,000</td>
+                        </tr>
+                        <tr>
+                            <td>Jewelry</td>
+                            <td>Choker</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>-</td>
+                            <td>+2,015</td>
+                            <td>-</td>
+                            <td>+11,000</td>
+                        </tr>
+                        <tr>
+                            <td>Jewelry</td>
+                            <td>Heels</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+806</td>
+                            <td>+11,000</td>
+                        </tr>
+                        <tr>
+                            <td>Jewelry</td>
+                            <td>Watch</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>+1,640</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Jewelry</td>
+                            <td>Bracelet</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>-</td>
+                            <td>+1,640</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Jewelry</td>
+                            <td>Lingerie</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+656</td>
+                            <td>-</td>
+                        </tr>
+                        
+                        <!-- Cars -->
+                        <tr>
+                            <td>Car</td>
+                            <td>Audi</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>+5,905</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+25,000</td>
+                        </tr>
+                        <tr>
+                            <td>Car</td>
+                            <td>Lamborghini</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>-</td>
+                            <td>+5,905</td>
+                            <td>-</td>
+                            <td>+25,000</td>
+                        </tr>
+                        <tr>
+                            <td>Car</td>
+                            <td>Lexus</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+2,362</td>
+                            <td>+25,000</td>
+                        </tr>
+                        <tr>
+                            <td>Car</td>
+                            <td>Lotus</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>+4,030</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Car</td>
+                            <td>Beetle</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>-</td>
+                            <td>+4,030</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Car</td>
+                            <td>Cooper</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+1,612</td>
+                            <td>-</td>
+                        </tr>
+                        
+                        <!-- Properties -->
+                        <tr>
+                            <td>Property</td>
+                            <td>Villa</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>+11,810</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+50,000</td>
+                        </tr>
+                        <tr>
+                            <td>Property</td>
+                            <td>Park Mansion</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>-</td>
+                            <td>+11,810</td>
+                            <td>-</td>
+                            <td>+50,000</td>
+                        </tr>
+                        <tr>
+                            <td>Property</td>
+                            <td>Country Manor</td>
+                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>+4,724</td>
+                            <td>+50,000</td>
+                        </tr>
+                        <tr>
+                            <td>Property</td>
+                            <td>Penthouse</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>+8,060</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Property</td>
+                            <td>Loft</td>
+                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                            <td>-</td>
+                            <td>+8,060</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 
         <section id="calculator">
             <h2>Team Calculator</h2>
-            <p>Build your optimal team and calculate synergy bonuses and total stats.</p>
+            <p>Build your optimal team and calculate synergy bonuses and total stats, including equipment bonuses.</p>
             
             <div class="calculator">
                 <div class="calculator-grid">
@@ -670,15 +1185,26 @@
                                 <li>Total Dance (Defense): 0</li>
                             </ul>
                             
-                            <div class="synergy-bonus" id="synergy-info">
+                            <div id="equipment-stats" style="margin-top: 0.5rem;">
+                                <p>Equipment Bonuses:</p>
+                                <ul>
+                                    <li>Jewelry: +0 Sing, +0 Dance</li>
+                                    <li>Cars: +0 Sing, +0 Dance</li>
+                                    <li>Properties: +0 Sing, +0 Dance</li>
+                                    <li>Total Fans: +0</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="synergy-bonus" id="synergy-info" style="margin-top: 0.5rem;">
                                 <p>Genre Synergy: None</p>
                                 <p>Synergy Bonus: +0%</p>
                             </div>
                             
-                            <p>Final Stats (with bonuses):</p>
+                            <p>Final Stats (with all bonuses):</p>
                             <ul>
                                 <li>Final Sing (Attack): 0</li>
                                 <li>Final Dance (Defense): 0</li>
+                                <li>Total Fan Capacity: 0</li>
                             </ul>
                         </div>
                         
@@ -692,6 +1218,7 @@
                         <div id="team-composition-warning" style="margin-top: 1rem; color: var(--primary-color);"></div>
                         
                         <button id="reset-team" style="margin-top: 1rem;">Reset Team</button>
+                        <button id="reset-equipment" style="margin-top: 1rem; margin-left: 0.5rem;">Reset Equipment</button>
                     </div>
                 </div>
             </div>
@@ -1023,6 +1550,92 @@
             </div>
         </section>
 
+        <section id="game-info">
+            <h2>Game Information</h2>
+            <div class="tabs">
+                <div class="tab active" data-tab="basics">Basics</div>
+                <div class="tab" data-tab="character-types">Character Types</div>
+                <div class="tab" data-tab="synergy">Synergy Bonuses</div>
+                <div class="tab" data-tab="skills">Skills</div>
+            </div>
+
+            <div class="tab-content active" id="basics-content">
+                <h3>Core Game Mechanics</h3>
+                <p>In this music game, you'll build a team of 5 characters with unique skills, stats, and synergies to compete and perform.</p>
+                <ul>
+                    <li>Characters have two main stats: <strong>Base Sing</strong> (attack) and <strong>Base Dance</strong> (defense)</li>
+                    <li>Characters have different positions: Vocalist, Dancer, and Center</li>
+                    <li>Characters belong to different genres and get synergy bonuses when teamed together</li>
+                    <li>Characters have unique skills that enhance team performance</li>
+                    <li>Teams consist of 5 characters with an optimal mix of skills and stats</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="character-types-content">
+                <h3>Character Types</h3>
+                <p>Characters come in two primary types:</p>
+                <ul>
+                    <li><strong>UR Characters</strong>: The strongest characters with max level 120</li>
+                    <li><strong>SSR Characters</strong>: Strong characters but not as powerful as UR</li>
+                </ul>
+                <p><strong>Important Rules:</strong></p>
+                <ul>
+                    <li>Only 2 UR characters can be on a team at a time</li>
+                    <li>UR characters can link with high-level SSR characters for additional bonuses</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="synergy-content">
+                <h3>Genre Synergy Bonuses</h3>
+                <p>Characters get bonuses based on genre combinations:</p>
+                <ul>
+                    <li><strong>3 characters of the same genre:</strong> +2% to Sing and Dance</li>
+                    <li><strong>4 characters of the same genre:</strong> +4% to Sing and Dance</li>
+                    <li><strong>5 characters of the same genre:</strong> +6% to Sing and Dance</li>
+                </ul>
+                <p>Available genres in the game:</p>
+                <ul>
+                    <li>R&B</li>
+                    <li>ROCK</li>
+                    <li>POP</li>
+                    <li>EDM</li>
+                    <li>HipHop</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="skills-content">
+                <h3>Skills System</h3>
+                <p>Skills have 5 tiers, with higher levels providing stronger effects:</p>
+                <div class="skill-legend">
+                    <div class="skill-level">
+                        <div class="skill-level-color" style="background-color: var(--skill1-color);"></div>
+                        <span>Level 1 (Grey)</span>
+                    </div>
+                    <div class="skill-level">
+                        <div class="skill-level-color" style="background-color: var(--skill2-color);"></div>
+                        <span>Level 2 (Green)</span>
+                    </div>
+                    <div class="skill-level">
+                        <div class="skill-level-color" style="background-color: var(--skill3-color);"></div>
+                        <span>Level 3 (Blue)
+                    </div>
+                    <div class="skill-level">
+                        <div class="skill-level-color" style="background-color: var(--skill4-color);"></div>
+                        <span>Level 4 (Purple)</span>
+                    </div>
+                    <div class="skill-level">
+                        <div class="skill-level-color" style="background-color: var(--skill5-color);"></div>
+                        <span>Level 5 (Gold)</span>
+                    </div>
+                </div>
+                <p>Specific skill info corrections:</p>
+                <ul>
+                    <li>Leilani has 50% increase to Normal Damage (not 20%)</li>
+                    <li>Cindy reduces skill damage, not increases Rally Cap</li>
+                </ul>
+            </div>
+        </section>
+
         <section id="characters">
             <h2>Character Database</h2>
             <div class="filter-controls">
@@ -1224,11 +1837,11 @@
         
         /* Type Colors */
         .ur-row {
-            background-color: rgba(255, 215, 0, 0.1) !important;
+            background-color: rgba(255, 153, 153, 0.1) !important;
         }
         
         .ur-row:hover {
-            background-color: rgba(255, 215, 0, 0.2) !important;
+            background-color: rgba(255, 153, 153, 0.2) !important;
         }
         
         .ur-badge {
@@ -1562,9 +2175,171 @@
 </section>
 </main>
     <script>
+        // Equipment data
+        const equipmentData = {
+            jewelry: [
+                {
+                    name: "Ring",
+                    type: "Jewelry",
+                    rarity: "gold",
+                    sing: 2015,
+                    dance: 0,
+                    management: 0,
+                    fans: 11000
+                },
+                {
+                    name: "Choker",
+                    type: "Jewelry",
+                    rarity: "gold",
+                    sing: 0,
+                    dance: 2015,
+                    management: 0,
+                    fans: 11000
+                },
+                {
+                    name: "Heels",
+                    type: "Jewelry",
+                    rarity: "gold",
+                    sing: 0,
+                    dance: 0,
+                    management: 806,
+                    fans: 11000
+                },
+                {
+                    name: "Watch",
+                    type: "Jewelry",
+                    rarity: "purple",
+                    sing: 1640,
+                    dance: 0,
+                    management: 0,
+                    fans: 0
+                },
+                {
+                    name: "Bracelet",
+                    type: "Jewelry",
+                    rarity: "purple",
+                    sing: 0,
+                    dance: 1640,
+                    management: 0,
+                    fans: 0
+                },
+                {
+                    name: "Lingerie",
+                    type: "Jewelry",
+                    rarity: "purple",
+                    sing: 0,
+                    dance: 0,
+                    management: 656,
+                    fans: 0
+                }
+            ],
+            cars: [
+                {
+                    name: "Audi",
+                    type: "Car",
+                    rarity: "gold",
+                    sing: 5905,
+                    dance: 0,
+                    management: 0,
+                    fans: 25000
+                },
+                {
+                    name: "Lamborghini",
+                    type: "Car",
+                    rarity: "gold",
+                    sing: 0,
+                    dance: 5905,
+                    management: 0,
+                    fans: 25000
+                },
+                {
+                    name: "Lexus",
+                    type: "Car",
+                    rarity: "gold",
+                    sing: 0,
+                    dance: 0,
+                    management: 2362,
+                    fans: 25000
+                },
+                {
+                    name: "Lotus",
+                    type: "Car",
+                    rarity: "purple",
+                    sing: 4030,
+                    dance: 0,
+                    management: 0,
+                    fans: 0
+                },
+                {
+                    name: "Beetle",
+                    type: "Car",
+                    rarity: "purple",
+                    sing: 0,
+                    dance: 4030,
+                    management: 0,
+                    fans: 0
+                },
+                {
+                    name: "Cooper",
+                    type: "Car",
+                    rarity: "purple",
+                    sing: 0,
+                    dance: 0,
+                    management: 1612,
+                    fans: 0
+                }
+            ],
+            properties: [
+                {
+                    name: "Villa",
+                    type: "Property",
+                    rarity: "gold",
+                    sing: 11810,
+                    dance: 0,
+                    management: 0,
+                    fans: 50000
+                },
+                {
+                    name: "Park Mansion",
+                    type: "Property",
+                    rarity: "gold",
+                    sing: 0,
+                    dance: 11810,
+                    management: 0,
+                    fans: 50000
+                },
+                {
+                    name: "Country Manor",
+                    type: "Property",
+                    rarity: "gold",
+                    sing: 0,
+                    dance: 0,
+                    management: 4724,
+                    fans: 50000
+                },
+                {
+                    name: "Penthouse",
+                    type: "Property",
+                    rarity: "purple",
+                    sing: 8060,
+                    dance: 0,
+                    management: 0,
+                    fans: 0
+                },
+                {
+                    name: "Loft",
+                    type: "Property",
+                    rarity: "purple",
+                    sing: 0,
+                    dance: 8060,
+                    management: 0,
+                    fans: 0
+                }
+            ]
+        };
+        
         // Character data from the Excel spreadsheet
-        const characterData = [
-            {
+        const characterData = [{
                 "GENR": "R&B",
                 "Attrib": "Elegant",
                 "POSITION": "Vocalist",
@@ -1802,8 +2577,8 @@
                 "POSITION": "Dancer",
                 "TYPE": "SSR",
                 "GIRL": "Cindy",
+                "SKILL_DM": 0.2,
                 "REDUCE_SKILL_DMG": -0.12,
-                "REDUCE_NORMAL_ATTCK_DMG": -0.12,
                 "BASE_SING": 8854,
                 "BASE_DANCE": 8854
             },
@@ -1927,6 +2702,151 @@
 
         // Team state
         let currentTeam = [];
+        // Team state for equipment
+        let teamEquipment = {};
+        
+        // Create equipment dropdowns
+        function createEquipmentDropdowns(characterName) {
+            const equipmentDiv = document.createElement('div');
+            equipmentDiv.className = 'equipment-selector';
+            
+            // Initialize equipment in teamEquipment if not exists
+            if (!teamEquipment[characterName]) {
+                teamEquipment[characterName] = {
+                    jewelry: null,
+                    car: null,
+                    property: null
+                };
+            }
+            
+            // Jewelry selector
+            const jewelryDiv = document.createElement('div');
+            const jewelryLabel = document.createElement('h4');
+            jewelryLabel.textContent = 'Jewelry:';
+            const jewelrySelect = document.createElement('select');
+            jewelrySelect.className = 'equipment-dropdown';
+            jewelrySelect.id = `jewelry-${characterName}`;
+            
+            // Add default option
+            jewelrySelect.innerHTML = '<option value="">None</option>';
+            
+            // Add jewelry options
+            equipmentData.jewelry.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.name;
+                option.textContent = `${item.name} (${item.rarity.toUpperCase()}) - ${getEquipmentStats(item)}`;
+                jewelrySelect.appendChild(option);
+            });
+            
+            // Set selected value if exists
+            if (teamEquipment[characterName].jewelry) {
+                jewelrySelect.value = teamEquipment[characterName].jewelry;
+            }
+            
+            // Add event listener
+            jewelrySelect.addEventListener('change', (e) => {
+                teamEquipment[characterName].jewelry = e.target.value;
+                updateTeamStats();
+            });
+            
+            jewelryDiv.appendChild(jewelryLabel);
+            jewelryDiv.appendChild(jewelrySelect);
+            equipmentDiv.appendChild(jewelryDiv);
+            
+            // Car selector
+            const carDiv = document.createElement('div');
+            const carLabel = document.createElement('h4');
+            carLabel.textContent = 'Car:';
+            const carSelect = document.createElement('select');
+            carSelect.className = 'equipment-dropdown';
+            carSelect.id = `car-${characterName}`;
+            
+            // Add default option
+            carSelect.innerHTML = '<option value="">None</option>';
+            
+            // Add car options
+            equipmentData.cars.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.name;
+                option.textContent = `${item.name} (${item.rarity.toUpperCase()}) - ${getEquipmentStats(item)}`;
+                carSelect.appendChild(option);
+            });
+            
+            // Set selected value if exists
+            if (teamEquipment[characterName].car) {
+                carSelect.value = teamEquipment[characterName].car;
+            }
+            
+            // Add event listener
+            carSelect.addEventListener('change', (e) => {
+                teamEquipment[characterName].car = e.target.value;
+                updateTeamStats();
+            });
+            
+            carDiv.appendChild(carLabel);
+            carDiv.appendChild(carSelect);
+            equipmentDiv.appendChild(carDiv);
+            
+            // Property selector
+            const propertyDiv = document.createElement('div');
+            const propertyLabel = document.createElement('h4');
+            propertyLabel.textContent = 'Property:';
+            const propertySelect = document.createElement('select');
+            propertySelect.className = 'equipment-dropdown';
+            propertySelect.id = `property-${characterName}`;
+            
+            // Add default option
+            propertySelect.innerHTML = '<option value="">None</option>';
+            
+            // Add property options
+            equipmentData.properties.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.name;
+                option.textContent = `${item.name} (${item.rarity.toUpperCase()}) - ${getEquipmentStats(item)}`;
+                propertySelect.appendChild(option);
+            });
+            
+            // Set selected value if exists
+            if (teamEquipment[characterName].property) {
+                propertySelect.value = teamEquipment[characterName].property;
+            }
+            
+            // Add event listener
+            propertySelect.addEventListener('change', (e) => {
+                teamEquipment[characterName].property = e.target.value;
+                updateTeamStats();
+            });
+            
+            propertyDiv.appendChild(propertyLabel);
+            propertyDiv.appendChild(propertySelect);
+            equipmentDiv.appendChild(propertyDiv);
+            
+            return equipmentDiv;
+        }
+        
+        // Get equipment stats text
+        function getEquipmentStats(item) {
+            let statText = '';
+            
+            if (item.sing > 0) {
+                statText += `+${item.sing.toLocaleString()} Sing`;
+            }
+            
+            if (item.dance > 0) {
+                statText += `+${item.dance.toLocaleString()} Dance`;
+            }
+            
+            if (item.management > 0) {
+                statText += `+${item.management.toLocaleString()} Management`;
+            }
+            
+            if (item.fans > 0) {
+                if (statText) statText += ', ';
+                statText += `+${item.fans.toLocaleString()} Fans`;
+            }
+            
+            return statText;
+        }
         
         // Populate character grid
         function populateCharacterGrid(characters) {
@@ -2044,9 +2964,7 @@
                 
                 characterSelectionList.appendChild(option);
             });
-        }
-        
-        // Add character to team
+        }// Add character to team
         function addCharacterToTeam(character) {
             // Check if character is already in team
             if (currentTeam.some(char => char.GIRL === character.GIRL)) {
@@ -2078,6 +2996,12 @@
         // Remove character from team
         function removeCharacterFromTeam(characterName) {
             currentTeam = currentTeam.filter(char => char.GIRL !== characterName);
+            
+            // Also remove equipment for this character
+            if (teamEquipment[characterName]) {
+                delete teamEquipment[characterName];
+            }
+            
             updateTeamUI();
             updateTeamStats();
             
@@ -2098,13 +3022,36 @@
                 currentTeam.forEach(char => {
                     const charDiv = document.createElement('div');
                     charDiv.className = 'selected-character';
+                    charDiv.style.padding = '1rem';
+                    charDiv.style.marginBottom = '1rem';
                     
-                    charDiv.innerHTML = `
+                    const charHeader = document.createElement('div');
+                    charHeader.style.display = 'flex';
+                    charHeader.style.justifyContent = 'space-between';
+                    charHeader.style.marginBottom = '0.5rem';
+                    
+                    const charInfo = document.createElement('div');
+                    charInfo.innerHTML = `
+                        <strong>${char.GIRL}</strong> (${char.TYPE}) - ${char.GENR}
                         <div>
-                            <strong>${char.GIRL}</strong> (${char.TYPE}) - ${char.GENR}
+                            <small>Base Sing: ${char.BASE_SING.toLocaleString()} | Base Dance: ${char.BASE_DANCE.toLocaleString()}</small>
                         </div>
-                        <span class="remove-character" data-name="${char.GIRL}">×</span>
                     `;
+                    
+                    const removeButton = document.createElement('span');
+                    removeButton.className = 'remove-character';
+                    removeButton.dataset.name = char.GIRL;
+                    removeButton.textContent = '×';
+                    removeButton.style.cursor = 'pointer';
+                    
+                    charHeader.appendChild(charInfo);
+                    charHeader.appendChild(removeButton);
+                    
+                    charDiv.appendChild(charHeader);
+                    
+                    // Add equipment selector
+                    const equipmentDiv = createEquipmentDropdowns(char.GIRL);
+                    charDiv.appendChild(equipmentDiv);
                     
                     selectedTeam.appendChild(charDiv);
                 });
@@ -2154,6 +3101,68 @@
             };
         }
         
+        // Calculate equipment stats
+        function calculateEquipmentStats() {
+            const stats = {
+                sing: 0,
+                dance: 0,
+                management: 0,
+                fans: 0,
+                jewelrySing: 0,
+                jewelryDance: 0,
+                carSing: 0,
+                carDance: 0,
+                propertySing: 0,
+                propertyDance: 0
+            };
+            
+            // Loop through each character's equipment
+            for (const charName in teamEquipment) {
+                const charEquip = teamEquipment[charName];
+                
+                // Jewelry stats
+                if (charEquip.jewelry) {
+                    const jewelry = equipmentData.jewelry.find(item => item.name === charEquip.jewelry);
+                    if (jewelry) {
+                        stats.sing += jewelry.sing;
+                        stats.dance += jewelry.dance;
+                        stats.management += jewelry.management;
+                        stats.fans += jewelry.fans;
+                        stats.jewelrySing += jewelry.sing;
+                        stats.jewelryDance += jewelry.dance;
+                    }
+                }
+                
+                // Car stats
+                if (charEquip.car) {
+                    const car = equipmentData.cars.find(item => item.name === charEquip.car);
+                    if (car) {
+                        stats.sing += car.sing;
+                        stats.dance += car.dance;
+                        stats.management += car.management;
+                        stats.fans += car.fans;
+                        stats.carSing += car.sing;
+                        stats.carDance += car.dance;
+                    }
+                }
+                
+                // Property stats
+                if (charEquip.property) {
+                    const property = equipmentData.properties.find(item => item.name === charEquip.property);
+                    if (property) {
+                        stats.sing += property.sing;
+                        stats.dance += property.dance;
+                        stats.management += property.management;
+                        stats.fans += property.fans;
+                        stats.propertySing += property.sing;
+                        stats.propertyDance += property.dance;
+                    }
+                }
+            }
+            
+            return stats;
+        }
+        
         // Update team stats
         function updateTeamStats() {
             if (currentTeam.length === 0) {
@@ -2164,15 +3173,26 @@
                         <li>Total Dance (Defense): 0</li>
                     </ul>
                     
-                    <div class="synergy-bonus" id="synergy-info">
+                    <div id="equipment-stats" style="margin-top: 0.5rem;">
+                        <p>Equipment Bonuses:</p>
+                        <ul>
+                            <li>Jewelry: +0 Sing, +0 Dance</li>
+                            <li>Cars: +0 Sing, +0 Dance</li>
+                            <li>Properties: +0 Sing, +0 Dance</li>
+                            <li>Total Fans: +0</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="synergy-bonus" id="synergy-info" style="margin-top: 0.5rem;">
                         <p>Genre Synergy: None</p>
                         <p>Synergy Bonus: +0%</p>
                     </div>
                     
-                    <p>Final Stats (with bonuses):</p>
+                    <p>Final Stats (with all bonuses):</p>
                     <ul>
                         <li>Final Sing (Attack): 0</li>
                         <li>Final Dance (Defense): 0</li>
+                        <li>Total Fan Capacity: 0</li>
                     </ul>
                 `;
                 
@@ -2189,12 +3209,20 @@
                 totalDance += char.BASE_DANCE;
             });
             
-            // Calculate synergy bonus
+            // Calculate equipment stats
+            const equipStats = calculateEquipmentStats();
+            
+            // Calculate synergy bonus (applied AFTER equipment flat stats are added)
             const synergy = calculateSynergyBonus(currentTeam);
             
-            // Calculate final stats with bonuses
-            const finalSing = totalSing * (1 + synergy.percentage / 100);
-            const finalDance = totalDance * (1 + synergy.percentage / 100);
+            // Calculate final stats with all bonuses
+            const statsWithEquipment = {
+                sing: totalSing + equipStats.sing,
+                dance: totalDance + equipStats.dance
+            };
+            
+            const finalSing = statsWithEquipment.sing * (1 + synergy.percentage / 100);
+            const finalDance = statsWithEquipment.dance * (1 + synergy.percentage / 100);
             
             // Update stats UI
             teamStats.innerHTML = `
@@ -2204,15 +3232,27 @@
                     <li>Total Dance (Defense): ${totalDance.toLocaleString()}</li>
                 </ul>
                 
-                <div class="synergy-bonus">
+                <div id="equipment-stats" style="margin-top: 0.5rem;">
+                    <p>Equipment Bonuses:</p>
+                    <ul>
+                        <li>Jewelry: +${equipStats.jewelrySing.toLocaleString()} Sing, +${equipStats.jewelryDance.toLocaleString()} Dance</li>
+                        <li>Cars: +${equipStats.carSing.toLocaleString()} Sing, +${equipStats.carDance.toLocaleString()} Dance</li>
+                        <li>Properties: +${equipStats.propertySing.toLocaleString()} Sing, +${equipStats.propertyDance.toLocaleString()} Dance</li>
+                        <li>Total Equipment Bonus: +${equipStats.sing.toLocaleString()} Sing, +${equipStats.dance.toLocaleString()} Dance</li>
+                        <li>Total Fans: +${equipStats.fans.toLocaleString()}</li>
+                    </ul>
+                </div>
+                
+                <div class="synergy-bonus" style="margin-top: 0.5rem;">
                     <p>Genre Synergy: ${synergy.genre ? `${synergy.count}x ${synergy.genre}` : 'None'}</p>
                     <p>Synergy Bonus: +${synergy.percentage}%</p>
                 </div>
                 
-                <p>Final Stats (with bonuses):</p>
+                <p>Final Stats (with all bonuses):</p>
                 <ul>
                     <li>Final Sing (Attack): ${Math.round(finalSing).toLocaleString()}</li>
                     <li>Final Dance (Defense): ${Math.round(finalDance).toLocaleString()}</li>
+                    <li>Total Fan Capacity: ${equipStats.fans.toLocaleString()}</li>
                 </ul>
             `;
             
@@ -2278,14 +3318,6 @@
             }
         }
         
-        // Reset team
-        resetTeamBtn.addEventListener('click', () => {
-            currentTeam = [];
-            updateTeamUI();
-            updateTeamStats();
-            teamCompositionWarning.textContent = '';
-        });
-        
         // Filter characters for selection
         function filterCharactersForSelection() {
             let filtered = [...characterData];
@@ -2350,11 +3382,48 @@
             populateCharacterGrid(characterData);
         });
         
+        // Reset team
+        resetTeamBtn.addEventListener('click', () => {
+            currentTeam = [];
+            teamEquipment = {};
+            updateTeamUI();
+            updateTeamStats();
+            teamCompositionWarning.textContent = '';
+        });
+        
+        // Reset equipment
+        document.getElementById('reset-equipment').addEventListener('click', () => {
+            teamEquipment = {};
+            updateTeamUI();
+            updateTeamStats();
+        });
+        
+        // Initialize equipment tab functionality
+        const equipmentTabs = document.querySelectorAll('#equipment .tab');
+        const equipmentTabContents = document.querySelectorAll('#equipment .tab-content');
+        
+        equipmentTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Deactivate all tabs
+                equipmentTabs.forEach(t => t.classList.remove('active'));
+                equipmentTabContents.forEach(content => content.classList.remove('active'));
+                
+                // Activate selected tab
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             populateCharacterGrid(characterData);
             populateCharacterSelection(characterData);
             updateTeamStats();
+            
+            // Initialize team equipment object
+            teamEquipment = {};
         });
     </script>
 </body>
