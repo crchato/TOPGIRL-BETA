@@ -47,6 +47,7 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         nav {
@@ -57,13 +58,15 @@
             position: sticky;
             top: 4rem;
             z-index: 99;
+            flex-wrap: wrap;
+            width: 100%;
         }
 
         nav a {
             color: white;
             text-decoration: none;
             padding: 0.5rem 1rem;
-            margin: 0 0.5rem;
+            margin: 0.25rem 0.5rem;
             border-radius: 4px;
             transition: background-color 0.3s;
         }
@@ -75,7 +78,7 @@
         main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
         }
 
         section {
@@ -425,6 +428,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
+            overflow-x: auto;
         }
 
         th, td {
@@ -472,6 +476,7 @@
         .tabs {
             display: flex;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .tab {
@@ -480,6 +485,7 @@
             cursor: pointer;
             border-radius: 4px 4px 0 0;
             margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
         }
 
         .tab.active {
@@ -585,54 +591,10 @@
             margin-bottom: 0.5rem;
         }
 
-        @media (max-width: 768px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .character-selection {
-                border-right: none;
-                padding-right: 0;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            .team-preview {
-                padding-left: 0;
-            }
-
-            nav {
-                flex-wrap: wrap;
-            }
-        }
-        
-        .char-table {
+        /* Table overflow handling */
+        .table-container {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .char-table th, .char-table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        
-        .char-table th {
-            background-color: var(--secondary-color);
-            color: white;
-            position: sticky;
-            top: 120px;
-            z-index: 10;
-        }
-        
-        .char-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        
-        .char-table tr:hover {
-            background-color: #f0f0f0;
+            overflow-x: auto;
         }
         
         /* Genre Colors */
@@ -680,6 +642,48 @@
             padding: 2px 6px;
             border-radius: 4px;
         }
+        
+        /* Star rating display */
+        .stars {
+            color: gold;
+            font-size: 1.2rem;
+        }
+        
+        /* Footer styles */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .character-selection {
+                border-right: none;
+                padding-right: 0;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .team-preview {
+                padding-left: 0;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                margin-bottom: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -695,6 +699,8 @@
         <a href="#equipment">Equipment</a>
         <a href="#game-info">Game Info</a>
         <a href="#skills">Skills & Bonuses</a>
+        <a href="#leveling">Leveling Guide</a>
+        <a href="#vehicles">Vehicle System</a>
     </nav>
 
     <main>
@@ -948,179 +954,181 @@
                 <h3>Equipment Table</h3>
                 <p>Complete overview of all equipment items and their stats.</p>
                 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Name</th>
-                            <th>Rarity</th>
-                            <th>Sing</th>
-                            <th>Dance</th>
-                            <th>Management</th>
-                            <th>Fans</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Jewelry -->
-                        <tr>
-                            <td>Jewelry</td>
-                            <td>Ring</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td><td>+2,015</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+11,000</td>
-                        </tr>
-                        <tr>
-                            <td>Jewelry</td>
-                            <td>Choker</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>-</td>
-                            <td>+2,015</td>
-                            <td>-</td>
-                            <td>+11,000</td>
-                        </tr>
-                        <tr>
-                            <td>Jewelry</td>
-                            <td>Heels</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+806</td>
-                            <td>+11,000</td>
-                        </tr>
-                        <tr>
-                            <td>Jewelry</td>
-                            <td>Watch</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>+1,640</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Jewelry</td>
-                            <td>Bracelet</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>-</td>
-                            <td>+1,640</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Jewelry</td>
-                            <td>Lingerie</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+656</td>
-                            <td>-</td>
-                        </tr>
-                        
-                        <!-- Cars -->
-                        <tr>
-                            <td>Car</td>
-                            <td>Audi</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>+5,905</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+25,000</td>
-                        </tr>
-                        <tr>
-                            <td>Car</td>
-                            <td>Lamborghini</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>-</td>
-                            <td>+5,905</td>
-                            <td>-</td>
-                            <td>+25,000</td>
-                        </tr>
-                        <tr>
-                            <td>Car</td>
-                            <td>Lexus</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+2,362</td>
-                            <td>+25,000</td>
-                        </tr>
-                        <tr>
-                            <td>Car</td>
-                            <td>Lotus</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>+4,030</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Car</td>
-                            <td>Beetle</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>-</td>
-                            <td>+4,030</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Car</td>
-                            <td>Cooper</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+1,612</td>
-                            <td>-</td>
-                        </tr>
-                        
-                        <!-- Properties -->
-                        <tr>
-                            <td>Property</td>
-                            <td>Villa</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>+11,810</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+50,000</td>
-                        </tr>
-                        <tr>
-                            <td>Property</td>
-                            <td>Park Mansion</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>-</td>
-                            <td>+11,810</td>
-                            <td>-</td>
-                            <td>+50,000</td>
-                        </tr>
-                        <tr>
-                            <td>Property</td>
-                            <td>Country Manor</td>
-                            <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>+4,724</td>
-                            <td>+50,000</td>
-                        </tr>
-                        <tr>
-                            <td>Property</td>
-                            <td>Penthouse</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>+8,060</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Property</td>
-                            <td>Loft</td>
-                            <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
-                            <td>-</td>
-                            <td>+8,060</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Rarity</th>
+                                <th>Sing</th>
+                                <th>Dance</th>
+                                <th>Management</th>
+                                <th>Fans</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Jewelry -->
+                            <tr>
+                                <td>Jewelry</td>
+                                <td>Ring</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>+2,015</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+11,000</td>
+                            </tr>
+                            <tr>
+                                <td>Jewelry</td>
+                                <td>Choker</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>-</td>
+                                <td>+2,015</td>
+                                <td>-</td>
+                                <td>+11,000</td>
+                            </tr>
+                            <tr>
+                                <td>Jewelry</td>
+                                <td>Heels</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+806</td>
+                                <td>+11,000</td>
+                            </tr>
+                            <tr>
+                                <td>Jewelry</td>
+                                <td>Watch</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>+1,640</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Jewelry</td>
+                                <td>Bracelet</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>-</td>
+                                <td>+1,640</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Jewelry</td>
+                                <td>Lingerie</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+656</td>
+                                <td>-</td>
+                            </tr>
+                            
+                            <!-- Cars -->
+                            <tr>
+                                <td>Car</td>
+                                <td>Audi</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>+5,905</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+25,000</td>
+                            </tr>
+                            <tr>
+                                <td>Car</td>
+                                <td>Lamborghini</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>-</td>
+                                <td>+5,905</td>
+                                <td>-</td>
+                                <td>+25,000</td>
+                            </tr>
+                            <tr>
+                                <td>Car</td>
+                                <td>Lexus</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+2,362</td>
+                                <td>+25,000</td>
+                            </tr>
+                            <tr>
+                                <td>Car</td>
+                                <td>Lotus</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>+4,030</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Car</td>
+                                <td>Beetle</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>-</td>
+                                <td>+4,030</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Car</td>
+                                <td>Cooper</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+1,612</td>
+                                <td>-</td>
+                            </tr>
+                            
+                            <!-- Properties -->
+                            <tr>
+                                <td>Property</td>
+                                <td>Villa</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>+11,810</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+50,000</td>
+                            </tr>
+                            <tr>
+                                <td>Property</td>
+                                <td>Park Mansion</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>-</td>
+                                <td>+11,810</td>
+                                <td>-</td>
+                                <td>+50,000</td>
+                            </tr>
+                            <tr>
+                                <td>Property</td>
+                                <td>Country Manor</td>
+                                <td><span style="color: var(--gold-equip); font-weight: bold;">GOLD</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>+4,724</td>
+                                <td>+50,000</td>
+                            </tr>
+                            <tr>
+                                <td>Property</td>
+                                <td>Penthouse</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>+8,060</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Property</td>
+                                <td>Loft</td>
+                                <td><span style="color: var(--purple-equip); font-weight: bold;">PURPLE</span></td>
+                                <td>-</td>
+                                <td>+8,060</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
@@ -1215,342 +1223,559 @@
                             </ul>
                         </div>
                         
-                        <div id="team-composition-warning" style="margin-top: 1rem; color: var(--primary-color);"></div>
-                        
-                        <button id="reset-team" style="margin-top: 1rem;">Reset Team</button>
-                        <button id="reset-equipment" style="margin-top: 1rem; margin-left: 0.5rem;">Reset Equipment</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+                
 
-        <section id="recommended-teams">
-            <h2>Recommended Teams</h2>
+        <!-- Leveling Guide Section -->
+        <section id="leveling">
+            <h2>Leveling Guide</h2>
+            <p>Understanding the requirements for character and facility upgrades.</p>
+            
             <div class="tabs">
-                <div class="tab active" data-tab="home-teams">HOME Teams (with URs)</div>
-                <div class="tab" data-tab="bali-teams">Initial Bali Teams (No URs)</div>
+                <div class="tab active" data-tab="ssr-leveling">SSR Character Leveling</div>
+                <div class="tab" data-tab="blueprint-reqs">Blueprint Requirements</div>
+                <div class="tab" data-tab="hq-upgrade">HQ Upgrade Guide</div>
             </div>
             
-            <div class="tab-content active" id="home-teams-content">
-                <p>These teams include UR characters for maximum performance.</p>
+            <div class="tab-content active" id="ssr-leveling-content">
+                <h3>SSR Character Level Up Requirements</h3>
+                <p>These are the gold card requirements for each level cap for SSR girls.</p>
                 
-                <div class="team-container">
-                    <div class="team-card">
-                        <div class="team-header">
-                            <h3>R&B Powerhouse</h3>
-                        </div>
-                        <div class="team-members">
-                            <div class="team-member">
-                                <div class="member-type ur">UR</div>
-                                <div>
-                                    <strong>Marguerite</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ur">UR</div>
-                                <div>
-                                    <strong>Elizabeth</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Sora</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Julia</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Nova</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-stats">
-                            <p><strong>Synergy:</strong> +6% (5 R&B characters)</p>
-                            <p><strong>Total Base Sing:</strong> 51,275</p>
-                            <p><strong>Total Base Dance:</strong> 40,801</p>
-                            <p><strong>Final Sing:</strong> 54,352</p>
-                            <p><strong>Final Dance:</strong> 43,249</p>
-                            <p><strong>Key Skills:</strong> Normal DMG +50%, Skill DMG +20%, FAN CAP +10%</p>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-header">
-                            <h3>EDM Fusion</h3>
-                        </div>
-                        <div class="team-members">
-                            <div class="team-member">
-                                <div class="member-type ur">UR</div>
-                                <div>
-                                    <strong>Marguerite</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Kokoro</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Everly</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Alice</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Cindy</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-stats">
-                            <p><strong>Synergy:</strong> +4% (4 EDM characters)</p>
-                            <p><strong>Total Base Sing:</strong> 50,855</p>
-                            <p><strong>Total Base Dance:</strong> 42,232</p>
-                            <p><strong>Final Sing:</strong> 52,889</p>
-                            <p><strong>Final Dance:</strong> 43,921</p>
-                            <p><strong>Key Skills:</strong> Skill DMG +60%, Normal DMG +100%, Reduce Normal Attack DMG -12%</p>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-header">
-                            <h3>Mixed Elite</h3>
-                        </div>
-                        <div class="team-members">
-                            <div class="team-member">
-                                <div class="member-type ur">UR</div>
-                                <div>
-                                    <strong>Elizabeth</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ur">UR</div>
-                                <div>
-                                    <strong>Marguerite</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Leilani</strong>
-                                    <div><span class="genre-badge">HipHop</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Skylar</strong>
-                                    <div><span class="genre-badge">ROCK</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Aurora</strong>
-                                    <div><span class="genre-badge">POP</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-stats">
-                            <p><strong>Synergy:</strong> +0% (no genre synergy)</p>
-                            <p><strong>Total Base Sing:</strong> 45,552</p>
-                            <p><strong>Total Base Dance:</strong> 43,866</p>
-                            <p><strong>Final Sing:</strong> 45,552</p>
-                            <p><strong>Final Dance:</strong> 43,866</p>
-                            <p><strong>Key Skills:</strong> Skill DMG +60%, Normal DMG +150%, NPC DMG +30%</p>
-                        </div>
-                    </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Required Gold Cards</th>
+                                <th>Total Cards</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Level 20</td>
+                                <td>50</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>Level 30</td>
+                                <td>100</td>
+                                <td>150</td>
+                            </tr>
+                            <tr>
+                                <td>Level 40</td>
+                                <td>200</td>
+                                <td>350</td>
+                            </tr>
+                            <tr>
+                                <td>Level 50</td>
+                                <td>450</td>
+                                <td>800</td>
+                            </tr>
+                            <tr>
+                                <td>Level 60</td>
+                                <td>700</td>
+                                <td>1,500</td>
+                            </tr>
+                            <tr>
+                                <td>Level 80</td>
+                                <td>800</td>
+                                <td>2,300</td>
+                            </tr>
+                            <tr>
+                                <td>Level 85</td>
+                                <td>800</td>
+                                <td>3,100</td>
+                            </tr>
+                            <tr>
+                                <td>Level 90</td>
+                                <td>800</td>
+                                <td>3,900</td>
+                            </tr>
+                            <tr>
+                                <td>Level 95</td>
+                                <td>800</td>
+                                <td>4,700</td>
+                            </tr>
+                            <tr>
+                                <td>Level 100</td>
+                                <td>1,200</td>
+                                <td>5,900</td>
+                            </tr>
+                            <tr>
+                                <td>Level 105</td>
+                                <td>1,200</td>
+                                <td>7,100</td>
+                            </tr>
+                            <tr>
+                                <td>Level 110</td>
+                                <td>1,200</td>
+                                <td>8,300</td>
+                            </tr>
+                            <tr>
+                                <td>Level 115</td>
+                                <td>1,200</td>
+                                <td>9,500</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"><strong>Total SSR Promote Cards</strong></td>
+                                <td><strong>9,500</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
             
-            <div class="tab-content" id="bali-teams-content">
-                <p>These teams contain only SSR characters, ideal for Initial Bali content.</p>
+            <div class="tab-content" id="blueprint-reqs-content">
+                <h3>Blueprint Requirements by Tier</h3>
+                <p>Blueprint cards are used to level up facilities that enhance rally capacity, sing, dance, management, plundering, etc.</p>
                 
-                <div class="team-container">
-                    <div class="team-card">
-                        <div class="team-header">
-                            <h3>R&B Harmony</h3>
-                        </div>
-                        <div class="team-members">
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Sora</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Julia</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Nova</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Zendaya</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Raith</strong>
-                                    <div><span class="genre-badge">R&B</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-stats">
-                            <p><strong>Synergy:</strong> +6% (5 R&B characters)</p>
-                            <p><strong>Total Base Sing:</strong> 48,003</p>
-                            <p><strong>Total Base Dance:</strong> 53,118</p>
-                            <p><strong>Final Sing:</strong> 50,883</p>
-                            <p><strong>Final Dance:</strong> 56,305</p>
-                            <p><strong>Key Skills:</strong> Normal DMG +150%, Skill DMG +20%, Car Speed +50%</p>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-header">
-                            <h3>EDM Masters</h3>
-                        </div>
-                        <div class="team-members">
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Caroline</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Kokoro</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Everly</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Alice</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Sari</strong>
-                                    <div><span class="genre-badge">EDM</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-stats">
-                            <p><strong>Synergy:</strong> +6% (5 EDM characters)</p>
-                            <p><strong>Total Base Sing:</strong> 50,699</p>
-                            <p><strong>Total Base Dance:</strong> 45,820</p>
-                            <p><strong>Final Sing:</strong> 53,741</p>
-                            <p><strong>Final Dance:</strong> 48,569</p>
-                            <p><strong>Key Skills:</strong> Skill DMG +40%, Normal DMG +100%, Fan Cap +10%</p>
-                        </div>
-                    </div>
-                    
-                    <div class="team-card">
-                        <div class="team-header">
-                            <h3>Rock Band</h3>
-                        </div>
-                        <div class="team-members">
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Yuuko</strong>
-                                    <div><span class="genre-badge">ROCK</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Claire</strong>
-                                    <div><span class="genre-badge">ROCK</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Paisley</strong>
-                                    <div><span class="genre-badge">ROCK</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Skylar</strong>
-                                    <div><span class="genre-badge">ROCK</span></div>
-                                </div>
-                            </div>
-                            <div class="team-member">
-                                <div class="member-type ssr">SSR</div>
-                                <div>
-                                    <strong>Talia</strong>
-                                    <div><span class="genre-badge">ROCK</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="team-stats">
-                            <p><strong>Synergy:</strong> +6% (5 ROCK characters)</p>
-                            <p><strong>Total Base Sing:</strong> 44,921</p>
-                            <p><strong>Total Base Dance:</strong> 48,700</p>
-                            <p><strong>Final Sing:</strong> 47,616</p>
-                            <p><strong>Final Dance:</strong> 51,622</p>
-                            <p><strong>Key Skills:</strong> Skill DMG +40%, Normal DMG +100%, Reduce Skill DMG -12%</p>
-                        </div>
-                    </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Blueprint Cards Per Tier</th>
+                                <th>Tier 7<br/>(Purple)</th>
+                                <th>Tier 8<br/>(Gold)</th>
+                                <th>Tier 9<br/>(Gold)</th>
+                                <th>Tier 10<br/>(Gold)</th>
+                                <th>Tier 11<br/>(Gold)</th>
+                                <th>Tier 12<br/>(Gold)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>1,870</td>
+                                <td>2,920</td>
+                                <td>4,470</td>
+                                <td>6,520</td>
+                                <td>8,700</td>
+                                <td>9,900</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>1,970</td>
+                                <td>2,920</td>
+                                <td>4,670</td>
+                                <td>6,520</td>
+                                <td>8,700</td>
+                                <td>9,900</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>2,070</td>
+                                <td>3,070</td>
+                                <td>4,870</td>
+                                <td>6,770</td>
+                                <td>8,700</td>
+                                <td>9,900</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>2,170</td>
+                                <td>3,220</td>
+                                <td>5,070</td>
+                                <td>7,020</td>
+                                <td>9,000</td>
+                                <td>10,000</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>2,170</td>
+                                <td>3,220</td>
+                                <td>5,070</td>
+                                <td>7,020</td>
+                                <td>9,000</td>
+                                <td>10,000</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>2,270</td>
+                                <td>3,370</td>
+                                <td>5,270</td>
+                                <td>7,270</td>
+                                <td>9,000</td>
+                                <td>10,000</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>2,370</td>
+                                <td>3,520</td>
+                                <td>5,470</td>
+                                <td>7,520</td>
+                                <td>9,300</td>
+                                <td>11,000</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>2,470</td>
+                                <td>3,670</td>
+                                <td>5,670</td>
+                                <td>7,520</td>
+                                <td>9,300</td>
+                                <td>11,000</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>2,470</td>
+                                <td>3,670</td>
+                                <td>5,670</td>
+                                <td>7,770</td>
+                                <td>9,300</td>
+                                <td>11,000</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>2,570</td>
+                                <td>3,820</td>
+                                <td>5,870</td>
+                                <td>8,020</td>
+                                <td>9,600</td>
+                                <td>11,000</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>2,670</td>
+                                <td>3,970</td>
+                                <td>6,070</td>
+                                <td>8,470</td>
+                                <td>9,600</td>
+                                <td>11,000</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>2,770</td>
+                                <td>3,970</td>
+                                <td>6,270</td>
+                                <td>-</td>
+                                <td>9,600</td>
+                                <td>11,000</td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>-</td>
+                                <td>4,120</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>-</td>
+                                <td>4,270</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>21,930</strong></td>
+                                <td><strong>40,820</strong></td>
+                                <td><strong>50,430</strong></td>
+                                <td><strong>60,610</strong></td>
+                                <td><strong>83,700</strong></td>
+                                <td><strong>96,000</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                
+                <p>Blueprint tier information:</p>
+                <ul>
+                    <li>Tier 1-2: Silver quality</li>
+                    <li>Tier 3-4: Green quality</li>
+                    <li>Tier 5-7: Purple quality</li>
+                    <li>Tier 8-18: Gold quality (Tiers 13-18 added in new patch)</li>
+                </ul>
+            </div>
+            
+            <div class="tab-content" id="hq-upgrade-content">
+                <h3>HQ Upgrade Guide</h3>
+                <p>This guide shows the number of building cards needed to level up your headquarters.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Required Cards</th>
+                                <th>Total Cards</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>20</td>
+                                <td>22</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>100</td>
+                                <td>122</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>200</td>
+                                <td>322</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>400</td>
+                                <td>722</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>800</td>
+                                <td>1,522</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>1,400</td>
+                                <td>2,922</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>2,000</td>
+                                <td>4,922</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>2,600</td>
+                                <td>7,522</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>3,200</td>
+                                <td>10,722</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>3,600</td>
+                                <td>14,322</td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>4,000</td>
+                                <td>18,322</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>5,600</td>
+                                <td>23,922</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>6,000</td>
+                                <td>29,922</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <section id="game-info">
+        <!-- Vehicle System Section -->
+<section id="vehicles">
+    <h2>Vehicle System</h2>
+    <p>The vehicle system unlocks new skins and boosts at each stage of advancement.</p>
+    
+    <div class="tabs">
+        <div class="tab active" data-tab="vehicle-upgrades">Vehicle Upgrade Guide</div>
+        <div class="tab" data-tab="vehicle-parts">Vehicle Parts System</div>
+    </div>
+    
+    <div class="tab-content active" id="vehicle-upgrades-content">
+        <h3>Vehicle Advancement: Detailed Explanation of Each Stage and Resources Consumed</h3>
+        <p>This guide shows the Vehicle advance drawings needed to promote your vehicle to the next rank.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Star Level</th>
+                        <th>Quantity of Vehicle advance drawing consumed to promote to next rank</th>
+                        <th>Unlocked Skin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A Class</td>
+                        <td>0 [4]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>B Class</td>
+                        <td>0 [20]</td>
+                        <td></td>
+                        <td>Cybertruck</td>
+                    </tr>
+                    <tr>
+                        <td>B Class</td>
+                        <td>1 [80]</td>
+                        <td></td>
+                        <td>Mustang</td>
+                    </tr>
+                    <tr>
+                        <td>C Class</td>
+                        <td>0 [200]</td>
+                        <td></td>
+                        <td>Cooper</td>
+                    </tr>
+                    <tr>
+                        <td>C Class</td>
+                        <td>1 [500]</td>
+                        <td></td>
+                        <td>Lexas</td>
+                    </tr>
+                    <tr>
+                        <td>C Class</td>
+                        <td>2 [1000]</td>
+                        <td></td>
+                        <td>Explorer</td>
+                    </tr>
+                    <tr>
+                        <td>D Class</td>
+                        <td>0 [1200]</td>
+                        <td></td>
+                        <td>Hammer</td>
+                    </tr>
+                    <tr>
+                        <td>D Class</td>
+                        <td>1 [1400]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>D Class</td>
+                        <td>2 [1800]</td>
+                        <td></td>
+                        <td>Navigator</td>
+                    </tr>
+                    <tr>
+                        <td>D Class</td>
+                        <td>3 [2000]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E Class</td>
+                        <td>0 [2300]</td>
+                        <td></td>
+                        <td>AodiQ5</td>
+                    </tr>
+                    <tr>
+                        <td>E Class</td>
+                        <td>1 [2600]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E Class</td>
+                        <td>2 [2900]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E Class</td>
+                        <td>3 [3200]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E Class</td>
+                        <td>4 [3500]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E Class</td>
+                        <td>5 [4000]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>S Class</td>
+                        <td>0 [4000]</td>
+                        <td></td>
+                        <td>Lamboginy</td>
+                    </tr>
+                    <tr>
+                        <td>S Class</td>
+                        <td>1 [4000]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>S Class</td>
+                        <td>2 [4000]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>S Class</td>
+                        <td>3 [4000]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>S Class</td>
+                        <td>4 [4000]</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>S Class</td>
+                        <td>5 []</td>
+                        <td></td>
+                        <td>Colinan</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="vehicle-parts-content">
+        <h3>Vehicle Parts System</h3>
+        <p>To advance to the next vehicle level, you must first upgrade each vehicle part 5 times.</p>
+        
+        <div class="vehicle-parts-info">
+            <h4>Vehicle Components:</h4>
+            <ul>
+                <li><strong>Engine</strong> (5 levels per vehicle tier) - Increases sing and fan capacity</li>
+                <li><strong>Chassis</strong> (5 levels per vehicle tier) - Increases dance and fan capacity</li>
+                <li><strong>Suspension</strong> (5 levels per vehicle tier) - Increases management and fan capacity</li>
+                <li><strong>Rims</strong> (5 levels per vehicle tier) - Increases driving speed and dance capacity</li>
+            </ul>
+            
+            <h4>Upgrade Process:</h4>
+            <ol>
+                <li>Upgrade each component (Engine, Chassis, Suspension, Rims) 5 times using "Vehicle Upgrade Parts"</li>
+                <li>Once all components are fully upgraded, use "Vehicle Advance Drawings" to advance to the next vehicle level</li>
+                <li>This unlocks new vehicle skins and provides stat boosts</li>
+            </ol>
+            
+            <p><strong>Note:</strong> Each vehicle has different requirements for advancement. As shown in the table, you'll need to collect the specified number of Vehicle Advance Drawings to progress through each class from A to S.</p>
+        </div>
+    </div>
+</section>
+  <section id="game-info">
             <h2>Game Information</h2>
             <div class="tabs">
                 <div class="tab active" data-tab="basics">Basics</div>
@@ -3427,4 +3652,4 @@
         });
     </script>
 </body>
-</html>
+
