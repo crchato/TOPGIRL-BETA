@@ -683,6 +683,19 @@
             .tab {
                 margin-bottom: 0.5rem;
             }
+            
+            .table-container {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -812,6 +825,87 @@
             </div>
             
             <div class="tab-content" id="cars-content">
+                <h3>Cars</h3>
+                <p>Cars provide medium stat boosts and fan capacity increases.</p>
+                
+                <div class="equipment-grid">
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Audi</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+5,905</strong> Sing</p>
+                                <p><strong>+25,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Lamborghini</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+5,905</strong> Dance</p>
+                                <p><strong>+25,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card gold">
+                        <div class="equipment-header">
+                            <h3>Lexus</h3>
+                            <span class="equipment-type-badge">GOLD</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+2,362</strong> Management</p>
+                                <p><strong>+25,000</strong> Fans</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Lotus</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+4,030</strong> Sing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Beetle</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+4,030</strong> Dance</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-card purple">
+                        <div class="equipment-header">
+                            <h3>Cooper</h3>
+                            <span class="equipment-type-badge">PURPLE</span>
+                        </div>
+                        <div class="equipment-info">
+                            <div class="equipment-stats">
+                                <p><strong>+1,612</strong> Management</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<div class="tab-content" id="cars-content">
                 <h3>Cars</h3>
                 <p>Cars provide medium stat boosts and fan capacity increases.</p>
                 
@@ -1145,6 +1239,7 @@
             </div>
         </section>
 
+        <!-- Calculator Section -->
         <section id="calculator">
             <h2>Team Calculator</h2>
             <p>Build your optimal team and calculate synergy bonuses and total stats, including equipment bonuses.</p>
@@ -1236,7 +1331,14 @@
                             </ul>
                         </div>
                         
-                
+                        <div id="team-composition-warning" style="margin-top: 1rem; color: var(--primary-color);"></div>
+                        
+                        <button id="reset-team" style="margin-top: 1rem;">Reset Team</button>
+                        <button id="reset-equipment" style="margin-top: 1rem; margin-left: 0.5rem;">Reset Equipment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Leveling Guide Section -->
         <section id="leveling">
@@ -1338,8 +1440,7 @@
                     </table>
                 </div>
             </div>
-            
-            <div class="tab-content" id="blueprint-reqs-content">
+<div class="tab-content" id="blueprint-reqs-content">
                 <h3>Blueprint Requirements by Tier</h3>
                 <p>Blueprint cards are used to level up facilities that enhance rally capacity, sing, dance, management, plundering, etc.</p>
                 
@@ -1603,192 +1704,194 @@
         </section>
 
         <!-- Vehicle System Section -->
-<section id="vehicles">
-    <h2>Vehicle System</h2>
-    <p>The vehicle system unlocks new skins and boosts at each stage of advancement.</p>
-    
-    <div class="tabs">
-        <div class="tab active" data-tab="vehicle-upgrades">Vehicle Upgrade Guide</div>
-        <div class="tab" data-tab="vehicle-parts">Vehicle Parts System</div>
-    </div>
-    
-    <div class="tab-content active" id="vehicle-upgrades-content">
-        <h3>Vehicle Advancement: Detailed Explanation of Each Stage and Resources Consumed</h3>
-        <p>This guide shows the Vehicle advance drawings needed to promote your vehicle to the next rank.</p>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Star Level</th>
-                        <th>Quantity of Vehicle advance drawing consumed to promote to next rank</th>
-                        <th>Unlocked Skin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>A Class</td>
-                        <td>0 [4]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>B Class</td>
-                        <td>0 [20]</td>
-                        <td></td>
-                        <td>Cybertruck</td>
-                    </tr>
-                    <tr>
-                        <td>B Class</td>
-                        <td>1 [80]</td>
-                        <td></td>
-                        <td>Mustang</td>
-                    </tr>
-                    <tr>
-                        <td>C Class</td>
-                        <td>0 [200]</td>
-                        <td></td>
-                        <td>Cooper</td>
-                    </tr>
-                    <tr>
-                        <td>C Class</td>
-                        <td>1 [500]</td>
-                        <td></td>
-                        <td>Lexas</td>
-                    </tr>
-                    <tr>
-                        <td>C Class</td>
-                        <td>2 [1000]</td>
-                        <td></td>
-                        <td>Explorer</td>
-                    </tr>
-                    <tr>
-                        <td>D Class</td>
-                        <td>0 [1200]</td>
-                        <td></td>
-                        <td>Hammer</td>
-                    </tr>
-                    <tr>
-                        <td>D Class</td>
-                        <td>1 [1400]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>D Class</td>
-                        <td>2 [1800]</td>
-                        <td></td>
-                        <td>Navigator</td>
-                    </tr>
-                    <tr>
-                        <td>D Class</td>
-                        <td>3 [2000]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>E Class</td>
-                        <td>0 [2300]</td>
-                        <td></td>
-                        <td>AodiQ5</td>
-                    </tr>
-                    <tr>
-                        <td>E Class</td>
-                        <td>1 [2600]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>E Class</td>
-                        <td>2 [2900]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>E Class</td>
-                        <td>3 [3200]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>E Class</td>
-                        <td>4 [3500]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>E Class</td>
-                        <td>5 [4000]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>S Class</td>
-                        <td>0 [4000]</td>
-                        <td></td>
-                        <td>Lamboginy</td>
-                    </tr>
-                    <tr>
-                        <td>S Class</td>
-                        <td>1 [4000]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>S Class</td>
-                        <td>2 [4000]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>S Class</td>
-                        <td>3 [4000]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>S Class</td>
-                        <td>4 [4000]</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>S Class</td>
-                        <td>5 []</td>
-                        <td></td>
-                        <td>Colinan</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="tab-content" id="vehicle-parts-content">
-        <h3>Vehicle Parts System</h3>
-        <p>To advance to the next vehicle level, you must first upgrade each vehicle part 5 times.</p>
-        
-        <div class="vehicle-parts-info">
-            <h4>Vehicle Components:</h4>
-            <ul>
-                <li><strong>Engine</strong> (5 levels per vehicle tier) - Increases sing and fan capacity</li>
-                <li><strong>Chassis</strong> (5 levels per vehicle tier) - Increases dance and fan capacity</li>
-                <li><strong>Suspension</strong> (5 levels per vehicle tier) - Increases management and fan capacity</li>
-                <li><strong>Rims</strong> (5 levels per vehicle tier) - Increases driving speed and dance capacity</li>
-            </ul>
+        <section id="vehicles">
+            <h2>Vehicle System</h2>
+            <p>The vehicle system unlocks new skins and boosts at each stage of advancement.</p>
             
-            <h4>Upgrade Process:</h4>
-            <ol>
-                <li>Upgrade each component (Engine, Chassis, Suspension, Rims) 5 times using "Vehicle Upgrade Parts"</li>
-                <li>Once all components are fully upgraded, use "Vehicle Advance Drawings" to advance to the next vehicle level</li>
-                <li>This unlocks new vehicle skins and provides stat boosts</li>
-            </ol>
+            <div class="tabs">
+                <div class="tab active" data-tab="vehicle-upgrades">Vehicle Upgrade Guide</div>
+                <div class="tab" data-tab="vehicle-parts">Vehicle Parts System</div>
+            </div>
             
-            <p><strong>Note:</strong> Each vehicle has different requirements for advancement. As shown in the table, you'll need to collect the specified number of Vehicle Advance Drawings to progress through each class from A to S.</p>
-        </div>
-    </div>
-</section>
-  <section id="game-info">
+            <div class="tab-content active" id="vehicle-upgrades-content">
+                <h3>Vehicle Advancement: Detailed Explanation of Each Stage and Resources Consumed</h3>
+                <p>This guide shows the Vehicle advance drawings needed to promote your vehicle to the next rank.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Star Level</th>
+                                <th>Quantity of Vehicle advance drawing consumed to promote to next rank</th>
+                                <th>Unlocked Skin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A Class</td>
+                                <td>0 ★</td>
+                                <td>4</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>B Class</td>
+                                <td>0 ★</td>
+                                <td>20</td>
+                                <td>Cybertruck</td>
+                            </tr>
+                            <tr>
+                                <td>B Class</td>
+                                <td>1 ★</td>
+                                <td>80</td>
+                                <td>Mustang</td>
+                            </tr>
+                            <tr>
+                                <td>C Class</td>
+                                <td>0 ★</td>
+                                <td>200</td>
+                                <td>Cooper</td>
+                            </tr>
+                            <tr>
+                                <td>C Class</td>
+                                <td>1 ★</td>
+                                <td>500</td>
+                                <td>Lexas</td>
+                            </tr>
+                            <tr>
+                                <td>C Class</td>
+                                <td>2 ★</td>
+                                <td>1000</td>
+                                <td>Explorer</td>
+                            </tr>
+                            <tr>
+                                <td>D Class</td>
+                                <td>0 ★</td>
+                                <td>1200</td>
+                                <td>Hammer</td>
+                            </tr>
+                            <tr>
+                                <td>D Class</td>
+                                <td>1 ★</td>
+                                <td>1400</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>D Class</td>
+                                <td>2 ★</td>
+                                <td>1800</td>
+                                <td>Navigator</td>
+                            </tr>
+                            <tr>
+                                <td>D Class</td>
+                                <td>3 ★</td>
+                                <td>2000</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>E Class</td>
+                                <td>0 ★</td>
+                                <td>2300</td>
+                                <td>AodiQ5</td>
+                            </tr>
+                            <tr>
+                                <td>E Class</td>
+                                <td>1 ★</td>
+                                <td>2600</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>E Class</td>
+                                <td>2 ★</td>
+                                <td>2900</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>E Class</td>
+                                <td>3 ★</td>
+                                <td>3200</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>E Class</td>
+                                <td>4 ★</td>
+                                <td>3500</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>E Class</td>
+                                <td>5 ★</td>
+                                <td>4000</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>S Class</td>
+                                <td>0 ★</td>
+                                <td>4000</td>
+                                <td>Lamboginy</td>
+                            </tr>
+                            <tr>
+                                <td>S Class</td>
+                                <td>1 ★</td>
+                                <td>4000</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>S Class</td>
+                                <td>2 ★</td>
+                                <td>4000</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>S Class</td>
+                                <td>3 ★</td>
+                                <td>4000</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>S Class</td>
+                                <td>4 ★</td>
+                                <td>4000</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>S Class</td>
+                                <td>5 ★</td>
+                                <td></td>
+                                <td>Colinan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="vehicle-parts-content">
+                <h3>Vehicle Parts System</h3>
+                <p>To advance to the next vehicle level, you must first upgrade each vehicle part 5 times.</p>
+                
+                <div class="vehicle-parts-info">
+                    <h4>Vehicle Components:</h4>
+                    <ul>
+                        <li><strong>Engine</strong> (5 levels per vehicle tier) - Increases sing and fan capacity</li>
+                        <li><strong>Chassis</strong> (5 levels per vehicle tier) - Increases dance and fan capacity</li>
+                        <li><strong>Suspension</strong> (5 levels per vehicle tier) - Increases management and fan capacity</li>
+                        <li><strong>Rims</strong> (5 levels per vehicle tier) - Increases driving speed and fan capacity</li>
+                    </ul>
+                    
+                    <h4>Upgrade Process:</h4>
+                    <ol>
+                        <li>Upgrade each component (Engine, Chassis, Suspension, Rims) 5 times using "Vehicle Upgrade Parts"</li>
+                        <li>Once all components are fully upgraded, use "Vehicle Advance Drawings" to advance to the next vehicle level</li>
+                        <li>This unlocks new vehicle skins and provides stat boosts</li>
+                    </ol>
+                    
+                    <p><strong>Note:</strong> Each vehicle has different requirements for advancement. As shown in the table, you'll need to collect the specified number of Vehicle Advance Drawings to progress through each class from A to S.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Information Section -->
+        <section id="game-info">
             <h2>Game Information</h2>
             <div class="tabs">
                 <div class="tab active" data-tab="basics">Basics</div>
@@ -1855,7 +1958,7 @@
                     </div>
                     <div class="skill-level">
                         <div class="skill-level-color" style="background-color: var(--skill3-color);"></div>
-                        <span>Level 3 (Blue)
+                        <span>Level 3 (Blue)</span>
                     </div>
                     <div class="skill-level">
                         <div class="skill-level-color" style="background-color: var(--skill4-color);"></div>
@@ -1866,14 +1969,10 @@
                         <span>Level 5 (Gold)</span>
                     </div>
                 </div>
-                <p>Specific skill info corrections:</p>
-                <ul>
-                    <li>Leilani has 50% increase to Normal Damage (not 20%)</li>
-                    <li>Cindy reduces skill damage, not increases Rally Cap</li>
-                </ul>
             </div>
         </section>
 
+        <!-- Character Database Section -->
         <section id="characters">
             <h2>Character Database</h2>
             <div class="filter-controls">
@@ -1907,6 +2006,7 @@
             </div>
         </section>
 
+        <!-- Skills & Bonuses Section -->
         <section id="skills">
             <h2>Skills & Bonuses</h2>
             <p>Understanding the different skills and bonuses is crucial for building effective teams.</p>
@@ -2009,14 +2109,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            
-            <div class="skill-info">
-                <h3>Special Skill Corrections</h3>
-                <ul>
-                    <li>Leilani has 50% increase to Normal Damage (not 20%)</li>
-                    <li>Cindy reduces skill damage, not increases Rally Cap</li>
-                </ul>
             </div>
         </section>
 <section id="character-table">
@@ -3665,4 +3757,3 @@
         });
     </script>
 </body>
-
