@@ -2112,399 +2112,320 @@
             </div>
         </section>
 <section id="character-table">
-    <h2>Character Table</h2>
-    <p>Complete overview of all characters, color-coded by genre and type.</p>
-    
-    <style>
-        .char-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .char-table th, .char-table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        
-        .char-table th {
-            background-color: var(--secondary-color);
-            color: white;
-            position: sticky;
-            top: 120px;
-            z-index: 10;
-        }
-        
-        .char-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        
-        .char-table tr:hover {
-            background-color: #f0f0f0;
-        }
-        
-        /* Genre Colors */
-        .rnb {
-            border-left: 5px solid #ff6b6b;
-        }
-        
-        .rock {
-            border-left: 5px solid #4ecdc4;
-        }
-        
-        .pop {
-            border-left: 5px solid #ffe66d;
-        }
-        
-        .edm {
-            border-left: 5px solid #a374db;
-        }
-        
-        .hiphop {
-            border-left: 5px solid #66c6ba;
-        }
-        
-        /* Type Colors */
-        .ur-row {
-            background-color: rgba(255, 153, 153, 0.1) !important;
-        }
-        
-        .ur-row:hover {
-            background-color: rgba(255, 153, 153, 0.2) !important;
-        }
-        
-        .ur-badge {
-            background-color: var(--ur-color);
-            color: #333;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        
-        .ssr-badge {
-            background-color: var(--ssr-color);
-            color: #333;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-    </style>
-    
-    <table class="char-table">
-    <caption>Character Table</caption>
-    <thead>
-        <tr>
-                    <th>Character</th>
-                    <th>Type</th>
-                    <th>Genre</th>
-                    <th>Position</th>
-                    <th>Attribute</th>
-                    <th>Base Sing</th>
-                    <th>Base Dance</th>
-                    <th>Skills</th>
-                </tr>
-            </thead>
+            <h2>Character Table</h2>
+            <p>Complete overview of all characters, color-coded by genre and type.</p>
+            
+            <div class="table-container">
+                <table class="char-table">
+                    <thead>
+                        <tr>
+                            <th>Character</th>
+                            <th>Type</th>
+                            <th>Genre</th>
+                            <th>Position</th>
+                            <th>Attribute</th>
+                            <th>Base Sing</th>
+                            <th>Base Dance</th>
+                            <th>Skills</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- R&B Characters -->
+                        <tr class="ur-row rnb">
+                            <td><strong>Marguerite</strong></td>
+                            <td><span class="ur-badge">UR</span></td>
+                            <td>R&B</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>11,261</td>
+                            <td>6,446</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                        <tr class="ur-row rnb">
+                            <td><strong>Elizabeth</strong></td>
+                            <td><span class="ur-badge">UR</span></td>
+                            <td>R&B</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>6,446</td>
+                            <td>11,261</td>
+                            <td>Normal DMG +50%, Player DMG +20%</td>
+                        </tr>
+                        <tr class="rnb">
+                            <td><strong>Sora</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>R&B</td>
+                            <td>Vocalist</td>
+                            <td>Cute</td>
+                            <td>13,513</td>
+                            <td>7,735</td>
+                            <td>Normal DMG +50%, Fan Cap +10%</td>
+                        </tr>
+                        <tr class="rnb">
+                            <td><strong>Julia</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>R&B</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>11,261</td>
+                            <td>6,446</td>
+                            <td>Skill DMG +20%, Car Speed +75%</td>
+                        </tr>
+                        <tr class="rnb">
+                            <td><strong>Nova</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>R&B</td>
+                            <td>Dancer</td>
+                            <td>Cute</td>
+                            <td>8,854</td>
+                            <td>8,854</td>
+                            <td>Normal DMG +50%, DMG Defense 200/s</td>
+                        </tr>
+                        <tr class="rnb">
+                            <td><strong>Zendaya</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>R&B</td>
+                            <td>Center</td>
+                            <td>Sexy</td>
+                            <td>6,446</td>
+                            <td>11,261</td>
+                            <td>Normal DMG +50%, NPC DMG +20%, Car Speed +50%</td>
+                        </tr>
+                        <tr class="rnb">
+                            <td><strong>Raith</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>R&B</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>7,735</td>
+                            <td>13,513</td>
+                            <td>Normal DMG +50%, Reduce Normal Attack DMG -12%</td>
+                        </tr>
+                        
+                        <!-- ROCK Characters -->
+                        <tr class="rock">
+                            <td><strong>Yuuko</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>ROCK</td>
+                            <td>Dancer</td>
+                            <td>Elegant</td>
+                            <td>7,735</td>
+                            <td>13,513</td>
+                            <td>Normal DMG +50%, Reduce Normal Attack DMG -12%</td>
+                        </tr>
+                        <tr class="rock">
+                            <td><strong>Claire</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>ROCK</td>
+                            <td>Center</td>
+                            <td>Cute</td>
+                            <td>8,854</td>
+                            <td>8,854</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                        <tr class="rock">
+                            <td><strong>Paisley</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>ROCK</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>6,446</td>
+                            <td>11,261</td>
+                            <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
+                        </tr>
+                        <tr class="rock">
+                            <td><strong>Skylar</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>ROCK</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>11,261</td>
+                            <td>6,446</td>
+                            <td>Skill DMG +20%, NPC DMG +30%</td>
+                        </tr>
+                        <tr class="rock">
+                            <td><strong>Talia</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>ROCK</td>
+                            <td>Center</td>
+                            <td>Cute</td>
+                            <td>10,625</td>
+                            <td>10,625</td>
+                            <td>Normal DMG +50%, Fan Cap +10%</td>
+                        </tr>
+                        
+                        <!-- POP Characters -->
+                        <tr class="pop">
+                            <td><strong>Chizuru</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>POP</td>
+                            <td>Center</td>
+                            <td>Sexy</td>
+                            <td>10,625</td>
+                            <td>10,625</td>
+                            <td>Player DMG +20%, Rally Cap +10%</td>
+                        </tr>
+                        <tr class="pop">
+                            <td><strong>Savannah</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>POP</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>6,446</td>
+                            <td>11,261</td>
+                            <td>Fan Cap +10%, DMG Attack 200/s</td>
+                        </tr>
+                        <tr class="pop">
+                            <td><strong>Aurora</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>POP</td>
+                            <td>Center</td>
+                            <td>Cute</td>
+                            <td>8,854</td>
+                            <td>8,854</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                        <tr class="pop">
+                            <td><strong>Brooklyn</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>POP</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>11,261</td>
+                            <td>6,446</td>
+                            <td>NPC DMG +30%, DMG Defense 200/s</td>
+                        </tr>
+                        <tr class="pop">
+                            <td><strong>Moana</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>POP</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>13,513</td>
+                            <td>7,735</td>
+                            <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
+                        </tr>
+                        
+                        <!-- EDM Characters -->
+                        <tr class="edm">
+                            <td><strong>Caroline</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>EDM</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>6,446</td>
+                            <td>11,261</td>
+                            <td>Fan Cap +10%, DMG Attack 200/s</td>
+                        </tr>
+                        <tr class="edm">
+                            <td><strong>Kokoro</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>EDM</td>
+                            <td>Center</td>
+                            <td>Sexy</td>
+                            <td>10,625</td>
+                            <td>10,625</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                        <tr class="edm">
+                            <td><strong>Everly</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>EDM</td>
+                            <td>Center</td>
+                            <td>Cute</td>
+                            <td>8,854</td>
+                            <td>8,854</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                        <tr class="edm">
+                            <td><strong>Alice</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>EDM</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>11,261</td>
+                            <td>6,446</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                        <tr class="edm">
+                            <td><strong>Cindy</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>EDM</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>8,854</td>
+                            <td>8,854</td>
+                            <td>Skill DMG +20%, Reduce Skill DMG -12%</td>
+                        </tr>
+                        <tr class="edm">
+                            <td><strong>Sari</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>EDM</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>13,513</td>
+                            <td>7,735</td>
+                            <td>Player DMG +20%, Rally Cap +10%</td>
+                        </tr>
+                        
+                        <!-- HipHop Characters -->
+                        <tr class="hiphop">
+                            <td><strong>Bella</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>HipHop</td>
+                            <td>Vocalist</td>
+                            <td>Elegant</td>
+                            <td>11,261</td>
+                            <td>6,446</td>
+                            <td>Skill DMG +20%, Fan Cap +10%</td>
+                        </tr>
+                        <tr class="hiphop">
+                            <td><strong>Avery</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>HipHop</td>
+                            <td>Center</td>
+                            <td>Sexy</td>
+                            <td>6,446</td>
+                            <td>11,261</td>
+                            <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
+                        </tr>
+                        <tr class="hiphop">
+                            <td><strong>Ayaka</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>HipHop</td>
+                            <td>Center</td>
+                            <td>Cute</td>
+                            <td>13,513</td>
+                            <td>7,735</td>
+                            <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
+                        </tr>
+                        <tr class="hiphop">
+                            <td><strong>Audrey</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>HipHop</td>
+                            <td>Center</td>
+                            <td>Cute</td>
+                            <td>8,854</td>
+                            <td>8,854</td>
+                            <td>NPC DMG +30%, Reduce Skill DMG -12%</td>
+                        </tr>
+                        <tr class="hiphop">
+                            <td><strong>Leilani</strong></td>
+                            <td><span class="ssr-badge">SSR</span></td>
+                            <td>HipHop</td>
+                            <td>Dancer</td>
+                            <td>Sexy</td>
+                            <td>7,735</td>
+                            <td>13,513</td>
+                            <td>Skill DMG +20%, Normal DMG +50%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
-
-<tbody>
-    <!-- Header should only appear once at the top of the table, in the thead section -->
-                
-    <!-- R&B Characters -->
-    <tr class="ur-row rnb">
-        <td><strong>Marguerite</strong></td>
-        <td><span class="ur-badge">UR</span></td>
-        <td>R&B</td>
-        <td>Vocalist</td>
-        <td>Elegant</td>
-        <td>11,261</td>
-        <td>6,446</td>
-        <td>Skill DMG +20%, Normal DMG +50%</td>
-    </tr>
-    <tr class="ur-row rnb">
-        <td><strong>Elizabeth</strong></td>
-        <td><span class="ur-badge">UR</span></td>
-        <td>R&B</td>
-        <td>Dancer</td>
-        <td>Sexy</td>
-        <td>6,446</td>
-        <td>11,261</td>
-        <td>Normal DMG +50%, Player DMG +20%</td>
-    </tr>
-    <tr class="rnb">
-        <td><strong>Sora</strong></td>
-        <td><span class="ssr-badge">SSR</span></td>
-        <td>R&B</td>
-        <td>Vocalist</td>
-        <td>Cute</td>
-        <td>13,513</td>
-        <td>7,735</td>
-        <td>Normal DMG +50%, Fan Cap +10%</td>
-    </tr>
-                <tr class="rnb">
-                    <td><strong>Julia</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>R&B</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>11,261</td>
-                    <td>6,446</td>
-                    <td>Skill DMG +20%, Car Speed +75%</td>
-                </tr>
-                <tr class="rnb">
-                    <td><strong>Nova</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>R&B</td>
-                    <td>Dancer</td>
-                    <td>Cute</td>
-                    <td>8,854</td>
-                    <td>8,854</td>
-                    <td>Normal DMG +50%, DMG Defense 200/s</td>
-                </tr>
-                <tr class="rnb">
-                    <td><strong>Zendaya</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>R&B</td>
-                    <td>Center</td>
-                    <td>Sexy</td>
-                    <td>6,446</td>
-                    <td>11,261</td>
-                    <td>Normal DMG +50%, NPC DMG +20%, Car Speed +50%</td>
-                </tr>
-                <tr class="rnb">
-                    <td><strong>Raith</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>R&B</td>
-                    <td>Dancer</td>
-                    <td>Sexy</td>
-                    <td>7,735</td>
-                    <td>13,513</td>
-                    <td>Normal DMG +50%, Reduce Normal Attack DMG -12%</td>
-                </tr>
-                
-                <!-- ROCK Characters -->
-                <tr class="rock">
-                    <td><strong>Yuuko</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>ROCK</td>
-                    <td>Dancer</td>
-                    <td>Elegant</td>
-                    <td>7,735</td>
-                    <td>13,513</td>
-                    <td>Normal DMG +50%, Reduce Normal Attack DMG -12%</td>
-                </tr>
-                <tr class="rock">
-                    <td><strong>Claire</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>ROCK</td>
-                    <td>Center</td>
-                    <td>Cute</td>
-                    <td>8,854</td>
-                    <td>8,854</td>
-                    <td>Skill DMG +20%, Normal DMG +50%</td>
-                </tr>
-                <tr class="rock">
-                    <td><strong>Paisley</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>ROCK</td>
-                    <td>Dancer</td>
-                    <td>Sexy</td>
-                    <td>6,446</td>
-                    <td>11,261</td>
-                    <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
-                </tr>
-                <tr class="rock">
-                    <td><strong>Skylar</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>ROCK</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>11,261</td>
-                    <td>6,446</td>
-                    <td>Skill DMG +20%, NPC DMG +30%</td>
-                </tr>
-                <tr class="rock">
-                    <td><strong>Talia</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>ROCK</td>
-                    <td>Center</td>
-                    <td>Cute</td>
-                    <td>10,625</td>
-                    <td>10,625</td>
-                    <td>Normal DMG +50%, Fan Cap +10%</td>
-                </tr>
-                
-                <!-- POP Characters -->
-                <tr class="pop">
-                    <td><strong>Chizuru</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>POP</td>
-                    <td>Center</td>
-                    <td>Sexy</td>
-                    <td>10,625</td>
-                    <td>10,625</td>
-                    <td>Player DMG +20%, Rally Cap +10%</td>
-                </tr>
-                <tr class="pop">
-                    <td><strong>Savannah</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>POP</td>
-                    <td>Dancer</td>
-                    <td>Sexy</td>
-                    <td>6,446</td>
-                    <td>11,261</td>
-                    <td>Fan Cap +10%, DMG Attack 200/s</td>
-                </tr>
-                <tr class="pop">
-                    <td><strong>Aurora</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>POP</td>
-                    <td>Center</td>
-                    <td>Cute</td>
-                    <td>8,854</td>
-                    <td>8,854</td>
-                    <td>Skill DMG +20%, Normal DMG +50%</td>
-                </tr>
-                <tr class="pop">
-                    <td><strong>Brooklyn</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>POP</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>11,261</td>
-                    <td>6,446</td>
-                    <td>NPC DMG +30%, DMG Defense 200/s</td>
-                </tr>
-                <tr class="pop">
-                    <td><strong>Moana</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>POP</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>13,513</td>
-                    <td>7,735</td>
-                    <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
-                </tr>
-                
-                <!-- EDM Characters -->
-                <tr class="edm">
-                    <td><strong>Caroline</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>EDM</td>
-                    <td>Dancer</td>
-                    <td>Sexy</td>
-                    <td>6,446</td>
-                    <td>11,261</td>
-                    <td>Fan Cap +10%, DMG Attack 200/s</td>
-                </tr>
-                <tr class="edm">
-                    <td><strong>Kokoro</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>EDM</td>
-                    <td>Center</td>
-                    <td>Sexy</td>
-                    <td>10,625</td>
-                    <td>10,625</td>
-                    <td>Skill DMG +20%, Normal DMG +50%</td>
-                </tr>
-                <tr class="edm">
-                    <td><strong>Everly</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>EDM</td>
-                    <td>Center</td>
-                    <td>Cute</td>
-                    <td>8,854</td>
-                    <td>8,854</td>
-                    <td>Skill DMG +20%, Normal DMG +50%</td>
-                </tr>
-                <tr class="edm">
-                    <td><strong>Alice</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>EDM</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>11,261</td>
-                    <td>6,446</td>
-                    <td>Skill DMG +20%, Normal DMG +50%</td>
-                </tr>
-                <tr class="edm">
-                    <td><strong>Cindy</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>EDM</td>
-                    <td>Dancer</td>
-                    <td>Sexy</td>
-                    <td>8,854</td>
-                    <td>8,854</td>
-                    <td>Skill DMG +20%, Reduce Skill DMG -12%</td>
-                </tr>
-                <tr class="edm">
-                    <td><strong>Sari</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>EDM</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>13,513</td>
-                    <td>7,735</td>
-                    <td>Player DMG +20%, Rally Cap +10%</td>
-                </tr>
-                
-                <!-- HipHop Characters -->
-                <tr class="hiphop">
-                    <td><strong>Bella</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>HipHop</td>
-                    <td>Vocalist</td>
-                    <td>Elegant</td>
-                    <td>11,261</td>
-                    <td>6,446</td>
-                    <td>Skill DMG +20%, Fan Cap +10%</td>
-                </tr>
-                <tr class="hiphop">
-                    <td><strong>Avery</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>HipHop</td>
-                    <td>Center</td>
-                    <td>Sexy</td>
-                    <td>6,446</td>
-                    <td>11,261</td>
-                    <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
-                </tr>
-                <tr class="hiphop">
-                    <td><strong>Ayaka</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>HipHop</td>
-                    <td>Center</td>
-                    <td>Cute</td>
-                    <td>13,513</td>
-                    <td>7,735</td>
-                    <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
-                </tr>
-                <tr class="hiphop">
-                    <td><strong>Audrey</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>HipHop</td>
-                    <td>Center</td>
-                    <td>Cute</td>
-                    <td>8,854</td>
-                    <td>8,854</td>
-                    <td>NPC DMG +30%, Reduce Skill DMG -12%</td>
-                </tr>
-                <tr class="hiphop">
-                    <td><strong>Leilani</strong></td>
-                    <td><span class="ssr-badge">SSR</span></td>
-                    <td>HipHop</td>
-                    <td>Dancer</td>
-                    <td>Sexy</td>
-                    <td>7,735</td>
-                    <td>13,513</td>
-                    <td>Skill DMG +20%, Normal DMG +50%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-</main>
-    <script>
+<script>
         // Equipment data
         const equipmentData = {
             jewelry: [
@@ -3756,4 +3677,9 @@
             teamEquipment = {};
         });
     </script>
+
+    <footer>
+        <p>Top Girl Team Builder © 2025 - Created by Upset Llama</p>
+    </footer>
 </body>
+</html>
