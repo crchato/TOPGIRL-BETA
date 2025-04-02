@@ -747,6 +747,60 @@
         }
     </style>
 </head>
+<div id="password-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 2rem; border-radius: 8px; max-width: 400px; width: 90%;">
+        <h2 style="color: var(--primary-color); text-align: center;">Top Girl Team Builder</h2>
+        <p style="margin: 1rem 0; text-align: center;">Please enter the password to access the team builder:</p>
+        <input type="password" id="password-input" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 4px;">
+        <p id="password-error" style="color: red; display: none; text-align: center;">Incorrect password. Please try again.</p>
+        <button id="password-submit" style="width: 100%; padding: 0.75rem; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Enter</button>
+    </div>
+</div>
+
+<script>
+    // Password protection
+    document.addEventListener('DOMContentLoaded', function() {
+        const correctPassword = "iloveflex"; // Password set to "ilove flex"
+        const passwordOverlay = document.getElementById('password-overlay');
+        const passwordInput = document.getElementById('password-input');
+        const passwordSubmit = document.getElementById('password-submit');
+        const passwordError = document.getElementById('password-error');
+        
+        // Check if the user has already entered the correct password
+        const hasAccess = localStorage.getItem('topGirlTeamBuilderAccess');
+        if (hasAccess === 'true') {
+            passwordOverlay.style.display = 'none';
+        }
+        
+        // Listen for Enter key on password input
+        passwordInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+        
+        // Listen for click on submit button
+        passwordSubmit.addEventListener('click', checkPassword);
+        
+        function checkPassword() {
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword === correctPassword) {
+                // Password is correct
+                passwordOverlay.style.display = 'none';
+                // Store access in localStorage so the user doesn't have to enter it again
+                localStorage.setItem('topGirlTeamBuilderAccess', 'true');
+            } else {
+                // Password is incorrect
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                setTimeout(() => {
+                    passwordError.style.display = 'none';
+                }, 3000);
+            }
+        }
+    });
+</script>
 <body>
     <div id="google_translate_element" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
     <script type="text/javascript">
