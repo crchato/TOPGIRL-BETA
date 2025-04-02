@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Girl Team Builder</title>
+    <!-- Leaflet CSS for interactive map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         :root {
             --primary-color: #ff6b6b;
@@ -697,6 +699,52 @@
                 padding: 0.5rem;
             }
         }
+
+        /* Map styles */
+        .map-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .map-button {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .map-button:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .map-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .marker-popup {
+            text-align: center;
+        }
+        
+        .marker-popup input {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -723,14 +771,16 @@
     <a href="#calculator">Team Calculator</a>
     <a href="#recommended-teams">Recommended Teams</a>
     <a href="#equipment">Equipment</a>
+    <a href="#game-map">Game Map</a>
     <a href="#game-info">Game Info</a>
     <a href="#skills">Skills & Bonuses</a>
     <a href="#leveling">Leveling Guide</a>
     <a href="#vehicles">Vehicle System</a>
+    <a href="#regional-teams">Regional Teams</a>
 </nav>
 
     <main>
-        <!-- New Equipment Section -->
+<!-- New Equipment Section -->
         <section id="equipment">
             <h2>Equipment</h2>
             <p>Enhance your team with Jewelry, Cars, and Properties that boost your characters' stats.</p>
@@ -905,88 +955,7 @@
                     </div>
                 </div>
             </div>
-<div class="tab-content" id="cars-content">
-                <h3>Cars</h3>
-                <p>Cars provide medium stat boosts and fan capacity increases.</p>
-                
-                <div class="equipment-grid">
-                    <div class="equipment-card gold">
-                        <div class="equipment-header">
-                            <h3>Audi</h3>
-                            <span class="equipment-type-badge">GOLD</span>
-                        </div>
-                        <div class="equipment-info">
-                            <div class="equipment-stats">
-                                <p><strong>+5,905</strong> Sing</p>
-                                <p><strong>+25,000</strong> Fans</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="equipment-card gold">
-                        <div class="equipment-header">
-                            <h3>Lamborghini</h3>
-                            <span class="equipment-type-badge">GOLD</span>
-                        </div>
-                        <div class="equipment-info">
-                            <div class="equipment-stats">
-                                <p><strong>+5,905</strong> Dance</p>
-                                <p><strong>+25,000</strong> Fans</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="equipment-card gold">
-                        <div class="equipment-header">
-                            <h3>Lexus</h3>
-                            <span class="equipment-type-badge">GOLD</span>
-                        </div>
-                        <div class="equipment-info">
-                            <div class="equipment-stats">
-                                <p><strong>+2,362</strong> Management</p>
-                                <p><strong>+25,000</strong> Fans</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="equipment-card purple">
-                        <div class="equipment-header">
-                            <h3>Lotus</h3>
-                            <span class="equipment-type-badge">PURPLE</span>
-                        </div>
-                        <div class="equipment-info">
-                            <div class="equipment-stats">
-                                <p><strong>+4,030</strong> Sing</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="equipment-card purple">
-                        <div class="equipment-header">
-                            <h3>Beetle</h3>
-                            <span class="equipment-type-badge">PURPLE</span>
-                        </div>
-                        <div class="equipment-info">
-                            <div class="equipment-stats">
-                                <p><strong>+4,030</strong> Dance</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="equipment-card purple">
-                        <div class="equipment-header">
-                            <h3>Cooper</h3>
-                            <span class="equipment-type-badge">PURPLE</span>
-                        </div>
-                        <div class="equipment-info">
-                            <div class="equipment-stats">
-                                <p><strong>+1,612</strong> Management</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+
             <div class="tab-content" id="properties-content">
                 <h3>Properties</h3>
                 <p>Properties provide the largest stat boosts and fan capacity increases.</p>
@@ -1239,7 +1208,49 @@
             </div>
         </section>
 
-        <!-- Calculator Section -->
+        <!-- Game Map Section -->
+        <section id="game-map">
+            <h2>Interactive Game Map</h2>
+            <p>Explore the game world, add markers for resource locations, and plan your strategy.</p>
+            
+            <div class="map-container">
+                <div id="top-girl-map" style="height: 600px; width: 100%; border-radius: 8px;"></div>
+            </div>
+            
+            <div class="map-controls">
+                <button id="add-marker" class="map-button">Add Marker</button>
+                <button id="clear-markers" class="map-button">Clear Markers</button>
+                <select id="marker-type" class="map-select">
+                    <option value="resource">Resource</option>
+                    <option value="enemy">Enemy</option>
+                    <option value="ally">Ally</option>
+                    <option value="quest">Quest</option>
+                </select>
+            </div>
+            
+            <div class="map-info" style="margin-top: 1rem; padding: 1rem; background-color: var(--light-color); border-radius: 8px;">
+                <h3>Map Regions</h3>
+                <p>The map is divided into six Chambers, each with unique resources and challenges:</p>
+                <ul>
+                    <li><strong>South-West:</strong> Jimbaran Chamber</li>
+                    <li><strong>South-East:</strong> Tanah Chamber</li>
+                    <li><strong>East:</strong> Seminyak Chamber</li>
+                    <li><strong>North-East:</strong> Uluwatu Chamber</li>
+                    <li><strong>North-West:</strong> Ubud Chamber</li>
+                    <li><strong>West:</strong> Kuta Chamber</li>
+                </ul>
+                
+                <h3 style="margin-top: 1rem;">UR Locations</h3>
+                <p>Three special UR locations can be found in the central region:</p>
+                <ul>
+                    <li><strong>Paradise Bay:</strong> North region</li>
+                    <li><strong>Emerald Coast:</strong> Southeast region</li>
+                    <li><strong>Royal Garden:</strong> Southwest region</li>
+                </ul>
+            </div>
+        </section>
+
+<!-- Calculator Section -->
         <section id="calculator">
             <h2>Team Calculator</h2>
             <p>Build your optimal team and calculate synergy bonuses and total stats, including equipment bonuses.</p>
@@ -1335,7 +1346,242 @@
                         
                         <button id="reset-team" style="margin-top: 1rem;">Reset Team</button>
                         <button id="reset-equipment" style="margin-top: 1rem; margin-left: 0.5rem;">Reset Equipment</button>
+                        <button id="recommend-equipment" style="margin-top: 1rem; margin-left: 0.5rem;">Recommend Balanced Equipment</button>
                     </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h3>Preset Teams</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                        <button id="load-rnb-team">Load R&B Team</button>
+                        <button id="load-balanced-team">Load Balanced Team</button>
+                        <button id="load-defense-team">Load Defense Team</button>
+                        <button id="load-bali-team">Load Bali Team</button>
+                        <button id="load-tokyo-team">Load Tokyo Team</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Regional Teams Section -->
+        <section id="regional-teams">
+            <h2>Regional Teams</h2>
+            <p>Characters from specific regions receive special bonuses when teamed together.</p>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="bali-teams">Bali Teams</div>
+                <div class="tab" data-tab="tokyo-teams">Tokyo Teams</div>
+            </div>
+            
+            <div class="tab-content active" id="bali-teams-content">
+                <h3>Bali Region Teams</h3>
+                <p>Characters from Bali receive a special 8% stat bonus when teamed together.</p>
+                
+                <div class="team-card">
+                    <div class="team-header">
+                        <h3>Bali Dream Team</h3>
+                    </div>
+                    <div class="team-members">
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Moana</strong>
+                                <div><small>POP | Vocalist | Sing: 13,513 | Dance: 7,735</small></div>
+                                <div><small>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Sari</strong><span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">(Warm-up Limited)</span>
+                                <div><small>EDM | Vocalist | Sing: 13,513 | Dance: 7,735</small></div>
+                                <div><small>Player DMG +20%, Rally Cap +10%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Leilani</strong>
+                                <div><small>HipHop | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
+                                <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Ratih</strong>
+                                <div><small>R&B | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
+                                <div><small>Normal DMG +50%, Reduce Normal Attack DMG -12%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Talia</strong>
+                                <div><small>ROCK | Center | Sing: 10,625 | Dance: 10,625</small></div>
+                                <div><small>Normal DMG +50%, Fan Cap +10%</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-stats">
+                        <p><strong>Region Synergy:</strong> Bali (+8% base stats)</p>
+                        <p><strong>Total Base Sing:</strong> 53,121</p>
+                        <p><strong>Total Base Dance:</strong> 53,121</p>
+                        <p><strong>Key Skills:</strong> Normal DMG +150%, Reduce DMG -24%, Skill DMG +20%</p>
+                        <p><strong>Equipment Focus:</strong> Balanced mix of Sing and Dance equipment</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 2rem;">Recommended Bali Equipment Setup</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Character</th>
+                                <th>Gold Equipment</th>
+                                <th>Purple Alternative</th>
+                                <th>Stats Focus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Moana</strong><br/><small>Vocalist</small></td>
+                                <td>Ring + Audi + Villa</td>
+                                <td>Watch + Lotus + Penthouse</td>
+                                <td>Balanced with slight Sing focus to maximize Sing while maintaining defenses</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sari</strong><br/><small>Vocalist</small></td>
+                                <td>Ring + Audi + Villa</td>
+                                <td>Watch + Lotus + Penthouse</td>
+                                <td>Balanced focus to enhance Player DMG +20%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Talia</strong><br/><small>Center</small></td>
+                                <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                                <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                                <td>True balance as Center position with equal Sing/Dance base stats</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Leilani</strong><br/><small>Dancer</small></td>
+                                <td>Choker + Lamborghini + Park Mansion</td>
+                                <td>Bracelet + Beetle + Loft</td>
+                                <td>Balanced with slight Dance focus to maximize defense</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ratih</strong><br/><small>Dancer</small></td>
+                                <td>Choker + Lamborghini + Park Mansion</td>
+                                <td>Bracelet + Beetle + Loft</td>
+                                <td>Balanced with slight Dance focus to enhance Reduce Normal Attack DMG</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="tokyo-teams-content">
+                <h3>Tokyo Region Teams</h3>
+                <p>Characters from Tokyo receive a special 8% stat bonus when teamed together.</p>
+                
+                <div class="team-card">
+                    <div class="team-header">
+                        <h3>Tokyo Dream Team</h3>
+                    </div>
+                    <div class="team-members">
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Yuuko</strong>
+                                <div><small>ROCK | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
+                                <div><small>Normal DMG +50%, Reduce Normal Attack DMG -12%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Chizuru</strong><span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">(Warm-up Limited)</span>
+                                <div><small>POP | Center | Sing: 10,625 | Dance: 10,625</small></div>
+                                <div><small>Player DMG +20%, Rally Cap +10%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Kokoro</strong>
+                                <div><small>EDM | Center | Sing: 10,625 | Dance: 10,625</small></div>
+                                <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Ayaka</strong>
+                                <div><small>HipHop | Center | Sing: 13,513 | Dance: 7,735</small></div>
+                                <div><small>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</small></div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="member-type ssr">SSR</div>
+                            <div>
+                                <strong>Sora</strong>
+                                <div><small>R&B | Vocalist | Sing: 13,513 | Dance: 7,735</small></div>
+                                <div><small>Normal DMG +50%, Fan Cap +10%</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-stats">
+                        <p><strong>Region Synergy:</strong> Tokyo (+8% base stats)</p>
+                        <p><strong>Total Base Sing:</strong> 56,011</p>
+                        <p><strong>Total Base Dance:</strong> 50,233</p>
+                        <p><strong>Key Skills:</strong> Normal DMG +150%, Reduce DMG -24%, Player DMG +20%, Skill DMG +20%</p>
+                        <p><strong>Equipment Focus:</strong> Balanced mix with slight Dance focus to equalize stats</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 2rem;">Recommended Tokyo Equipment Setup</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Character</th>
+                                <th>Gold Equipment</th>
+                                <th>Purple Alternative</th>
+                                <th>Stats Focus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Sora</strong><br/><small>Vocalist</small></td>
+                                <td>Ring + Audi + Villa</td>
+                                <td>Watch + Lotus + Penthouse</td>
+                                <td>Balanced sing focus to maximize Normal DMG +50%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chizuru</strong><br/><small>Center</small></td>
+                                <td>Choker + Lamborghini + Park Mansion</td>
+                                <td>Bracelet + Beetle + Loft</td>
+                                <td>Balance with dance focus to even out team stats</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kokoro</strong><br/><small>Center</small></td>
+                                <td>Choker + Lamborghini + Park Mansion</td>
+                                <td>Bracelet + Beetle + Loft</td>
+                                <td>Balance with dance focus to even out team stats</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ayaka</strong><br/><small>Center</small></td>
+                                <td>Choker + Lamborghini + Park Mansion</td>
+                                <td>Bracelet + Beetle + Loft</td>
+                                <td>Balance with dance focus to enhance defensive capabilities</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Yuuko</strong><br/><small>Dancer</small></td>
+                                <td>Choker + Lamborghini + Park Mansion</td>
+                                <td>Bracelet + Beetle + Loft</td>
+                                <td>Dance focus to maximize Reduce Normal Attack DMG -12%</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -1706,7 +1952,7 @@
        <!-- Recommended Teams Section -->
 <section id="recommended-teams">
     <h2>Recommended Teams</h2>
-    <p>Optimized team compositions based on synergy, skills, and stat balance.</p>
+    <p>Optimized team compositions based on synergy, skills, and balanced stat distribution.</p>
     
     <div class="tabs">
         <div class="tab active" data-tab="teams-with-ur">Teams with UR</div>
@@ -1717,13 +1963,13 @@
     
     <div class="tab-content active" id="teams-with-ur-content">
         <h3>Optimized Teams with UR Characters</h3>
-        <p>These team compositions include UR characters for maximum power.</p>
+        <p>These team compositions include UR characters for maximum power with balanced stats.</p>
         
         <div class="team-container">
             <!-- Team A: R&B Focus -->
             <div class="team-card">
                 <div class="team-header">
-                    <h3>R&B Focus (Offense)</h3>
+                    <h3>R&B Balance Team</h3>
                 </div>
                 <div class="team-members">
                     <div class="team-member">
@@ -1761,25 +2007,26 @@
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Julia</strong>
-                            <div><small>Sing: 11,261 | Dance: 6,446</small></div>
-                            <div><small>Skills: Skill DMG +20%, Car Speed +75%</small></div>
+                            <strong>Raith</strong> <!-- Corrected spelling -->
+                            <div><small>Sing: 7,735 | Dance: 13,513</small></div>
+                            <div><small>Skills: Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                         </div>
                     </div>
                 </div>
                 <div class="team-stats">
                     <p><strong>Genre Synergy:</strong> R&B (+4% bonus)</p>
-                    <p><strong>Total Base Sing:</strong> 51,335</p>
-                    <p><strong>Total Base Dance:</strong> 40,742</p>
-                    <p><strong>Key Skills:</strong> Normal DMG +150%, Skill DMG +40%</p>
-                    <p><strong>Equipment Focus:</strong> Sing-boosting for Vocalists, Dance-boosting for Dancers</p>
+                    <p><strong>Total Base Sing:</strong> 47,809</p>
+                    <p><strong>Total Base Dance:</strong> 47,809</p>
+                    <p><strong>Balance Ratio:</strong> 50/50 Sing:Dance (Perfect balance)</p>
+                    <p><strong>Key Skills:</strong> Normal DMG +200%, Skill DMG +20%, Defense buffs</p>
+                    <p><strong>Equipment:</strong> Balanced distribution of Sing and Dance equipment</p>
                 </div>
             </div>
             
             <!-- Team B: Mixed Genre (Balanced) -->
             <div class="team-card">
                 <div class="team-header">
-                    <h3>Balanced Power (Mixed)</h3>
+                    <h3>Mixed Genre Balance Team</h3>
                 </div>
                 <div class="team-members">
                     <div class="team-member">
@@ -1801,41 +2048,42 @@
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Bella</strong>
-                            <div><small>Sing: 11,261 | Dance: 6,446</small></div>
-                            <div><small>Skills: Skill DMG +20%, Fan Cap +10%</small></div>
+                            <strong>Aurora</strong>
+                            <div><small>Sing: 8,854 | Dance: 8,854</small></div>
+                            <div><small>Skills: Skill DMG +20%, Normal DMG +50%</small></div>
                         </div>
                     </div>
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Avery</strong>
-                            <div><small>Sing: 6,446 | Dance: 11,261</small></div>
-                            <div><small>Skills: Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
+                            <strong>Kokoro</strong>
+                            <div><small>Sing: 10,625 | Dance: 10,625</small></div>
+                            <div><small>Skills: Skill DMG +20%, Normal DMG +50%</small></div>
                         </div>
                     </div>
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Moana</strong>
-                            <div><small>Sing: 13,513 | Dance: 7,735</small></div>
-                            <div><small>Skills: Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
+                            <strong>Chizuru</strong>
+                            <div><small>Sing: 10,625 | Dance: 10,625</small></div>
+                            <div><small>Skills: Player DMG +20%, Rally Cap +10%</small></div>
                         </div>
                     </div>
                 </div>
                 <div class="team-stats">
-                    <p><strong>Genre Synergy:</strong> 2x R&B, 2x HipHop, 1x POP (+0% bonus)</p>
-                    <p><strong>Total Base Sing:</strong> 48,927</p>
-                    <p><strong>Total Base Dance:</strong> 43,149</p>
-                    <p><strong>Key Skills:</strong> Normal DMG +100%, Reduce DMG -24%</p>
-                    <p><strong>Equipment Focus:</strong> Balanced mix of Sing and Dance equipment</p>
+                    <p><strong>Genre Synergy:</strong> Mixed (no genre bonus)</p>
+                    <p><strong>Total Base Sing:</strong> 47,811</p>
+                    <p><strong>Total Base Dance:</strong> 47,811</p>
+                    <p><strong>Balance Ratio:</strong> 50/50 Sing:Dance (Perfect balance)</p>
+                    <p><strong>Key Skills:</strong> Normal DMG +150%, Skill DMG +60%, Player DMG +40%</p>
+                    <p><strong>Equipment Focus:</strong> True balanced mix of Sing and Dance equipment</p>
                 </div>
             </div>
             
-            <!-- Team C: Defensive Focus -->
+            <!-- Team C: Balance Defense Team -->
             <div class="team-card">
                 <div class="team-header">
-                    <h3>Defensive Focus (Mixed)</h3>
+                    <h3>Balanced Defense Team</h3>
                 </div>
                 <div class="team-members">
                     <div class="team-member">
@@ -1857,8 +2105,8 @@
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Paisley</strong>
-                            <div><small>Sing: 6,446 | Dance: 11,261</small></div>
+                            <strong>Moana</strong>
+                            <div><small>Sing: 13,513 | Dance: 7,735</small></div>
                             <div><small>Skills: Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
                         </div>
                     </div>
@@ -1873,18 +2121,19 @@
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Moana</strong>
+                            <strong>Ayaka</strong>
                             <div><small>Sing: 13,513 | Dance: 7,735</small></div>
                             <div><small>Skills: Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
                         </div>
                     </div>
                 </div>
                 <div class="team-stats">
-                    <p><strong>Genre Synergy:</strong> 2x R&B, 1x ROCK, 1x HipHop, 1x POP (+0% bonus)</p>
-                    <p><strong>Total Base Sing:</strong> 44,112</p>
-                    <p><strong>Total Base Dance:</strong> 47,964</p>
+                    <p><strong>Genre Synergy:</strong> Mixed (no genre bonus)</p>
+                    <p><strong>Total Base Sing:</strong> 51,179</p>
+                    <p><strong>Total Base Dance:</strong> 44,438</p>
+                    <p><strong>Balance Ratio:</strong> 53.5/46.5 Sing:Dance (Slight Sing advantage)</p>
                     <p><strong>Key Skills:</strong> Normal DMG +100%, Reduce DMG -36%, Player DMG +20%</p>
-                    <p><strong>Equipment Focus:</strong> Dance-boosting for defense</p>
+                    <p><strong>Equipment Focus:</strong> Dance-focused to balance stats (Chokers & Lamborghinis)</p>
                 </div>
             </div>
         </div>
@@ -1896,19 +2145,19 @@
     
     <!-- Add tabs for different team types -->
     <div class="tabs" style="margin-top: 1rem;">
-        <div class="tab active" data-tab="offense-ssr">Offense</div>
-        <div class="tab" data-tab="balanced-ssr">Balanced</div>
-        <div class="tab" data-tab="defense-ssr">Defense</div>
+        <div class="tab active" data-tab="offense-ssr">Balanced Offense</div>
+        <div class="tab" data-tab="balanced-ssr">Perfect Balance</div>
+        <div class="tab" data-tab="defense-ssr">Balanced Defense</div>
     </div>
     
     <!-- Offensive SSR Teams -->
     <div class="tab-content active" id="offense-ssr-content">
-        <h4>Offensive SSR Teams</h4>
+        <h4>Balanced Offensive SSR Teams</h4>
         
-        <!-- R&B Offensive Team -->
+        <!-- R&B Balanced Offensive Team -->
         <div class="team-card" style="margin-top: 1rem;">
             <div class="team-header">
-                <h3>R&B Offensive</h3>
+                <h3>R&B Balanced Offensive</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
@@ -1946,7 +2195,7 @@
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Raith</strong>
+                        <strong>Ratih</strong> <!-- Corrected spelling -->
                         <div><small>R&B | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
                         <div><small>Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                     </div>
@@ -1956,30 +2205,31 @@
                 <p><strong>Genre Synergy:</strong> R&B (+6% bonus)</p>
                 <p><strong>Total Base Sing:</strong> 47,809</p>
                 <p><strong>Total Base Dance:</strong> 47,809</p>
-                <p><strong>Key Skills:</strong> Normal DMG +200%, Skill DMG +20%</p>
-                <p><strong>Recommended Equipment:</strong> Gold Ring, Audi, Villa for Vocalists</p>
+                <p><strong>Balance Ratio:</strong> 50/50 Sing:Dance (Perfect balance)</p>
+                <p><strong>Key Skills:</strong> Normal DMG +200%, Skill DMG +20%, Reduce Normal Atk DMG -12%</p>
+                <p><strong>Equipment Recommendation:</strong> Balanced Sing and Dance equipment</p>
             </div>
         </div>
         
-        <!-- Mixed Offensive Team -->
+        <!-- Mixed Balanced Offensive Team -->
         <div class="team-card" style="margin-top: 1rem;">
             <div class="team-header">
-                <h3>Skill Damage Focus</h3>
+                <h3>Mixed Genre Balanced Offense</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Skylar</strong>
-                        <div><small>ROCK | Vocalist | Sing: 11,261 | Dance: 6,446</small></div>
-                        <div><small>Skill DMG +20%, NPC DMG +30%</small></div>
+                        <strong>Sora</strong>
+                        <div><small>R&B | Vocalist | Sing: 13,513 | Dance: 7,735</small></div>
+                        <div><small>Normal DMG +50%, Fan Cap +10%</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Claire</strong>
-                        <div><small>ROCK | Center | Sing: 8,854 | Dance: 8,854</small></div>
+                        <strong>Alice</strong>
+                        <div><small>EDM | Vocalist | Sing: 11,261 | Dance: 6,446</small></div>
                         <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
                     </div>
                 </div>
@@ -1994,39 +2244,96 @@
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Alice</strong>
-                        <div><small>EDM | Vocalist | Sing: 11,261 | Dance: 6,446</small></div>
-                        <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
+                        <strong>Avery</strong>
+                        <div><small>HipHop | Center | Sing: 6,446 | Dance: 11,261</small></div>
+                        <div><small>Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Bella</strong>
-                        <div><small>HipHop | Vocalist | Sing: 11,261 | Dance: 6,446</small></div>
-                        <div><small>Skill DMG +20%, Fan Cap +10%</small></div>
+                        <strong>Yuuko</strong>
+                        <div><small>ROCK | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
+                        <div><small>Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                     </div>
                 </div>
             </div>
             <div class="team-stats">
                 <p><strong>Genre Synergy:</strong> Mixed (no bonus)</p>
-                <p><strong>Total Base Sing:</strong> 51,491</p>
-                <p><strong>Total Base Dance:</strong> 37,046</p>
-                <p><strong>Key Skills:</strong> Skill DMG +100%, Normal DMG +150%</p>
-                <p><strong>Equipment Focus:</strong> Gold Ring, Audi, Villa for all characters</p>
+                <p><strong>Total Base Sing:</strong> 47,809</p>
+                <p><strong>Total Base Dance:</strong> 47,809</p>
+                <p><strong>Balance Ratio:</strong> 50/50 Sing:Dance (Perfect balance)</p>
+                <p><strong>Key Skills:</strong> Normal DMG +150%, Skill DMG +40%, Reduce DMG -24%</p>
+                <p><strong>Equipment Focus:</strong> Balanced Sing and Dance equipment</p>
             </div>
         </div>
     </div>
     
     <!-- Balanced SSR Teams -->
     <div class="tab-content" id="balanced-ssr-content">
-        <h4>Balanced SSR Teams</h4>
+        <h4>Perfect Balance SSR Teams</h4>
+        
+        <!-- Center-Heavy Balanced Team -->
+        <div class="team-card" style="margin-top: 1rem;">
+            <div class="team-header">
+                <h3>Perfect Balance Center Team</h3>
+            </div>
+            <div class="team-members">
+                <div class="team-member">
+                    <div class="member-type ssr">SSR</div>
+                    <div>
+                        <strong>Claire</strong>
+                        <div><small>ROCK | Center | Sing: 8,854 | Dance: 8,854</small></div>
+                        <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-type ssr">SSR</div>
+                    <div>
+                        <strong>Talia</strong>
+                        <div><small>ROCK | Center | Sing: 10,625 | Dance: 10,625</small></div>
+                        <div><small>Normal DMG +50%, Fan Cap +10%</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-type ssr">SSR</div>
+                    <div>
+                        <strong>Aurora</strong>
+                        <div><small>POP | Center | Sing: 8,854 | Dance: 8,854</small></div>
+                        <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-type ssr">SSR</div>
+                    <div>
+                        <strong>Chizuru</strong>
+                        <div><small>POP | Center | Sing: 10,625 | Dance: 10,625</small></div>
+                        <div><small>Player DMG +20%, Rally Cap +10%</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-type ssr">SSR</div>
+                    <div>
+                        <strong>Kokoro</strong>
+                        <div><small>EDM | Center | Sing: 10,625 | Dance: 10,625</small></div>
+                        <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
+                    </div>
+                </div>
+            </div>
+            <div class="team-stats">
+                <p><strong>Genre Synergy:</strong> Mixed (no bonus)</p>
+                <p><strong>Total Base Sing:</strong> 49,583</p>
+                <p><strong>Total Base Dance:</strong> 49,583</p>
+                <p><strong>Balance Ratio:</strong> 50/50 Sing:Dance (Perfect balance)</p>
+                <p><strong>Key Skills:</strong> Normal DMG +150%, Skill DMG +60%, Player DMG +20%</p>
+                <p><strong>Equipment Focus:</strong> Equal Sing and Dance equipment, can use any combination</p>
+            </div>
+        </div>
         
         <!-- EDM Balanced Team -->
         <div class="team-card" style="margin-top: 1rem;">
             <div class="team-header">
-                <h3>EDM Balanced</h3>
-            </div>
+                <h3>EDM Balanced Team</h3>
             <div class="team-members">
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
@@ -2073,76 +2380,21 @@
                 <p><strong>Genre Synergy:</strong> EDM (+6% bonus)</p>
                 <p><strong>Total Base Sing:</strong> 50,699</p>
                 <p><strong>Total Base Dance:</strong> 44,921</p>
-                <p><strong>Key Skills:</strong> Skill DMG +60%, Normal DMG +150%</p>
-                <p><strong>Equipment Focus:</strong> Mixed Sing and Dance equipment</p>
-            </div>
-        </div>
-        
-        <!-- Mixed Balanced Team -->
-        <div class="team-card" style="margin-top: 1rem;">
-            <div class="team-header">
-                <h3>Center-Heavy Balanced</h3>
-            </div>
-            <div class="team-members">
-                <div class="team-member">
-                    <div class="member-type ssr">SSR</div>
-                    <div>
-                        <strong>Claire</strong>
-                        <div><small>ROCK | Center | Sing: 8,854 | Dance: 8,854</small></div>
-                        <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-type ssr">SSR</div>
-                    <div>
-                        <strong>Talia</strong>
-                        <div><small>ROCK | Center | Sing: 10,625 | Dance: 10,625</small></div>
-                        <div><small>Normal DMG +50%, Fan Cap +10%</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-type ssr">SSR</div>
-                    <div>
-                        <strong>Aurora</strong>
-                        <div><small>POP | Center | Sing: 8,854 | Dance: 8,854</small></div>
-                        <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-type ssr">SSR</div>
-                    <div>
-                        <strong>Chizuru</strong>
-                        <div><small>POP | Center | Sing: 10,625 | Dance: 10,625</small></div>
-                        <div><small>Player DMG +20%, Rally Cap +10%</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="member-type ssr">SSR</div>
-                    <div>
-                        <strong>Audrey</strong>
-                        <div><small>HipHop | Center | Sing: 8,854 | Dance: 8,854</small></div>
-                        <div><small>NPC DMG +30%, Reduce Skill DMG -12%</small></div>
-                    </div>
-                </div>
-            </div>
-            <div class="team-stats">
-                <p><strong>Genre Synergy:</strong> Mixed (no bonus)</p>
-                <p><strong>Total Base Sing:</strong> 47,812</p>
-                <p><strong>Total Base Dance:</strong> 47,812</p>
-                <p><strong>Key Skills:</strong> Normal DMG +150%, Skill DMG +40%</p>
-                <p><strong>Equipment Focus:</strong> Equal Sing and Dance equipment</p>
+                <p><strong>Balance Ratio:</strong> 53/47 Sing:Dance (Near perfect balance)</p>
+                <p><strong>Key Skills:</strong> Skill DMG +60%, Normal DMG +150%, Player DMG +20%</p>
+                <p><strong>Equipment Focus:</strong> Dance-focused to balance stats perfectly</p>
             </div>
         </div>
     </div>
     
     <!-- Defensive SSR Teams -->
     <div class="tab-content" id="defense-ssr-content">
-        <h4>Defensive SSR Teams</h4>
+        <h4>Balanced Defensive SSR Teams</h4>
         
         <!-- Defensive Specialists Team -->
         <div class="team-card" style="margin-top: 1rem;">
             <div class="team-header">
-                <h3>Defense Specialists</h3>
+                <h3>Balanced Defense Specialists</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
@@ -2190,21 +2442,22 @@
                 <p><strong>Genre Synergy:</strong> Mixed (no bonus)</p>
                 <p><strong>Total Base Sing:</strong> 48,772</p>
                 <p><strong>Total Base Dance:</strong> 46,846</p>
-                <p><strong>Key Skills:</strong> Reduce Skill DMG -48%, Reduce Normal Attack DMG -48%</p>
-                <p><strong>Equipment Focus:</strong> Dance-boosting equipment for defense</p>
+                <p><strong>Balance Ratio:</strong> 51/49 Sing:Dance (Near perfect balance)</p>
+                <p><strong>Key Skills:</strong> Reduce Skill DMG -48%, Reduce Normal Attack DMG -48%, Normal DMG +50%</p>
+                <p><strong>Equipment Focus:</strong> Slight Dance focus to perfect the balance</p>
             </div>
         </div>
         
         <!-- Mixed Defensive Team -->
         <div class="team-card" style="margin-top: 1rem;">
             <div class="team-header">
-                <h3>Balanced Defense</h3>
+                <h3>Balanced Defense & Offense</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Raith</strong>
+                        <strong>Ratih</strong> <!-- Corrected spelling from Raith -->
                         <div><small>R&B | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
                         <div><small>Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                     </div>
@@ -2220,41 +2473,42 @@
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Paisley</strong>
-                        <div><small>ROCK | Dancer | Sing: 6,446 | Dance: 11,261</small></div>
-                        <div><small>Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
+                        <strong>Skylar</strong>
+                        <div><small>ROCK | Vocalist | Sing: 11,261 | Dance: 6,446</small></div>
+                        <div><small>Skill DMG +20%, NPC DMG +30%</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Avery</strong>
-                        <div><small>HipHop | Center | Sing: 6,446 | Dance: 11,261</small></div>
-                        <div><small>Reduce Skill DMG -12%, Reduce Normal Atk DMG -12%</small></div>
+                        <strong>Sora</strong>
+                        <div><small>R&B | Vocalist | Sing: 13,513 | Dance: 7,735</small></div>
+                        <div><small>Normal DMG +50%, Fan Cap +10%</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Leilani</strong>
-                        <div><small>HipHop | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
+                        <strong>Aurora</strong>
+                        <div><small>POP | Center | Sing: 8,854 | Dance: 8,854</small></div>
                         <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
                     </div>
                 </div>
             </div>
             <div class="team-stats">
                 <p><strong>Genre Synergy:</strong> Mixed (no bonus)</p>
-                <p><strong>Total Base Sing:</strong> 36,097</p>
-                <p><strong>Total Base Dance:</strong> 63,061</p>
-                <p><strong>Key Skills:</strong> Normal DMG +150%, Reduce DMG -48%</p>
-                <p><strong>Equipment Focus:</strong> Dance-focused equipment</p>
+                <p><strong>Total Base Sing:</strong> 49,098</p>
+                <p><strong>Total Base Dance:</strong> 50,061</p>
+                <p><strong>Balance Ratio:</strong> 49.5/50.5 Sing:Dance (Near perfect balance)</p>
+                <p><strong>Key Skills:</strong> Normal DMG +200%, Skill DMG +40%, Reduce Normal Atk DMG -24%</p>
+                <p><strong>Equipment Focus:</strong> Slightly Sing-focused to perfect the balance</p>
             </div>
         </div>
     </div>
 </div>
     <div class="tab-content" id="gold-equipment-content">
-    <h3>Gold Equipment Recommendations</h3>
-    <p>Optimal gold equipment setups for each character type based on their stats and skills.</p>
+    <h3>Gold Equipment Recommendations for Balanced Teams</h3>
+    <p>Optimal gold equipment setups for balanced teams - maintaining equal Sing and Dance stats when possible.</p>
     
     <div class="table-container">
         <table>
@@ -2271,19 +2525,19 @@
             <tbody>
                 <tr>
                     <td>Vocalist (High Sing)</td>
-                    <td>Ring</td>
-                    <td>Audi</td>
-                    <td>Villa</td>
-                    <td>+19,730 Sing, +86,000 Fans</td>
-                    <td>Marguerite, Sora, Julia, Skylar, Moana, Alice, Bella</td>
-                </tr>
-                <tr>
-                    <td>Dancer (High Dance)</td>
                     <td>Choker</td>
                     <td>Lamborghini</td>
                     <td>Park Mansion</td>
                     <td>+19,730 Dance, +86,000 Fans</td>
-                    <td>Elizabeth, Raith, Yuuko, Paisley, Savannah, Caroline, Leilani</td>
+                    <td>Marguerite, Sora, Julia, Skylar, Moana, Alice, Bella, Sari, Ayaka</td>
+                </tr>
+                <tr>
+                    <td>Dancer (High Dance)</td>
+                    <td>Ring</td>
+                    <td>Audi</td>
+                    <td>Villa</td>
+                    <td>+19,730 Sing, +86,000 Fans</td>
+                    <td>Elizabeth, Ratih, Yuuko, Paisley, Savannah, Caroline, Leilani</td>
                 </tr>
                 <tr>
                     <td>Center (Balanced)</td>
@@ -2291,7 +2545,7 @@
                     <td>Audi or Lamborghini</td>
                     <td>Villa or Park Mansion</td>
                     <td>+19,730 Sing/Dance, +86,000 Fans</td>
-                    <td>Zendaya, Claire, Talia, Chizuru, Aurora, Kokoro, Everly, Avery, Ayaka, Audrey</td>
+                    <td>Zendaya, Claire, Talia, Chizuru, Aurora, Kokoro, Everly, Avery</td>
                 </tr>
                 <tr>
                     <td>Management Focus</td>
@@ -2305,159 +2559,98 @@
         </table>
     </div>
     
-    <h3>Gold Equipment Team Setups</h3>
-    <p>Recommended full-team equipment combinations for different team strategies.</p>
+    <h3>Gold Equipment Team Setups for Perfect Balance</h3>
+    <p>Recommended equipment combinations that maintain equal Sing and Dance stats across the team.</p>
     
     <div class="team-container">
-        <!-- Maximum Offense Setup -->
+        <!-- Perfect Balance Setup -->
         <div class="team-card">
             <div class="team-header">
-                <h3>Maximum Offense</h3>
+                <h3>Perfect Balance Equipment</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
                     <div>
-                        <strong>Vocalist 1</strong>
-                        <div><small>Ring + Audi + Villa</small></div>
-                        <div><small>+19,730 Sing, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Vocalist 2</strong>
-                        <div><small>Ring + Audi + Villa</small></div>
-                        <div><small>+19,730 Sing, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Center</strong>
-                        <div><small>Ring + Audi + Villa</small></div>
-                        <div><small>+19,730 Sing, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Dancer 1</strong>
+                        <strong>Vocalist 1 (High Sing)</strong>
                         <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
+                        <div><small>Adds +19,730 Dance to balance high Sing</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div>
-                        <strong>Dancer 2</strong>
+                        <strong>Vocalist 2 (High Sing)</strong>
                         <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
+                        <div><small>Adds +19,730 Dance to balance high Sing</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div>
+                        <strong>Center (Balanced)</strong>
+                        <div><small>Equal combination (e.g., Ring + Lamborghini + Villa)</small></div>
+                        <div><small>Keeps balanced stats balanced</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div>
+                        <strong>Dancer 1 (High Dance)</strong>
+                        <div><small>Ring + Audi + Villa</small></div>
+                        <div><small>Adds +19,730 Sing to balance high Dance</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div>
+                        <strong>Dancer 2 (High Dance)</strong>
+                        <div><small>Ring + Audi + Villa</small></div>
+                        <div><small>Adds +19,730 Sing to balance high Dance</small></div>
                     </div>
                 </div>
             </div>
             <div class="team-stats">
-                <p><strong>Total Equipment Bonus:</strong> +59,190 Sing, +39,460 Dance, +430,000 Fans</p>
-                <p><strong>Strategy:</strong> Focus on Sing stat to maximize damage output</p>
+                <p><strong>Principle:</strong> Always equip Vocalists with Dance equipment and Dancers with Sing equipment</p>
+                <p><strong>For Centers:</strong> Use equal combinations or adjust based on specific stats to maintain balance</p>
+                <p><strong>Result:</strong> Near-perfect 50/50 balance between team Sing and Dance for optimal performance</p>
             </div>
         </div>
         
-        <!-- Balanced Setup -->
+        <!-- Custom Balance Setup -->
         <div class="team-card">
             <div class="team-header">
-                <h3>Balanced Setup</h3>
+                <h3>Custom Balance Setup</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
                     <div>
-                        <strong>Vocalist 1</strong>
+                        <strong>Unbalanced Team Example</strong>
+                        <div><small>If your team has 4 Vocalists and 1 Dancer:</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div>
+                        <strong>Vocalists (All 4)</strong>
+                        <div><small>All with Choker + Lamborghini + Park Mansion</small></div>
+                        <div><small>+78,920 Dance total from all equipment</small></div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div>
+                        <strong>Dancer</strong>
                         <div><small>Ring + Audi + Villa</small></div>
-                        <div><small>+19,730 Sing, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Vocalist 2</strong>
-                        <div><small>Ring + Audi + Villa</small></div>
-                        <div><small>+19,730 Sing, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Center</strong>
-                        <div><small>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</small></div>
-                        <div><small>+19,730 Sing/Dance, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Dancer 1</strong>
-                        <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Dancer 2</strong>
-                        <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
+                        <div><small>+19,730 Sing from equipment</small></div>
                     </div>
                 </div>
             </div>
             <div class="team-stats">
-                <p><strong>Total Equipment Bonus:</strong> ~+49,325 Sing, ~+49,325 Dance, +430,000 Fans</p>
-                <p><strong>Strategy:</strong> Equal focus on Sing and Dance for balanced offense and defense</p>
-            </div>
-        </div>
-        
-        <!-- Defensive Setup -->
-        <div class="team-card">
-            <div class="team-header">
-                <h3>Defensive Focus</h3>
-            </div>
-            <div class="team-members">
-                <div class="team-member">
-                    <div>
-                        <strong>Vocalist 1</strong>
-                        <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Vocalist 2</strong>
-                        <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Center</strong>
-                        <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Dancer 1</strong>
-                        <div><small>Choker + Lamborghini + Park Mansion</small></div>
-                        <div><small>+19,730 Dance, +86,000 Fans</small></div>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div>
-                        <strong>Dancer 2</strong>
-                        <div><small>Ring + Audi + Villa</small></div>
-                        <div><small>+19,730 Sing, +86,000 Fans</small></div>
-                    </div>
-                </div>
-            </div>
-            <div class="team-stats">
-                <p><strong>Total Equipment Bonus:</strong> +19,730 Sing, +78,920 Dance, +430,000 Fans</p>
-                <p><strong>Strategy:</strong> Focus on Dance stat to maximize defensive capability</p>
+                <p><strong>Strategy:</strong> Identify stat imbalance in your team composition and correct with equipment</p>
+                <p><strong>Calculate:</strong> Total base Sing and Dance, then add equipment to balance to near 50/50</p>
+                <p><strong>Remember:</strong> Skills still matter! Balanced stats optimize both attack and defense</p>
             </div>
         </div>
     </div>
 </div>
 
 <div class="tab-content" id="purple-equipment-content">
-    <h3>Purple Equipment Recommendations</h3>
-    <p>Budget-friendly purple equipment setups for each character type.</p>
+    <h3>Purple Equipment Recommendations for Balanced Teams</h3>
+    <p>Budget-friendly purple equipment setups that maintain balanced stats.</p>
     
     <div class="table-container">
         <table>
@@ -2474,18 +2667,18 @@
             <tbody>
                 <tr>
                     <td>Vocalist (High Sing)</td>
-                    <td>Watch</td>
-                    <td>Lotus</td>
-                    <td>Penthouse</td>
-                    <td>+13,730 Sing, +0 Fans</td>
-                    <td>-86,000 Fans vs Gold</td>
-                </tr>
-                <tr>
-                    <td>Dancer (High Dance)</td>
                     <td>Bracelet</td>
                     <td>Beetle</td>
                     <td>Loft</td>
                     <td>+13,730 Dance, +0 Fans</td>
+                    <td>-86,000 Fans vs Gold</td>
+                </tr>
+                <tr>
+                    <td>Dancer (High Dance)</td>
+                    <td>Watch</td>
+                    <td>Lotus</td>
+                    <td>Penthouse</td>
+                    <td>+13,730 Sing, +0 Fans</td>
                     <td>-86,000 Fans vs Gold</td>
                 </tr>
                 <tr>
@@ -2508,39 +2701,48 @@
         </table>
     </div>
     
-    <h3>Mixed Gold/Purple Equipment Strategy</h3>
-    <p>For players with limited gold equipment, prioritize in this order:</p>
+    <h3>Mixed Gold/Purple Equipment Strategy for Balance</h3>
+    <p>For players with limited gold equipment, prioritize in this order to maintain stat balance:</p>
     
     <div class="team-container">
         <div class="team-card">
             <div class="team-header">
-                <h3>Priority Order</h3>
+                <h3>Balancing Priority Order</h3>
             </div>
             <div class="team-members">
                 <div class="team-member">
                     <div>
                         <strong>1. Properties</strong>
-                        <div><small>Gold Villa/Park Mansion provide largest stat boosts</small></div>
+                        <div><small>Gold Villa/Park Mansion provide largest stat boosts to balance team</small></div>
                         <div><small>+11,810 Sing/Dance, +50,000 Fans</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div>
                         <strong>2. Cars</strong>
-                        <div><small>Gold Audi/Lamborghini provide medium boosts</small></div>
+                        <div><small>Gold Audi/Lamborghini provide medium boosts to balance team</small></div>
                         <div><small>+5,905 Sing/Dance, +25,000 Fans</small></div>
                     </div>
                 </div>
                 <div class="team-member">
                     <div>
                         <strong>3. Jewelry</strong>
-                        <div><small>Gold Ring/Choker provide smallest boosts</small></div>
+                        <div><small>Gold Ring/Choker provide smallest boosts to balance team</small></div>
                         <div><small>+2,015 Sing/Dance, +11,000 Fans</small></div>
                     </div>
                 </div>
             </div>
             <div class="team-stats">
                 <p><strong>Example Mixed Setup (Vocalist):</strong></p>
+                <ul>
+                    <li>Gold Park Mansion (+11,810 Dance, +50,000 Fans)</li>
+                    <li>Purple Beetle (+4,030 Dance)</li>
+                    <li>Purple Bracelet (+1,640 Dance)</li>
+                    <li><strong>Total:</strong> +17,480 Dance, +50,000 Fans</li>
+                    <li><strong>Difference vs All Gold:</strong> -2,250 Dance, -36,000 Fans</li>
+                </ul>
+                
+                <p><strong>Example Mixed Setup (Dancer):</strong></p>
                 <ul>
                     <li>Gold Villa (+11,810 Sing, +50,000 Fans)</li>
                     <li>Purple Lotus (+4,030 Sing)</li>
@@ -2915,6 +3117,7 @@
                     <li>Characters belong to different genres and get synergy bonuses when teamed together</li>
                     <li>Characters have unique skills that enhance team performance</li>
                     <li>Teams consist of 5 characters with an optimal mix of skills and stats</li>
+                    <li><strong>Balance is Key:</strong> The most effective teams maintain a 50/50 balance between Sing and Dance stats</li>
                 </ul>
             </div>
 
@@ -2929,6 +3132,11 @@
                 <ul>
                     <li>Only 2 UR characters can be on a team at a time</li>
                     <li>UR characters can link with high-level SSR characters for additional bonuses</li>
+                </ul>
+                <p><strong>Region Bonuses:</strong></p>
+                <ul>
+                    <li><strong>Bali Girls:</strong> Moana, Sari, Leilani, Ratih, and Talia receive special region bonuses when teamed together</li>
+                    <li><strong>Tokyo Girls:</strong> Yuuko, Chizuru, Kokoro, Ayaka, and Sora receive special region bonuses when teamed together</li>
                 </ul>
             </div>
 
@@ -2947,6 +3155,13 @@
                     <li>POP</li>
                     <li>EDM</li>
                     <li>HipHop</li>
+                </ul>
+                
+                <h3>Regional Bonuses</h3>
+                <p>Characters from the same region receive special bonuses:</p>
+                <ul>
+                    <li><strong>Bali Team:</strong> +8% to base stats when all Bali characters are used together</li>
+                    <li><strong>Tokyo Team:</strong> +8% to base stats when all Tokyo characters are used together</li>
                 </ul>
             </div>
 
@@ -3158,7 +3373,7 @@
                             <td>Normal DMG +50%, Player DMG +20%</td>
                         </tr>
                         <tr class="rnb">
-                            <td><strong>Sora</strong></td>
+                            <td><strong>Sora</strong> <span style="font-size: 0.8rem; color: #666;">(Tokyo)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>R&B</td>
                             <td>Vocalist</td>
@@ -3198,7 +3413,7 @@
                             <td>Normal DMG +50%, NPC DMG +20%, Car Speed +50%</td>
                         </tr>
                         <tr class="rnb">
-                            <td><strong>Raith</strong></td>
+                            <td><strong>Ratih</strong> <span style="font-size: 0.8rem; color: #666;">(Bali)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>R&B</td>
                             <td>Dancer</td>
@@ -3210,7 +3425,7 @@
                         
                         <!-- ROCK Characters -->
                         <tr class="rock">
-                            <td><strong>Yuuko</strong></td>
+                            <td><strong>Yuuko</strong> <span style="font-size: 0.8rem; color: #666;">(Tokyo)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>ROCK</td>
                             <td>Dancer</td>
@@ -3250,7 +3465,7 @@
                             <td>Skill DMG +20%, NPC DMG +30%</td>
                         </tr>
                         <tr class="rock">
-                            <td><strong>Talia</strong></td>
+                            <td><strong>Talia</strong> <span style="font-size: 0.8rem; color: #666;">(Bali)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>ROCK</td>
                             <td>Center</td>
@@ -3262,7 +3477,7 @@
                         
                         <!-- POP Characters -->
                         <tr class="pop">
-                            <td><strong>Chizuru</strong></td>
+                            <td><strong>Chizuru</strong> <span style="font-size: 0.8rem; color: #666;">(Tokyo, Limited)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>POP</td>
                             <td>Center</td>
@@ -3302,7 +3517,7 @@
                             <td>NPC DMG +30%, DMG Defense 200/s</td>
                         </tr>
                         <tr class="pop">
-                            <td><strong>Moana</strong></td>
+                            <td><strong>Moana</strong> <span style="font-size: 0.8rem; color: #666;">(Bali)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>POP</td>
                             <td>Vocalist</td>
@@ -3311,7 +3526,6 @@
                             <td>7,735</td>
                             <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
                         </tr>
-                        
                         <!-- EDM Characters -->
                         <tr class="edm">
                             <td><strong>Caroline</strong></td>
@@ -3324,7 +3538,7 @@
                             <td>Fan Cap +10%, DMG Attack 200/s</td>
                         </tr>
                         <tr class="edm">
-                            <td><strong>Kokoro</strong></td>
+                            <td><strong>Kokoro</strong> <span style="font-size: 0.8rem; color: #666;">(Tokyo)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>EDM</td>
                             <td>Center</td>
@@ -3364,7 +3578,7 @@
                             <td>Skill DMG +20%, Reduce Skill DMG -12%</td>
                         </tr>
                         <tr class="edm">
-                            <td><strong>Sari</strong></td>
+                            <td><strong>Sari</strong> <span style="font-size: 0.8rem; color: #666;">(Bali, Limited)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>EDM</td>
                             <td>Vocalist</td>
@@ -3396,7 +3610,7 @@
                             <td>Reduce Skill DMG -12%, Reduce Normal Attack DMG -12%</td>
                         </tr>
                         <tr class="hiphop">
-                            <td><strong>Ayaka</strong></td>
+                            <td><strong>Ayaka</strong> <span style="font-size: 0.8rem; color: #666;">(Tokyo)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>HipHop</td>
                             <td>Center</td>
@@ -3416,7 +3630,7 @@
                             <td>NPC DMG +30%, Reduce Skill DMG -12%</td>
                         </tr>
                         <tr class="hiphop">
-                            <td><strong>Leilani</strong></td>
+                            <td><strong>Leilani</strong> <span style="font-size: 0.8rem; color: #666;">(Bali)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
                             <td>HipHop</td>
                             <td>Dancer</td>
@@ -3445,14 +3659,15 @@
     
     <div class="tab-content active" id="ur-equipment-content">
         <h3>UR Character Equipment</h3>
-        <p>Optimal equipment setup for UR characters.</p>
+        <p>Optimal equipment setup for UR characters with both balanced and focused approaches.</p>
         
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Character</th>
-                        <th>Gold Equipment</th>
+                        <th>Gold Equipment (Balanced)</th>
+                        <th>Gold Equipment (Focused)</th>
                         <th>Purple Alternative</th>
                         <th>Stats Focus</th>
                     </tr>
@@ -3460,15 +3675,17 @@
                 <tbody>
                     <tr>
                         <td><strong>Marguerite</strong><br/><small>R&B | Vocalist</small></td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
                         <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Skill DMG +20% and Normal DMG +50%</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Balanced: Add Dance to balance high Sing<br/>Focused: Maximize Sing for damage output</td>
                     </tr>
                     <tr>
                         <td><strong>Elizabeth</strong><br/><small>R&B | Dancer</small></td>
+                        <td>Ring + Audi + Villa</td>
                         <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize Normal DMG +50% and Player DMG +20%</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Balanced: Add Sing to balance high Dance<br/>Focused: Maximize Dance for defense</td>
                     </tr>
                 </tbody>
             </table>
@@ -3477,14 +3694,14 @@
     
     <div class="tab-content" id="ssr-rb-equipment-content">
         <h3>SSR R&B Character Equipment</h3>
-        <p>Optimal equipment setup for SSR R&B characters.</p>
+        <p>Optimal equipment setup for SSR R&B characters for balanced stat distribution.</p>
         
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Character</th>
-                        <th>Gold Equipment</th>
+                        <th>Gold Equipment (Balanced)</th>
                         <th>Purple Alternative</th>
                         <th>Stats Focus</th>
                     </tr>
@@ -3492,33 +3709,33 @@
                 <tbody>
                     <tr>
                         <td><strong>Sora</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Normal DMG +50%</td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing stat to create perfect balance</td>
                     </tr>
                     <tr>
                         <td><strong>Julia</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Skill DMG +20%</td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing stat to create perfect balance</td>
                     </tr>
                     <tr>
                         <td><strong>Nova</strong><br/><small>Dancer</small></td>
-                        <td>Ring + Audi + Villa<br/>or<br/>Choker + Lamborghini + Park Mansion</td>
-                        <td>Watch + Lotus + Penthouse<br/>or<br/>Bracelet + Beetle + Loft</td>
-                        <td>Balanced stats allow flexibility - can focus on either Sing or Dance</td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain balance with equipment</td>
                     </tr>
                     <tr>
                         <td><strong>Zendaya</strong><br/><small>Center</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize defensive capability</td>
+                        <td>Ring + Audi + Villa</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance stat to create perfect balance</td>
                     </tr>
                     <tr>
-                        <td><strong>Raith</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to enhance damage reduction</td>
+                        <td><strong>Ratih</strong><br/><small>Dancer</small></td>
+                        <td>Ring + Audi + Villa</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance stat to create perfect balance</td>
                     </tr>
                 </tbody>
             </table>
@@ -3527,14 +3744,14 @@
     
     <div class="tab-content" id="ssr-rock-equipment-content">
         <h3>SSR Rock Character Equipment</h3>
-        <p>Optimal equipment setup for SSR Rock characters.</p>
+        <p>Optimal equipment setup for SSR Rock characters for balanced stat distribution.</p>
         
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Character</th>
-                        <th>Gold Equipment</th>
+                        <th>Gold Equipment (Balanced)</th>
                         <th>Purple Alternative</th>
                         <th>Stats Focus</th>
                     </tr>
@@ -3542,33 +3759,33 @@
                 <tbody>
                     <tr>
                         <td><strong>Yuuko</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize Normal DMG +50%</td>
+                        <td>Ring + Audi + Villa</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance for better overall performance</td>
                     </tr>
                     <tr>
                         <td><strong>Claire</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Skill DMG +20%</td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
                     </tr>
                     <tr>
                         <td><strong>Paisley</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize damage reduction</td>
+                        <td>Ring + Audi + Villa</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance to enhance defensive capabilities</td>
                     </tr>
                     <tr>
                         <td><strong>Skylar</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Skill DMG +20%</td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing to maximize Skill DMG +20%</td>
                     </tr>
                     <tr>
                         <td><strong>Talia</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Normal DMG +50%</td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
                     </tr>
                 </tbody>
             </table>
@@ -3577,14 +3794,14 @@
     
     <div class="tab-content" id="ssr-pop-equipment-content">
         <h3>SSR Pop Character Equipment</h3>
-        <p>Optimal equipment setup for SSR Pop characters.</p>
+        <p>Optimal equipment setup for SSR Pop characters for balanced stat distribution.</p>
         
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Character</th>
-                        <th>Gold Equipment</th>
+                        <th>Gold Equipment (Balanced)</th>
                         <th>Purple Alternative</th>
                         <th>Stats Focus</th>
                     </tr>
@@ -3592,33 +3809,33 @@
                 <tbody>
                     <tr>
                         <td><strong>Chizuru</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Player DMG +20%</td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
                     </tr>
                     <tr>
                         <td><strong>Savannah</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize DMG Attack 200/s</td>
+                        <td>Ring + Audi + Villa</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance to maximize Fan Cap +10%</td>
                     </tr>
                     <tr>
                         <td><strong>Aurora</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Skill DMG +20%</td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
                     </tr>
                     <tr>
                         <td><strong>Brooklyn</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize NPC DMG +30%</td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing to maximize NPC DMG +30%</td>
                     </tr>
                     <tr>
                         <td><strong>Moana</strong><br/><small>Vocalist</small></td>
                         <td>Choker + Lamborghini + Park Mansion</td>
                         <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance despite Vocalist position to enhance damage reduction</td>
+                        <td>Add Dance to balance high Sing and enhance damage reduction</td>
                     </tr>
                 </tbody>
             </table>
@@ -3627,14 +3844,14 @@
     
     <div class="tab-content" id="ssr-edm-equipment-content">
         <h3>SSR EDM Character Equipment</h3>
-        <p>Optimal equipment setup for SSR EDM characters.</p>
+        <p>Optimal equipment setup for SSR EDM characters for balanced stat distribution.</p>
         
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Character</th>
-                        <th>Gold Equipment</th>
+                        <th>Gold Equipment (Balanced)</th>
                         <th>Purple Alternative</th>
                         <th>Stats Focus</th>
                     </tr>
@@ -3642,232 +3859,103 @@
                 <tbody>
                     <tr>
                         <td><strong>Caroline</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize DMG Attack 200/s</td>
-                    </tr>
-                    <!-- Character Equipment Guide Section -->
-<section id="character-equipment">
-    <h2>Character Equipment Guide</h2>
-    <p>Recommended equipment setups for each character based on their stats and skills.</p>
-    
-    <div class="tabs">
-        <div class="tab active" data-tab="ur-equipment">UR Characters</div>
-        <div class="tab" data-tab="ssr-rb-equipment">SSR R&B</div>
-        <div class="tab" data-tab="ssr-rock-equipment">SSR Rock</div>
-        <div class="tab" data-tab="ssr-pop-equipment">SSR Pop</div>
-        <div class="tab" data-tab="ssr-edm-equipment">SSR EDM</div>
-        <div class="tab" data-tab="ssr-hiphop-equipment">SSR HipHop</div>
-    </div>
-    
-    <div class="tab-content active" id="ur-equipment-content">
-        <h3>UR Character Equipment</h3>
-        <p>Optimal equipment setup for UR characters.</p>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Character</th>
-                        <th>Gold Equipment</th>
-                        <th>Purple Alternative</th>
-                        <th>Stats Focus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Marguerite</strong><br/><small>R&B | Vocalist</small></td>
                         <td>Ring + Audi + Villa</td>
                         <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Skill DMG +20% and Normal DMG +50%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Elizabeth</strong><br/><small>R&B | Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize Normal DMG +50% and Player DMG +20%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="tab-content" id="ssr-rb-equipment-content">
-        <h3>SSR R&B Character Equipment</h3>
-        <p>Optimal equipment setup for SSR R&B characters.</p>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Character</th>
-                        <th>Gold Equipment</th>
-                        <th>Purple Alternative</th>
-                        <th>Stats Focus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Sora</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Normal DMG +50%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Julia</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Skill DMG +20%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Nova</strong><br/><small>Dancer</small></td>
-                        <td>Ring + Audi + Villa<br/>or<br/>Choker + Lamborghini + Park Mansion</td>
-                        <td>Watch + Lotus + Penthouse<br/>or<br/>Bracelet + Beetle + Loft</td>
-                        <td>Balanced stats allow flexibility - can focus on either Sing or Dance</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Zendaya</strong><br/><small>Center</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize defensive capability</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Raith</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to enhance damage reduction</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="tab-content" id="ssr-rock-equipment-content">
-        <h3>SSR Rock Character Equipment</h3>
-        <p>Optimal equipment setup for SSR Rock characters.</p>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Character</th>
-                        <th>Gold Equipment</th>
-                        <th>Purple Alternative</th>
-                        <th>Stats Focus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Yuuko</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize Normal DMG +50%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Claire</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Skill DMG +20%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Paisley</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize damage reduction</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Skylar</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize Skill DMG +20%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Talia</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Normal DMG +50%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="tab-content" id="ssr-pop-equipment-content">
-        <h3>SSR Pop Character Equipment</h3>
-        <p>Optimal equipment setup for SSR Pop characters.</p>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Character</th>
-                        <th>Gold Equipment</th>
-                        <th>Purple Alternative</th>
-                        <th>Stats Focus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Chizuru</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Player DMG +20%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Savannah</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize DMG Attack 200/s</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Aurora</strong><br/><small>Center</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Balanced stats - can focus on Sing for Skill DMG +20%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Brooklyn</strong><br/><small>Vocalist</small></td>
-                        <td>Ring + Audi + Villa</td>
-                        <td>Watch + Lotus + Penthouse</td>
-                        <td>Focus on Sing to maximize NPC DMG +30%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Moana</strong><br/><small>Vocalist</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance despite Vocalist position to enhance damage reduction</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="tab-content" id="ssr-edm-equipment-content">
-        <h3>SSR EDM Character Equipment</h3>
-        <p>Optimal equipment setup for SSR EDM characters.</p>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Character</th>
-                        <th>Gold Equipment</th>
-                        <th>Purple Alternative</th>
-                        <th>Stats Focus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Caroline</strong><br/><small>Dancer</small></td>
-                        <td>Choker + Lamborghini + Park Mansion</td>
-                        <td>Bracelet + Beetle + Loft</td>
-                        <td>Focus on Dance to maximize DMG Attack 200/s</td>
+                        <td>Add Sing to balance high Dance to maximize DMG Attack 200/s</td>
                     </tr>
                     <tr>
                         <td><strong>Kokoro</strong><br/><small>Center</small></td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Everly</strong><br/><small>Center</small></td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alice</strong><br/><small>Vocalist</small></td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing to maximize Skill DMG +20%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cindy</strong><br/><small>Dancer (Seasonal)</small></td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sari</strong><br/><small>Vocalist (Bali)</small></td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing to enhance Player DMG +20%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="ssr-hiphop-equipment-content">
+        <h3>SSR HipHop Character Equipment</h3>
+        <p>Optimal equipment setup for SSR HipHop characters for balanced stat distribution.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Character</th>
+                        <th>Gold Equipment (Balanced)</th>
+                        <th>Purple Alternative</th>
+                        <th>Stats Focus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bella</strong><br/><small>Vocalist</small></td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing to maximize Skill DMG +20%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Avery</strong><br/><small>Center</small></td>
                         <td>Ring + Audi + Villa</td>
-                        <td>Watch +
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance to strengthen defensive capabilities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ayaka</strong><br/><small>Center (Tokyo)</small></td>
+                        <td>Choker + Lamborghini + Park Mansion</td>
+                        <td>Bracelet + Beetle + Loft</td>
+                        <td>Add Dance to balance high Sing and enhance damage reduction</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Audrey</strong><br/><small>Center</small></td>
+                        <td>Ring/Choker + Audi/Lamborghini + Villa/Park Mansion</td>
+                        <td>Watch/Bracelet + Lotus/Beetle + Penthouse/Loft</td>
+                        <td>Already balanced with equal Sing/Dance, maintain perfect balance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Leilani</strong><br/><small>Dancer (Bali)</small></td>
+                        <td>Ring + Audi + Villa</td>
+                        <td>Watch + Lotus + Penthouse</td>
+                        <td>Add Sing to balance high Dance to maximize Normal DMG +50%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
     </main>
+
+<footer>
+    <p>Top Girl Team Builder © 2025 - Created by Upset Llama</p>
+</footer>
+
+<!-- Leaflet.js for interactive map -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 <script>
         // Equipment data
@@ -4065,7 +4153,8 @@ const characterData = [{
         "NORMAL_DM": 0.5,
         "FAN_CAP": 0.1,
         "BASE_SING": 13513,
-        "BASE_DANCE": 7735
+        "BASE_DANCE": 7735,
+        "REGION": "Tokyo"
     },
     {
         "GENR": "R&B",
@@ -4106,11 +4195,12 @@ const characterData = [{
         "Attrib": "Sexy",
         "POSITION": "Dancer",
         "TYPE": "SSR",
-        "GIRL": "Raith",
+        "GIRL": "Ratih",  // Corrected spelling from Raith
         "NORMAL_DM": 0.5,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "BASE_SING": 7735,
-        "BASE_DANCE": 13513
+        "BASE_DANCE": 13513,
+        "REGION": "Bali"
     },
     {
         "GENR": "ROCK",
@@ -4121,7 +4211,8 @@ const characterData = [{
         "NORMAL_DM": 0.5,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "BASE_SING": 7735,
-        "BASE_DANCE": 13513
+        "BASE_DANCE": 13513,
+        "REGION": "Tokyo"
     },
     {
         "GENR": "ROCK",
@@ -4165,7 +4256,8 @@ const characterData = [{
         "NORMAL_DM": 0.5,
         "FAN_CAP": 0.1,
         "BASE_SING": 10625,
-        "BASE_DANCE": 10625
+        "BASE_DANCE": 10625,
+        "REGION": "Bali"
     },
     {
         "GENR": "POP",
@@ -4176,7 +4268,9 @@ const characterData = [{
         "PLAYER_DM": 0.2,
         "RALLY_CAP": 0.1,
         "BASE_SING": 10625,
-        "BASE_DANCE": 10625
+        "BASE_DANCE": 10625,
+        "REGION": "Tokyo",
+        "LIMITED": true
     },
     {
         "GENR": "POP",
@@ -4220,7 +4314,8 @@ const characterData = [{
         "REDUCE_SKILL_DMG": -0.12,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "BASE_SING": 13513,
-        "BASE_DANCE": 7735
+        "BASE_DANCE": 7735,
+        "REGION": "Bali"
     },
     {
         "GENR": "EDM",
@@ -4242,7 +4337,8 @@ const characterData = [{
         "SKILL_DM": 0.2,
         "NORMAL_DM": 0.5,
         "BASE_SING": 10625,
-        "BASE_DANCE": 10625
+        "BASE_DANCE": 10625,
+        "REGION": "Tokyo"
     },
     {
         "GENR": "EDM",
@@ -4287,7 +4383,9 @@ const characterData = [{
         "PLAYER_DM": 0.2,
         "RALLY_CAP": 0.1,
         "BASE_SING": 13513,
-        "BASE_DANCE": 7735
+        "BASE_DANCE": 7735,
+        "REGION": "Bali",
+        "LIMITED": true
     },
     {
         "GENR": "HipHop",
@@ -4320,7 +4418,8 @@ const characterData = [{
         "REDUCE_SKILL_DMG": -0.12,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "BASE_SING": 13513,
-        "BASE_DANCE": 7735
+        "BASE_DANCE": 7735,
+        "REGION": "Tokyo"
     },
     {
         "GENR": "HipHop",
@@ -4342,22 +4441,10 @@ const characterData = [{
         "SKILL_DM": 0.2,
         "NORMAL_DM": 0.5,
         "BASE_SING": 7735,
-        "BASE_DANCE": 13513
+        "BASE_DANCE": 13513,
+        "REGION": "Bali"
     }
 ];
-
-// Apply Leilani's skill correction
-const leilaniIndex = characterData.findIndex(char => char.GIRL === "Leilani");
-if (leilaniIndex !== -1) {
-    characterData[leilaniIndex].NORMAL_DM = 0.5; // 50% instead of 20%
-}
-
-// Apply Cindy's skill correction
-const cindyIndex = characterData.findIndex(char => char.GIRL === "Cindy");
-if (cindyIndex !== -1) {
-    delete characterData[cindyIndex].RALLY_CAP;
-    characterData[cindyIndex].REDUCE_SKILL_DMG = -0.12;
-}
 
 // DOM elements
 const tabs = document.querySelectorAll('.tab');
@@ -4382,23 +4469,39 @@ const applyCharFilterBtn = document.getElementById('apply-char-filter');
 const resetCharFilterBtn = document.getElementById('reset-char-filter');
 
 // Tab functionality
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const tabId = tab.getAttribute('data-tab');
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix for all tab systems
+    const allTabGroups = document.querySelectorAll('.tabs');
+    
+    allTabGroups.forEach(tabGroup => {
+        const tabs = tabGroup.querySelectorAll('.tab');
         
-        // Find the parent container
-        const parentContainer = tab.closest('.tabs').parentNode;
-        
-        // Deactivate all tabs in this container
-        parentContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        parentContainer.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        
-        // Activate selected tab
-        tab.classList.add('active');
-        const tabContent = parentContainer.querySelector(`#${tabId}-content`);
-        if (tabContent) {
-            tabContent.classList.add('active');
-        }
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                const parentSection = tabGroup.closest('section');
+                
+                // Deactivate all tabs and contents in this section
+                parentSection.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                parentSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Also check for nested tab content within the section
+                document.querySelectorAll(`#${tabId}-content`).forEach(content => {
+                    if (parentSection.contains(content)) {
+                        content.classList.add('active');
+                    }
+                });
+                
+                // Activate selected tab
+                tab.classList.add('active');
+                const tabContent = parentSection.querySelector(`#${tabId}-content`);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                } else {
+                    console.warn(`Tab content #${tabId}-content not found`);
+                }
+            });
+        });
     });
 });
 
@@ -4568,14 +4671,26 @@ function populateCharacterGrid(characters) {
         const name = document.createElement('h3');
         name.textContent = char.GIRL;
         
+        // Special labels for specific regions or limited characters
+        const specialInfo = [];
+        if (char.REGION) {
+            specialInfo.push(char.REGION);
+        }
         if (char.SEASONAL) {
-            const seasonalBadge = document.createElement('span');
-            seasonalBadge.style.fontSize = '0.8rem';
-            seasonalBadge.style.fontWeight = 'bold';
-            seasonalBadge.style.marginLeft = '0.5rem';
-            seasonalBadge.style.color = '#fff';
-            seasonalBadge.textContent = '(Seasonal)';
-            name.appendChild(seasonalBadge);
+            specialInfo.push("Seasonal");
+        }
+        if (char.LIMITED) {
+            specialInfo.push("Limited");
+        }
+        
+        if (specialInfo.length > 0) {
+            const specialBadge = document.createElement('span');
+            specialBadge.style.fontSize = '0.8rem';
+            specialBadge.style.fontWeight = 'bold';
+            specialBadge.style.marginLeft = '0.5rem';
+            specialBadge.style.color = '#fff';
+            specialBadge.textContent = `(${specialInfo.join(", ")})`;
+            name.appendChild(specialBadge);
         }
         
         header.appendChild(name);
@@ -4668,8 +4783,15 @@ function populateCharacterSelection(characters) {
         optionText += `<span class="genre-badge" style="padding: 2px 5px; font-size: 0.8rem;">${char.GENR}</span>`;
         optionText += `<span class="position-badge" style="padding: 2px 5px; font-size: 0.8rem;">${char.POSITION}</span>`;
         
+        // Special labels for specific regions or limited characters
+        if (char.REGION) {
+            optionText += `<span style="color: #666; font-size: 0.8rem; margin-left: 5px;">(${char.REGION})</span>`;
+        }
         if (char.SEASONAL) {
             optionText += `<span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 5px;">(Seasonal)</span>`;
+        }
+        if (char.LIMITED) {
+            optionText += `<span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 5px;">(Limited)</span>`;
         }
         
         option.innerHTML = optionText;
@@ -4786,6 +4908,36 @@ function updateTeamUI() {
     // Update team count in header
     const teamHeader = selectedTeam.previousElementSibling;
     teamHeader.textContent = `Selected Team (${currentTeam.length}/5)`;
+}
+
+// Calculate region bonus
+function calculateRegionBonus(team) {
+    // Count Bali characters
+    const baliCharacters = team.filter(char => char.REGION === 'Bali');
+    const baliTotal = baliCharacters.length;
+    
+    // Count Tokyo characters
+    const tokyoCharacters = team.filter(char => char.REGION === 'Tokyo');
+    const tokyoTotal = tokyoCharacters.length;
+    
+    // Determine which region has the most characters
+    let regionBonus = 0;
+    let dominantRegion = null;
+    
+    if (baliTotal >= 5) {
+        regionBonus = 0.08; // 8% bonus for full Bali team
+        dominantRegion = 'Bali';
+    } else if (tokyoTotal >= 5) {
+        regionBonus = 0.08; // 8% bonus for full Tokyo team
+        dominantRegion = 'Tokyo';
+    }
+    
+    return {
+        regionBonus,
+        dominantRegion,
+        baliTotal,
+        tokyoTotal
+    };
 }
 
 // Calculate synergy bonus
@@ -4906,8 +5058,7 @@ function calculateTeamPower() {
     
     // Count genres for synergy
     const genreCounts = {};
-    
-    currentTeam.forEach(char => {
+   currentTeam.forEach(char => {
         // Add base stats
         totalSing += char.BASE_SING;
         totalDance += char.BASE_DANCE;
@@ -4930,27 +5081,28 @@ function calculateTeamPower() {
     });
     
     // Calculate genre synergy bonus
-    let synergyBonus = 0;
-    let dominantGenre = null;
-    let dominantCount = 0;
+    const synergy = calculateSynergyBonus(currentTeam);
+    let synergyBonus = synergy.percentage / 100;  // Convert percentage to decimal
     
-    for (const [genre, count] of Object.entries(genreCounts)) {
-        if (count > dominantCount) {
-            dominantCount = count;
-            dominantGenre = genre;
-        }
-    }
-    
-    if (dominantCount >= 5) synergyBonus = 0.06;
-    else if (dominantCount >= 4) synergyBonus = 0.04;
-    else if (dominantCount >= 3) synergyBonus = 0.02;
+    // Calculate region bonus
+    const regionInfo = calculateRegionBonus(currentTeam);
+    let regionBonus = regionInfo.regionBonus;
     
     // Calculate equipment bonuses
     const equipStats = calculateEquipmentStats();
     
     // Apply all bonuses
-    const finalSing = (totalSing + equipStats.sing) * (1 + synergyBonus);
-    const finalDance = (totalDance + equipStats.dance) * (1 + synergyBonus);
+    const baseWithEquipSing = totalSing + equipStats.sing;
+    const baseWithEquipDance = totalDance + equipStats.dance;
+    
+    // Apply synergy and region bonuses
+    const finalSing = baseWithEquipSing * (1 + synergyBonus + regionBonus);
+    const finalDance = baseWithEquipDance * (1 + synergyBonus + regionBonus);
+    
+    // Balance ratio calculation
+    const totalStats = baseWithEquipSing + baseWithEquipDance;
+    const singPercentage = totalStats > 0 ? Math.round((baseWithEquipSing / totalStats) * 100) : 50;
+    const dancePercentage = totalStats > 0 ? Math.round((baseWithEquipDance / totalStats) * 100) : 50;
     
     // Active skill power (approximation based on observations)
     const activeSkill = Math.round(
@@ -4981,14 +5133,17 @@ function calculateTeamPower() {
         finalSing,
         finalDance,
         synergyBonus,
-        dominantGenre,
-        dominantCount,
+        synergy,
+        regionBonus,
+        regionInfo,
         activeSkill,
         skillBonuses,
         basicAttackBonus,
         damageReduction,
         fans: equipStats.fans,
-        skills
+        skills,
+        singPercentage,
+        dancePercentage
     };
 }
 
@@ -5053,8 +5208,9 @@ function updateTeamStatsEnhanced() {
         </div>
         
         <div class="synergy-bonus" style="margin-top: 0.5rem;">
-            <p>Genre Synergy: ${teamPower.dominantGenre ? `${teamPower.dominantCount}x ${teamPower.dominantGenre}` : 'None'}</p>
-            <p>Synergy Bonus: +${(teamPower.synergyBonus * 100).toFixed(0)}%</p>
+            <p>Genre Synergy: ${teamPower.synergy.genre ? `${teamPower.synergy.count}x ${teamPower.synergy.genre}` : 'None'}</p>
+            <p>Synergy Bonus: +${teamPower.synergy.percentage}%</p>
+            ${teamPower.regionInfo.dominantRegion ? `<p>Region Bonus: ${teamPower.regionInfo.dominantRegion} Team (+8%)</p>` : ''}
         </div>
         
         <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #e8f4f8; border-radius: 4px;">
@@ -5067,6 +5223,15 @@ function updateTeamStatsEnhanced() {
             </ul>
         </div>
         
+        <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #f8f4e8; border-radius: 4px;">
+            <p><strong>Balance Ratio:</strong> ${teamPower.singPercentage}% Sing : ${teamPower.dancePercentage}% Dance</p>
+            <div style="height: 20px; background-color: #f0f0f0; border-radius: 10px; margin-top: 5px; overflow: hidden;">
+                <div style="width: ${teamPower.singPercentage}%; height: 100%; background-color: var(--primary-color); float: left;"></div>
+                <div style="width: ${teamPower.dancePercentage}%; height: 100%; background-color: var(--secondary-color); float: left;"></div>
+            </div>
+            <p style="font-size: 0.8rem; margin-top: 5px; text-align: center;">${getBattleEffectivenessMessage(teamPower.singPercentage, teamPower.dancePercentage)}</p>
+        </div>
+        
         <p style="margin-top: 0.5rem;"><strong>Final Stats (with all bonuses):</strong></p>
         <ul>
             <li>Final Sing (Attack): ${Math.round(teamPower.finalSing).toLocaleString()}</li>
@@ -5077,6 +5242,23 @@ function updateTeamStatsEnhanced() {
     
     // Update skills summary with enhanced information
     updateSkillsSummaryEnhanced(teamPower.skills);
+}
+
+// Get a message about battle effectiveness based on stat balance
+function getBattleEffectivenessMessage(singPercentage, dancePercentage) {
+    const diff = Math.abs(singPercentage - dancePercentage);
+    
+    if (diff <= 5) {
+        return "Perfect Balance: Excellent battle effectiveness with equal attack and defense!";
+    } else if (diff <= 10) {
+        return "Good Balance: Strong overall performance with slightly favored " + (singPercentage > dancePercentage ? "attack" : "defense");
+    } else if (diff <= 20) {
+        return "Decent Balance: Favors " + (singPercentage > dancePercentage ? "attack over defense" : "defense over attack");
+    } else if (diff <= 30) {
+        return "Imbalanced: Heavily favors " + (singPercentage > dancePercentage ? "attack, vulnerable on defense" : "defense, weak on attack");
+    } else {
+        return "Extreme Imbalance: Very " + (singPercentage > dancePercentage ? "attack-focused, poor defense" : "defense-focused, weak attack");
+    }
 }
 
 // Update skills summary with enhanced information
@@ -5200,30 +5382,16 @@ function updateSkillsSummaryEnhanced(skills) {
     }
 }
 
-// Auto-recommend equipment based on character stats and position
-function recommendEquipment(character) {
+// Auto-recommend balanced equipment based on character stats and position
+function recommendBalancedEquipment(character) {
     const equipRecommendation = {
         jewelry: null,
         car: null,
         property: null
     };
     
-    // Vocalist strategy - focus on Sing
-    if (character.POSITION === 'Vocalist' || character.BASE_SING > character.BASE_DANCE) {
-        // Gold equipment recommendation
-        if (hasGoldEquipment()) {
-            equipRecommendation.jewelry = "Ring";
-            equipRecommendation.car = "Audi";
-            equipRecommendation.property = "Villa";
-        } else {
-            // Purple equipment fallback
-            equipRecommendation.jewelry = "Watch";
-            equipRecommendation.car = "Lotus";
-            equipRecommendation.property = "Penthouse";
-        }
-    } 
-    // Dancer strategy - focus on Dance
-    else if (character.POSITION === 'Dancer' || character.BASE_DANCE > character.BASE_SING) {
+    // Vocalist strategy - add Dance to balance high Sing
+    if (character.BASE_SING > character.BASE_DANCE) {
         // Gold equipment recommendation
         if (hasGoldEquipment()) {
             equipRecommendation.jewelry = "Choker";
@@ -5236,12 +5404,26 @@ function recommendEquipment(character) {
             equipRecommendation.property = "Loft";
         }
     } 
-    // Center/balanced strategy
+    // Dancer strategy - add Sing to balance high Dance
+    else if (character.BASE_DANCE > character.BASE_SING) {
+        // Gold equipment recommendation
+        if (hasGoldEquipment()) {
+            equipRecommendation.jewelry = "Ring";
+            equipRecommendation.car = "Audi";
+            equipRecommendation.property = "Villa";
+        } else {
+            // Purple equipment fallback
+            equipRecommendation.jewelry = "Watch";
+            equipRecommendation.car = "Lotus";
+            equipRecommendation.property = "Penthouse";
+        }
+    } 
+    // Center/balanced strategy - maintain equal stat distribution
     else {
-        // Choose based on team needs or balance
+        // Choose based on overall team needs
         const teamStats = calculateTeamStats();
         if (teamStats.sing < teamStats.dance) {
-            // Need more Sing
+            // Need more Sing for balance
             if (hasGoldEquipment()) {
                 equipRecommendation.jewelry = "Ring";
                 equipRecommendation.car = "Audi";
@@ -5252,7 +5434,7 @@ function recommendEquipment(character) {
                 equipRecommendation.property = "Penthouse";
             }
         } else {
-            // Need more Dance
+            // Need more Dance for balance
             if (hasGoldEquipment()) {
                 equipRecommendation.jewelry = "Choker";
                 equipRecommendation.car = "Lamborghini";
@@ -5288,29 +5470,7 @@ function calculateTeamStats() {
     return { sing, dance };
 }
 
-// Add a button to recommend equipment for all team members
-function addRecommendEquipmentButton() {
-    const resetEquipBtn = document.getElementById('reset-equipment');
-    
-    if (resetEquipBtn) {
-        // Create recommend button
-        const recommendBtn = document.createElement('button');
-        recommendBtn.id = 'recommend-equipment';
-        recommendBtn.style.marginTop = '1rem';
-        recommendBtn.style.marginLeft = '0.5rem';
-        recommendBtn.textContent = 'Recommend Equipment';
-        
-        // Insert after reset button
-        resetEquipBtn.parentNode.insertBefore(recommendBtn, resetEquipBtn.nextSibling);
-        
-        // Add event listener
-        recommendBtn.addEventListener('click', () => {
-            recommendTeamEquipment();
-        });
-    }
-}
-
-// Recommend equipment for the entire team
+// Recommend team equipment
 function recommendTeamEquipment() {
     if (currentTeam.length === 0) {
         teamCompositionWarning.textContent = 'Add characters to your team first.';
@@ -5320,9 +5480,51 @@ function recommendTeamEquipment() {
     // Reset warning
     teamCompositionWarning.textContent = '';
     
-    // Apply recommendations for each character
+    // First calculate total sing and dance to determine if we need to balance
+    const baseStats = calculateTeamStats();
+    const singPercent = baseStats.sing / (baseStats.sing + baseStats.dance) * 100;
+    const dancePercent = baseStats.dance / (baseStats.sing + baseStats.dance) * 100;
+    
+    const diff = Math.abs(singPercent - dancePercent);
+    
+    // Apply recommendations based on balancing the whole team
     currentTeam.forEach(char => {
-        const recommendation = recommendEquipment(char);
+        let recommendation;
+        
+        if (diff <= 5) {
+            // Team is already balanced, follow individual character's needs
+            recommendation = recommendBalancedEquipment(char);
+        } else if (singPercent > dancePercent) {
+            // Too much sing, add dance regardless of character type
+            if (hasGoldEquipment()) {
+                recommendation = {
+                    jewelry: "Choker",
+                    car: "Lamborghini",
+                    property: "Park Mansion"
+                };
+            } else {
+                recommendation = {
+                    jewelry: "Bracelet",
+                    car: "Beetle",
+                    property: "Loft"
+                };
+            }
+        } else {
+            // Too much dance, add sing regardless of character type
+            if (hasGoldEquipment()) {
+                recommendation = {
+                    jewelry: "Ring",
+                    car: "Audi",
+                    property: "Villa"
+                };
+            } else {
+                recommendation = {
+                    jewelry: "Watch",
+                    car: "Lotus",
+                    property: "Penthouse"
+                };
+            }
+        }
         
         // Apply recommendations to teamEquipment
         if (!teamEquipment[char.GIRL]) {
@@ -5339,117 +5541,13 @@ function recommendTeamEquipment() {
     updateTeamStatsEnhanced();
     
     // Show confirmation message
-    teamCompositionWarning.textContent = 'Equipment recommendations applied!';
+    teamCompositionWarning.textContent = 'Balanced equipment recommendations applied!';
     teamCompositionWarning.style.color = '#4caf50'; // Success green color
     
     // Reset warning color after 3 seconds
     setTimeout(() => {
         teamCompositionWarning.style.color = 'var(--primary-color)';
     }, 3000);
-}
-
-// Add preset team functions
-function addPresetTeamButtons() {
-    const resetTeamBtn = document.getElementById('reset-team');
-    
-    if (resetTeamBtn) {
-        // Create preset teams container
-        const presetContainer = document.createElement('div');
-        presetContainer.style.marginTop = '1rem';
-        presetContainer.innerHTML = '<h3>Preset Teams:</h3>';
-        
-        // Create buttons for different preset teams
-        const presetRnBBtn = document.createElement('button');
-        presetRnBBtn.textContent = 'Load R&B Team';
-        presetRnBBtn.style.marginRight = '0.5rem';
-        presetRnBBtn.style.marginTop = '0.5rem';
-        
-        const presetDamageBtn = document.createElement('button');
-        presetDamageBtn.textContent = 'Load Damage Team';
-        presetDamageBtn.style.marginRight = '0.5rem';
-        presetDamageBtn.style.marginTop = '0.5rem';
-        
-        const presetDefenseBtn = document.createElement('button');
-        presetDefenseBtn.textContent = 'Load Defense Team';
-        presetDefenseBtn.style.marginTop = '0.5rem';
-        
-        // Add buttons to container
-        presetContainer.appendChild(presetRnBBtn);
-        presetContainer.appendChild(presetDamageBtn);
-        presetContainer.appendChild(presetDefenseBtn);
-        
-        // Insert after reset button
-        resetTeamBtn.parentNode.insertBefore(presetContainer, resetTeamBtn.nextSibling);
-        
-        // Add event listeners
-        presetRnBBtn.addEventListener('click', () => loadPresetTeam('rnb'));
-        presetDamageBtn.addEventListener('click', () => loadPresetTeam('damage'));
-        presetDefenseBtn.addEventListener('click', () => loadPresetTeam('defense'));
-    }
-}
-
-// Load preset team function
-function loadPresetTeam(teamType) {
-    // Reset current team
-    currentTeam = [];
-    teamEquipment = {};
-    
-    // Clear warning
-    teamCompositionWarning.textContent = '';
-    
-    // Load team based on type
-    switch(teamType) {
-        case 'rnb':
-            // R&B Team (with URs)
-            addPresetCharacter("Marguerite");
-            addPresetCharacter("Elizabeth");
-            addPresetCharacter("Sora");
-            addPresetCharacter("Nova");
-            addPresetCharacter("Julia");
-            break;
-            
-        case 'damage':
-            // Maximum Damage Team (with URs)
-            addPresetCharacter("Marguerite");
-            addPresetCharacter("Elizabeth");
-            addPresetCharacter("Claire");
-            addPresetCharacter("Aurora");
-            addPresetCharacter("Alice");
-            break;
-            
-        case 'defense':
-            // Defensive Team (with URs)
-            addPresetCharacter("Marguerite");
-            addPresetCharacter("Elizabeth");
-            addPresetCharacter("Paisley");
-            addPresetCharacter("Avery");
-            addPresetCharacter("Moana");
-            break;
-    }
-    
-    // Update UI
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-    
-    // Show confirmation message
-    teamCompositionWarning.textContent = `${teamType.toUpperCase()} preset team loaded!`;
-    teamCompositionWarning.style.color = '#4caf50';
-    
-    // Auto-recommend equipment
-    recommendTeamEquipment();
-    
-    // Reset warning color after 3 seconds
-    setTimeout(() => {
-        teamCompositionWarning.style.color = 'var(--primary-color)';
-    }, 3000);
-}
-
-// Helper function to add a preset character by name
-function addPresetCharacter(name) {
-    const character = characterData.find(char => char.GIRL === name);
-    if (character) {
-        currentTeam.push(character);
-    }
 }
 
 // Filter characters for selection
@@ -5493,6 +5591,227 @@ function filterCharactersForGrid() {
     return filtered;
 }
 
+// Load preset team function
+function loadPresetTeam(teamType) {
+    // Reset current team
+    currentTeam = [];
+    teamEquipment = {};
+    
+    // Clear warning
+    teamCompositionWarning.textContent = '';
+    
+    // Load team based on type
+    switch(teamType) {
+        case 'rnb':
+            // R&B Team (with URs)
+            addPresetCharacter("Marguerite");
+            addPresetCharacter("Elizabeth");
+            addPresetCharacter("Sora");
+            addPresetCharacter("Nova");
+            addPresetCharacter("Ratih");
+            break;
+            
+        case 'balanced':
+            // Balanced Team (with URs)
+            addPresetCharacter("Marguerite");
+            addPresetCharacter("Elizabeth");
+            addPresetCharacter("Aurora");
+            addPresetCharacter("Kokoro");
+            addPresetCharacter("Chizuru");
+            break;
+            
+        case 'defense':
+            // Defensive Team (with URs)
+            addPresetCharacter("Marguerite");
+            addPresetCharacter("Elizabeth");
+            addPresetCharacter("Moana");
+            addPresetCharacter("Avery");
+            addPresetCharacter("Ayaka");
+            break;
+            
+        case 'bali':
+            // Bali Team
+            addPresetCharacter("Moana");
+            addPresetCharacter("Sari");
+            addPresetCharacter("Leilani");
+            addPresetCharacter("Ratih");
+            addPresetCharacter("Talia");
+            break;
+            
+        case 'tokyo':
+            // Tokyo Team
+            addPresetCharacter("Sora");
+            addPresetCharacter("Yuuko");
+            addPresetCharacter("Kokoro");
+            addPresetCharacter("Ayaka");
+            addPresetCharacter("Chizuru");
+            break;
+    }
+    
+    // Update UI
+    updateTeamUI();
+    updateTeamStatsEnhanced();
+    
+    // Show confirmation message
+    teamCompositionWarning.textContent = `${teamType.toUpperCase()} preset team loaded!`;
+    teamCompositionWarning.style.color = '#4caf50';
+    
+    // Auto-recommend equipment
+    recommendTeamEquipment();
+    
+    // Reset warning color after 3 seconds
+    setTimeout(() => {
+        teamCompositionWarning.style.color = 'var(--primary-color)';
+    }, 3000);
+}
+
+// Helper function to add a preset character by name
+function addPresetCharacter(name) {
+    const character = characterData.find(char => char.GIRL === name);
+    if (character) {
+        currentTeam.push(character);
+    }
+}
+
+// Initialize interactive map
+function initializeMap() {
+    if (document.getElementById('top-girl-map')) {
+        const gameMap = L.map('top-girl-map', {
+            crs: L.CRS.Simple,
+            minZoom: -1,
+            maxZoom: 2
+        });
+        
+        // Set map bounds based on the square island image
+        const imageUrl = 'https://i.imgur.com/UHN5aLV.jpeg'; // Replace with your actual map image URL
+        const imageBounds = [[0, 0], [550, 550]]; // Square bounds matching the island image
+        
+        // Add the map image as a base layer
+        L.imageOverlay(imageUrl, imageBounds).addTo(gameMap);
+        gameMap.fitBounds(imageBounds);
+        
+        // Center the map on the central palace
+        gameMap.setView([275, 275], 0);
+        
+        // Track markers
+        const markers = [];
+        
+        // Add marker button handler
+        document.getElementById('add-marker').addEventListener('click', function() {
+            const markerType = document.getElementById('marker-type').value;
+            alert('Click on the map to place a ' + markerType + ' marker');
+            
+            gameMap.once('click', function(e) {
+                // Create custom marker with color based on type
+                let markerColor;
+                switch(markerType) {
+                    case 'resource': markerColor = '#4cd964'; break; // Green
+                    case 'enemy': markerColor = '#ff3b30'; break;    // Red
+                    case 'ally': markerColor = '#007aff'; break;     // Blue
+                    case 'quest': markerColor = '#ffcc00'; break;    // Yellow
+                    default: markerColor = '#8e8e93'; break;         // Gray
+                }
+                
+                const customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: ${markerColor}; 
+                           width: 12px; 
+                           height: 12px; 
+                           border-radius: 50%; 
+                           border: 2px solid white;
+                           box-shadow: 0 0 4px rgba(0,0,0,0.5);">
+                           </div>`,
+                    iconSize: [12, 12],
+                    iconAnchor: [8, 8]
+                });
+                
+                // Create marker
+                const marker = L.marker(e.latlng, {icon: customIcon, draggable: true}).addTo(gameMap);
+                markers.push(marker);
+                
+                // Add popup
+                marker.bindPopup(`
+                    <div class="marker-popup">
+                      <strong>${markerType.charAt(0).toUpperCase() + markerType.slice(1)}</strong>
+                      <input type="text" placeholder="Add description" onchange="this.parentNode.querySelector('p').textContent = this.value">
+                      <p></p>
+                      <button onclick="this.closest('.leaflet-popup').querySelector('.leaflet-popup-close-button').click();">Save</button>
+                    </div>
+                `).openPopup();
+            });
+        });
+        
+        // Clear markers
+        document.getElementById('clear-markers').addEventListener('click', function() {
+            markers.forEach(marker => gameMap.removeLayer(marker));
+            markers.length = 0;
+        });
+        
+        // Add game landmarks (chambers and UR locations)
+        addGameLandmarks(gameMap);
+    }
+}
+
+// Helper function to get marker icon based on type
+function getMarkerIcon(type) {
+    switch(type) {
+        case 'resource':
+            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png';
+        case 'enemy':
+            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678088-map-marker-512.png';
+        case 'ally':
+            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678087-map-marker-512.png';
+        case 'quest':
+            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678089-map-marker-512.png';
+        default:
+            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png';
+    }
+}
+
+// Add game landmarks to map
+function addGameLandmarks(map) {
+    // Define landmarks array properly
+    const landmarks = [
+        // UR locations - positioned at the volcano-shaped areas
+        { name: "Paradise Bay (UR)", type: "ur", pos: [240, 195] },  // Top/North volcano
+        { name: "Emerald Coast (UR)", type: "ur", pos: [390, 280] }, // Right/East volcano
+        { name: "Royal Garden (UR)", type: "ur", pos: [240, 370] },  // Left/West volcano
+        
+        // Chamber locations - positioned around the perimeter where labeled in the image
+        { name: "Ubud Chamber", type: "chamber", pos: [460, 130] },      // Top left
+        { name: "Uluwatu Chamber", type: "chamber", pos: [460, 410] },   // Top right
+        { name: "Kuta Chamber", type: "chamber", pos: [300, 100] },      // Middle left
+        { name: "Seminyak Chamber", type: "chamber", pos: [290, 460] },  // Middle right
+        { name: "Jimbaran Chamber", type: "chamber", pos: [100, 90] },  // Bottom left
+        { name: "Tanah Chamber", type: "chamber", pos: [100, 400] }      // Bottom right
+    ];
+    
+    // Add markers for landmarks using default Leaflet markers
+    landmarks.forEach(landmark => {
+        // Different colors for different landmark types
+        const markerOptions = {
+            title: landmark.name,
+            // UR locations get red markers, chambers get blue
+            icon: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: ${landmark.type === 'ur' ? '#ff3b30' : '#007aff'}; 
+                       width: 15px; 
+                       height: 15px; 
+                       border-radius: 50%; 
+                       border: 2px solid white;
+                       box-shadow: 0 0 4px rgba(0,0,0,0.5);">
+                       </div>`,
+                iconSize: [15, 15],
+                iconAnchor: [8, 8]
+            })
+        };
+        
+        L.marker(landmark.pos, markerOptions)
+            .addTo(map)
+            .bindPopup(`<strong>${landmark.name}</strong>`);
+    });
+}
+
 // Event listeners for filters
 genreFilter.addEventListener('change', () => {
     populateCharacterSelection(filterCharactersForSelection());
@@ -5532,108 +5851,48 @@ document.getElementById('reset-equipment').addEventListener('click', () => {
     updateTeamStatsEnhanced();
 });
 
-// Initialize enhanced calculator features
+// Add event listeners for preset team buttons
+document.getElementById('load-rnb-team').addEventListener('click', () => {
+    loadPresetTeam('rnb');
+});
+
+document.getElementById('load-balanced-team').addEventListener('click', () => {
+    loadPresetTeam('balanced');
+});
+
+document.getElementById('load-defense-team').addEventListener('click', () => {
+    loadPresetTeam('defense');
+});
+
+document.getElementById('load-bali-team').addEventListener('click', () => {
+    loadPresetTeam('bali');
+});
+
+document.getElementById('load-tokyo-team').addEventListener('click', () => {
+    loadPresetTeam('tokyo');
+});
+
+// Recommend balanced equipment
+document.getElementById('recommend-equipment').addEventListener('click', () => {
+    recommendTeamEquipment();
+});
+
+// Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
-    // Add the original initialization code
+    // Populate character data
     populateCharacterGrid(characterData);
     populateCharacterSelection(characterData);
-    
-    // Replace updateTeamStats with enhanced version
-    updateTeamStats = updateTeamStatsEnhanced;
     
     // Initialize team equipment object
     teamEquipment = {};
     
-    // Add new buttons for recommendations
-    addRecommendEquipmentButton();
-    addPresetTeamButtons();
-    
-    // Initialize equipment tab functionality
-    const equipmentTabs = document.querySelectorAll('#equipment .tab');
-    const equipmentTabContents = document.querySelectorAll('#equipment .tab-content');
-    
-    equipmentTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabId = tab.getAttribute('data-tab');
-            
-            // Deactivate all tabs
-            equipmentTabs.forEach(t => t.classList.remove('active'));
-            equipmentTabContents.forEach(content => content.classList.remove('active'));
-            
-            // Activate selected tab
-            tab.classList.add('active');
-            document.getElementById(`${tabId}-content`).classList.add('active');
-        });
-    });
-    
-    // Initialize recommended teams tabs
-    const recommendedTeamsTabs = document.querySelectorAll('#recommended-teams .tab');
-    if (recommendedTeamsTabs.length > 0) {
-        const recommendedTeamsContents = document.querySelectorAll('#recommended-teams .tab-content');
-        
-        recommendedTeamsTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                // Deactivate all tabs
-                recommendedTeamsTabs.forEach(t => t.classList.remove('active'));
-                recommendedTeamsContents.forEach(content => content.classList.remove('active'));
-                
-                // Activate selected tab
-                tab.classList.add('active');
-                document.getElementById(`${tabId}-content`).classList.add('active');
-            });
-        });
-    }
-    
-    // Initialize character equipment tabs
-    const characterEquipmentTabs = document.querySelectorAll('#character-equipment .tab');
-    if (characterEquipmentTabs.length > 0) {
-        const characterEquipmentContents = document.querySelectorAll('#character-equipment .tab-content');
-        
-        characterEquipmentTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                // Deactivate all tabs
-                characterEquipmentTabs.forEach(t => t.classList.remove('active'));
-                characterEquipmentContents.forEach(content => content.classList.remove('active'));
-                
-                // Activate selected tab
-                tab.classList.add('active');
-                document.getElementById(`${tabId}-content`).classList.add('active');
-            });
-        });
-    }
-    
-    // Initialize SSR Teams tabs
-    const ssrTeamsTabs = document.querySelectorAll('#teams-without-ur-content .tab');
-    if (ssrTeamsTabs.length > 0) {
-        const ssrTeamsContents = document.querySelectorAll('#teams-without-ur-content .tab-content');
-        
-        ssrTeamsTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                // Deactivate all tabs
-                ssrTeamsTabs.forEach(t => t.classList.remove('active'));
-                ssrTeamsContents.forEach(content => content.classList.remove('active'));
-                
-                // Activate selected tab
-                tab.classList.add('active');
-                document.getElementById(`${tabId}-content`).classList.add('active');
-            });
-        });
-    }
+    // Initialize map
+    initializeMap();
     
     // Initial stats update
     updateTeamStatsEnhanced();
 });
 
-    </script>
-
-    <footer>
-        <p>Top Girl Team Builder © 2025 - Created by Upset Llama</p>
-    </footer>
+</script>
 </body>
 </html>
