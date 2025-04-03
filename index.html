@@ -104,7 +104,6 @@
         p {
             margin-bottom: 1rem;
         }
-
         .character-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -311,8 +310,7 @@
             background-color: var(--ssr-color);
             color: #2c2c2c;
         }
-
-        .calculator {
+.calculator {
             padding: 2rem;
             background-color: white;
             border-radius: 8px;
@@ -502,7 +500,6 @@
         .tab-content.active {
             display: block;
         }
-
         /* Equipment styles */
         .equipment-grid {
             display: grid;
@@ -660,46 +657,6 @@
             margin-top: 2rem;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .character-selection {
-                border-right: none;
-                padding-right: 0;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            .team-preview {
-                padding-left: 0;
-            }
-
-            .tabs {
-                flex-wrap: wrap;
-            }
-            
-            .tab {
-                margin-bottom: 0.5rem;
-            }
-            
-            .table-container {
-                max-width: 100%;
-                overflow-x: auto;
-            }
-            
-            table {
-                font-size: 0.9rem;
-            }
-            
-            th, td {
-                padding: 0.5rem;
-            }
-        }
-
         /* Map styles */
         .map-container {
             margin: 1rem 0;
@@ -744,6 +701,80 @@
             margin: 0.5rem 0;
             padding: 0.5rem;
             width: 100%;
+        }
+
+        /* Custom map marker styles */
+        .custom-marker {
+            background-color: #fff;
+            border: 2px solid #000;
+            border-radius: 50%;
+            text-align: center;
+            color: #000;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .custom-marker.resource { 
+            background-color: #4cd964; 
+            border-color: #2eb944;
+        }
+        
+        .custom-marker.enemy { 
+            background-color: #ff3b30; 
+            border-color: #d91d12;
+            color: white;
+        }
+        
+        .custom-marker.landmark { 
+            background-color: #ffcc00; 
+            border-color: #d6a900;
+        }
+        
+        .custom-marker.direction { 
+            background-color: #007aff; 
+            border-color: #0055cc;
+            color: white;
+        }
+/* Responsive design */
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .character-selection {
+                border-right: none;
+                padding-right: 0;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .team-preview {
+                padding-left: 0;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                margin-bottom: 0.5rem;
+            }
+            
+            .table-container {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -1009,8 +1040,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="tab-content" id="properties-content">
+<div class="tab-content" id="properties-content">
                 <h3>Properties</h3>
                 <p>Properties provide the largest stat boosts and fan capacity increases.</p>
                 
@@ -1209,8 +1239,7 @@
                                 <td>+1,612</td>
                                 <td>-</td>
                             </tr>
-                            
-                            <!-- Properties -->
+<!-- Properties -->
                             <tr>
                                 <td>Property</td>
                                 <td>Villa</td>
@@ -1277,8 +1306,13 @@
                 <select id="marker-type" class="map-select">
                     <option value="resource">Resource</option>
                     <option value="enemy">Enemy</option>
-                    <option value="ally">Ally</option>
-                    <option value="quest">Quest</option>
+                    <option value="direction">Build Direction</option>
+                    <option value="landmark">Landmark</option>
+                </select>
+                <select id="marker-size" class="map-select">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
                 </select>
             </div>
             
@@ -1345,8 +1379,7 @@
                                 </select>
                             </div>
                         </div>
-                        
-                        <div class="character-select" id="character-selection-list">
+<div class="character-select" id="character-selection-list">
                             <!-- Character options will be populated by JavaScript -->
                         </div>
                         
@@ -1420,7 +1453,7 @@
         <!-- Regional Teams Section -->
         <section id="regional-teams">
             <h2>Regional Teams</h2>
-            <p></p>
+            <p>Teams formed with characters from specific regions.</p>
             
             <div class="tabs">
                 <div class="tab active" data-tab="bali-teams">Bali Teams</div>
@@ -1429,7 +1462,7 @@
             
             <div class="tab-content active" id="bali-teams-content">
                 <h3>Bali Region Teams</h3>
-                <p></p>
+                <p>Characters from Bali can link with Bali UR characters for enhanced effects.</p>
                 
                 <div class="team-card">
                     <div class="team-header">
@@ -1478,15 +1511,14 @@
                         </div>
                     </div>
                     <div class="team-stats">
-                        <p><strong>Region Synergy:</strong> Bali (+8% base stats)</p>
+                        <p><strong>Region Synergy:</strong> Bali characters can link with Bali UR units</p>
                         <p><strong>Total Base Sing:</strong> 53,121</p>
                         <p><strong>Total Base Dance:</strong> 53,121</p>
                         <p><strong>Key Skills:</strong> Normal DMG +150%, Reduce DMG -24%, Skill DMG +20%</p>
                         <p><strong>Equipment Focus:</strong> Balanced mix of Sing and Dance equipment</p>
                     </div>
                 </div>
-                
-                <h4 style="margin-top: 2rem;">Recommended Bali Equipment Setup</h4>
+<h4 style="margin-top: 2rem;">Recommended Bali Equipment Setup</h4>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -1535,7 +1567,7 @@
             
             <div class="tab-content" id="tokyo-teams-content">
                 <h3>Tokyo Region Teams</h3>
-                <p>Characters from Tokyo receive a special 8% stat bonus when teamed together.</p>
+                <p>Characters from Tokyo can link with Tokyo UR characters for enhanced effects.</p>
                 
                 <div class="team-card">
                     <div class="team-header">
@@ -1584,7 +1616,7 @@
                         </div>
                     </div>
                     <div class="team-stats">
-                        <p><strong>Region Synergy:</strong> Tokyo (+8% base stats)</p>
+                        <p><strong>Region Synergy:</strong> Tokyo characters can link with Tokyo UR units</p>
                         <p><strong>Total Base Sing:</strong> 56,011</p>
                         <p><strong>Total Base Dance:</strong> 50,233</p>
                         <p><strong>Key Skills:</strong> Normal DMG +150%, Reduce DMG -24%, Player DMG +20%, Skill DMG +20%</p>
@@ -1639,8 +1671,7 @@
                 </div>
             </div>
         </section>
-
-        <!-- Leveling Guide Section -->
+<!-- Leveling Guide Section -->
         <section id="leveling">
             <h2>Leveling Guide</h2>
             <p>Understanding the requirements for character and facility upgrades.</p>
@@ -1907,8 +1938,7 @@
                     <li>Tier 8-18: Gold quality (Tiers 13-18 added in new patch)</li>
                 </ul>
             </div>
-            
-            <div class="tab-content" id="hq-upgrade-content">
+<div class="tab-content" id="hq-upgrade-content">
                 <h3>HQ Upgrade Guide</h3>
                 <p>This guide shows the number of building cards needed to level up your headquarters.</p>
                 
@@ -2061,7 +2091,7 @@
                     <div class="team-member">
                         <div class="member-type ssr">SSR</div>
                         <div>
-                            <strong>Raith</strong> <!-- Corrected spelling -->
+                            <strong>Ratih</strong>
                             <div><small>Sing: 7,735 | Dance: 13,513</small></div>
                             <div><small>Skills: Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                         </div>
@@ -2076,8 +2106,7 @@
                     <p><strong>Equipment:</strong> Balanced distribution of Sing and Dance equipment</p>
                 </div>
             </div>
-            
-            <!-- Team B: Mixed Genre (Balanced) -->
+<!-- Team B: Mixed Genre (Balanced) -->
             <div class="team-card">
                 <div class="team-header">
                     <h3>Mixed Genre Balance Team</h3>
@@ -2203,8 +2232,7 @@
         <div class="tab" data-tab="balanced-ssr">Perfect Balance</div>
         <div class="tab" data-tab="defense-ssr">Balanced Defense</div>
     </div>
-    
-    <!-- Offensive SSR Teams -->
+<!-- Offensive SSR Teams -->
     <div class="tab-content active" id="offense-ssr-content">
         <h4>Balanced Offensive SSR Teams</h4>
         
@@ -2249,7 +2277,7 @@
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Ratih</strong> <!-- Corrected spelling -->
+                        <strong>Ratih</strong>
                         <div><small>R&B | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
                         <div><small>Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                     </div>
@@ -2357,7 +2385,7 @@
                         <div><small>Skill DMG +20%, Normal DMG +50%</small></div>
                     </div>
                 </div>
-                <div class="team-member">
+<div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
                         <strong>Chizuru</strong>
@@ -2501,8 +2529,7 @@
                 <p><strong>Equipment Focus:</strong> Slight Dance focus to perfect the balance</p>
             </div>
         </div>
-        
-        <!-- Mixed Defensive Team -->
+<!-- Mixed Defensive Team -->
         <div class="team-card" style="margin-top: 1rem;">
             <div class="team-header">
                 <h3>Balanced Defense & Offense</h3>
@@ -2511,7 +2538,7 @@
                 <div class="team-member">
                     <div class="member-type ssr">SSR</div>
                     <div>
-                        <strong>Ratih</strong> <!-- Corrected spelling from Raith -->
+                        <strong>Ratih</strong>
                         <div><small>R&B | Dancer | Sing: 7,735 | Dance: 13,513</small></div>
                         <div><small>Normal DMG +50%, Reduce Normal Atk DMG -12%</small></div>
                     </div>
@@ -2644,7 +2671,7 @@
                         <div><small>Keeps balanced stats balanced</small></div>
                     </div>
                 </div>
-                <div class="team-member">
+<div class="team-member">
                     <div>
                         <strong>Dancer 1 (High Dance)</strong>
                         <div><small>Ring + Audi + Villa</small></div>
@@ -2786,7 +2813,7 @@
                     </div>
                 </div>
             </div>
-            <div class="team-stats">
+<div class="team-stats">
                 <p><strong>Example Mixed Setup (Vocalist):</strong></p>
                 <ul>
                     <li>Gold Park Mansion (+11,810 Dance, +50,000 Fans)</li>
@@ -3086,7 +3113,7 @@
                 <td>41,200</td>
                 <td>4000</td>
             </tr>
-            <tr>
+           <tr>
                 <td>S Class</td>
                 <td>1 ★</td>
                 <td>2150</td>
@@ -3187,14 +3214,13 @@
                     <li>Only 2 UR characters can be on a team at a time</li>
                     <li>UR characters can link with high-level SSR characters for additional bonuses</li>
                 </ul>
-                <p><strong>Region Bonuses:</strong></p>
+                <p><strong>Region Linking:</strong></p>
                 <ul>
-                    <li><strong>Bali Girls:</strong> Moana, Sari, Leilani, Ratih, and Talia receive special region bonuses when teamed together</li>
-                    <li><strong>Tokyo Girls:</strong> Yuuko, Chizuru, Kokoro, Ayaka, and Sora receive special region bonuses when teamed together</li>
+                    <li><strong>Bali Girls:</strong> Moana, Sari, Leilani, Ratih, and Talia can link with Bali UR characters</li>
+                    <li><strong>Tokyo Girls:</strong> Yuuko, Chizuru, Kokoro, Ayaka, and Sora can link with Tokyo UR characters</li>
                 </ul>
             </div>
-
-            <div class="tab-content" id="synergy-content">
+ <div class="tab-content" id="synergy-content">
                 <h3>Genre Synergy Bonuses</h3>
                 <p>Characters get bonuses based on genre combinations:</p>
                 <ul>
@@ -3211,11 +3237,11 @@
                     <li>HipHop</li>
                 </ul>
                 
-                <h3>Regional Bonuses</h3>
-                <p>Characters from the same region receive special bonuses:</p>
+                <h3>Regional Linking System</h3>
+                <p>Characters from specific regions can link with UR characters from the same region:</p>
                 <ul>
-                    <li><strong>Bali Team:</strong> +8% to base stats when all Bali characters are used together</li>
-                    <li><strong>Tokyo Team:</strong> +8% to base stats when all Tokyo characters are used together</li>
+                    <li><strong>Bali Team:</strong> Bali characters can link with Bali UR characters for special bonuses</li>
+                    <li><strong>Tokyo Team:</strong> Tokyo characters can link with Tokyo UR characters for special bonuses</li>
                 </ul>
             </div>
 
@@ -3325,8 +3351,7 @@
                     </tbody>
                 </table>
             </div>
-            
-            <div class="skill-info">
+<div class="skill-info">
                 <h3>Defense Skills</h3>
                 <table>
                     <thead>
@@ -3476,8 +3501,7 @@
                             <td>13,513</td>
                             <td>Normal DMG +50%, Reduce Normal Attack DMG -12%</td>
                         </tr>
-                        
-                        <!-- ROCK Characters -->
+                       <!-- ROCK Characters -->
                         <tr class="rock">
                             <td><strong>Yuuko</strong> <span style="font-size: 0.8rem; color: #666;">(Tokyo)</span></td>
                             <td><span class="ssr-badge">SSR</span></td>
@@ -3745,8 +3769,7 @@
             </table>
         </div>
     </div>
-    
-    <div class="tab-content" id="ssr-rb-equipment-content">
+<div class="tab-content" id="ssr-rb-equipment-content">
         <h3>SSR R&B Character Equipment</h3>
         <p>Optimal equipment setup for SSR R&B characters for balanced stat distribution.</p>
         
@@ -3895,8 +3918,7 @@
             </table>
         </div>
     </div>
-    
-    <div class="tab-content" id="ssr-edm-equipment-content">
+<div class="tab-content" id="ssr-edm-equipment-content">
         <h3>SSR EDM Character Equipment</h3>
         <p>Optimal equipment setup for SSR EDM characters for balanced stat distribution.</p>
         
