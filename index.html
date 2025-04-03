@@ -4545,40 +4545,75 @@ const applyCharFilterBtn = document.getElementById('apply-char-filter');
 const resetCharFilterBtn = document.getElementById('reset-char-filter');
 
 // Tab functionality
+// Fix for tabs in the Recommended Teams section
 document.addEventListener('DOMContentLoaded', function() {
-    // Fix for all tab systems
-    const allTabGroups = document.querySelectorAll('.tabs');
-    
-    allTabGroups.forEach(tabGroup => {
-        const tabs = tabGroup.querySelectorAll('.tab');
+    // Get all tab groups in the recommended-teams section
+    const recommendedTeamsSection = document.getElementById('recommended-teams');
+    if (recommendedTeamsSection) {
+        const mainTabs = recommendedTeamsSection.querySelectorAll('.tabs > .tab');
         
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                const parentSection = tabGroup.closest('section');
+        // Add click event to main tabs
+        mainTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Get data-tab attribute
+                const tabId = this.getAttribute('data-tab');
                 
-                // Deactivate all tabs and contents in this section
-                parentSection.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                parentSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                // Remove active class from all tabs and contents
+                recommendedTeamsSection.querySelectorAll('.tabs > .tab').forEach(t => t.classList.remove('active'));
+                recommendedTeamsSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 
-                // Also check for nested tab content within the section
-                document.querySelectorAll(`#${tabId}-content`).forEach(content => {
-                    if (parentSection.contains(content)) {
-                        content.classList.add('active');
-                    }
-                });
-                
-                // Activate selected tab
-                tab.classList.add('active');
-                const tabContent = parentSection.querySelector(`#${tabId}-content`);
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                const tabContent = document.getElementById(tabId + '-content');
                 if (tabContent) {
                     tabContent.classList.add('active');
-                } else {
-                    console.warn(`Tab content #${tabId}-content not found`);
+                }
+                
+                // Handle the case of the nested tabs in "teams-without-ur-content"
+                if (tabId === 'teams-without-ur') {
+                    // Make sure the first sub-tab is active by default
+                    const firstSubTab = document.querySelector('#teams-without-ur-content .tabs .tab');
+                    if (firstSubTab) {
+                        const firstSubTabId = firstSubTab.getAttribute('data-tab');
+                        
+                        // Remove active class from all sub-tabs and sub-tab contents
+                        document.querySelectorAll('#teams-without-ur-content .tabs .tab').forEach(st => 
+                            st.classList.remove('active'));
+                        document.querySelectorAll('#teams-without-ur-content .tab-content').forEach(stc => 
+                            stc.classList.remove('active'));
+                        
+                        // Add active class to first sub-tab and its content
+                        firstSubTab.classList.add('active');
+                        const firstSubTabContent = document.getElementById(firstSubTabId + '-content');
+                        if (firstSubTabContent) {
+                            firstSubTabContent.classList.add('active');
+                        }
+                    }
                 }
             });
         });
-    });
+        
+        // Handle the sub-tabs in the "teams-without-ur-content" section
+        const subTabs = document.querySelectorAll('#teams-without-ur-content .tabs .tab');
+        subTabs.forEach(subTab => {
+            subTab.addEventListener('click', function() {
+                const subTabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all sub-tabs and contents
+                document.querySelectorAll('#teams-without-ur-content .tabs .tab').forEach(st => 
+                    st.classList.remove('active'));
+                document.querySelectorAll('#teams-without-ur-content .tab-content').forEach(stc => 
+                    stc.classList.remove('active'));
+                
+                // Add active class to clicked sub-tab and its content
+                this.classList.add('active');
+                const subTabContent = document.getElementById(subTabId + '-content');
+                if (subTabContent) {
+                    subTabContent.classList.add('active');
+                }
+            });
+        });
+    }
 });
 // Team state
 let currentTeam = [];
@@ -5721,7 +5756,7 @@ function initializeMap() {
         });
         
         // Set map bounds based on the square island image
-        const imageUrl = 'https://i.imgur.com/UHN5aLV.jpeg'; // Replace with your actual map image URL
+        const imageUrl = 'https://i.imgur.com/nl0lRlW.png'; // Replace with your actual map image URL
         const imageBounds = [[0, 0], [550, 550]]; // Square bounds matching the island image
         
         // Add the map image as a base layer
@@ -5941,9 +5976,9 @@ function addGameLandmarks(map) {
     // Define landmarks array properly
     const landmarks = [
         // UR locations - positioned at the volcano-shaped areas
-        { name: "Paradise Bay (UR)", type: "landmark", pos: [240, 195], desc: "UR location in the North" },  
-        { name: "Emerald Coast (UR)", type: "landmark", pos: [390, 280], desc: "UR location in the Southeast" }, 
-        { name: "Royal Garden (UR)", type: "landmark", pos: [240, 370], desc: "UR location in the Southwest" },  
+        { name: "Royal Garden (UR)", type: "landmark", pos: [240, 195], desc: "UR location in the North" },  
+        { name: "Paradise Bay (UR)", type: "landmark", pos: [390, 280], desc: "UR location in the Southeast" }, 
+        { name: "Emerald Coast (UR)", type: "landmark", pos: [240, 370], desc: "UR location in the Southwest" },  
         
         // Chamber locations - positioned around the perimeter where labeled in the image
         { name: "Ubud Chamber", type: "landmark", pos: [460, 130], desc: "Northwest chamber" },      
