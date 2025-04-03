@@ -4580,7 +4580,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 // Team state
 let currentTeam = [];
 // Team state for equipment
@@ -4986,36 +4985,6 @@ function updateTeamUI() {
     teamHeader.textContent = `Selected Team (${currentTeam.length}/5)`;
 }
 
-// Calculate region bonus
-function calculateRegionBonus(team) {
-    // Count Bali characters
-    const baliCharacters = team.filter(char => char.REGION === 'Bali');
-    const baliTotal = baliCharacters.length;
-    
-    // Count Tokyo characters
-    const tokyoCharacters = team.filter(char => char.REGION === 'Tokyo');
-    const tokyoTotal = tokyoCharacters.length;
-    
-    // Determine which region has the most characters
-    let regionBonus = 0;
-    let dominantRegion = null;
-    
-    if (baliTotal >= 5) {
-        regionBonus = 0.08; // 8% bonus for full Bali team
-        dominantRegion = 'Bali';
-    } else if (tokyoTotal >= 5) {
-        regionBonus = 0.08; // 8% bonus for full Tokyo team
-        dominantRegion = 'Tokyo';
-    }
-    
-    return {
-        regionBonus,
-        dominantRegion,
-        baliTotal,
-        tokyoTotal
-    };
-}
-
 // Calculate synergy bonus
 function calculateSynergyBonus(team) {
     const genreCounts = {};
@@ -5160,10 +5129,6 @@ function calculateTeamPower() {
     const synergy = calculateSynergyBonus(currentTeam);
     let synergyBonus = synergy.percentage / 100;  // Convert percentage to decimal
     
-    // Calculate region bonus
-    const regionInfo = calculateRegionBonus(currentTeam);
-    let regionBonus = regionInfo.regionBonus;
-    
     // Calculate equipment bonuses
     const equipStats = calculateEquipmentStats();
     
@@ -5171,9 +5136,9 @@ function calculateTeamPower() {
     const baseWithEquipSing = totalSing + equipStats.sing;
     const baseWithEquipDance = totalDance + equipStats.dance;
     
-    // Apply synergy and region bonuses
-    const finalSing = baseWithEquipSing * (1 + synergyBonus + regionBonus);
-    const finalDance = baseWithEquipDance * (1 + synergyBonus + regionBonus);
+    // Apply synergy bonus only
+    const finalSing = baseWithEquipSing * (1 + synergyBonus);
+    const finalDance = baseWithEquipDance * (1 + synergyBonus);
     
     // Balance ratio calculation
     const totalStats = baseWithEquipSing + baseWithEquipDance;
@@ -5210,8 +5175,6 @@ function calculateTeamPower() {
         finalDance,
         synergyBonus,
         synergy,
-        regionBonus,
-        regionInfo,
         activeSkill,
         skillBonuses,
         basicAttackBonus,
@@ -5286,7 +5249,6 @@ function updateTeamStatsEnhanced() {
         <div class="synergy-bonus" style="margin-top: 0.5rem;">
             <p>Genre Synergy: ${teamPower.synergy.genre ? `${teamPower.synergy.count}x ${teamPower.synergy.genre}` : 'None'}</p>
             <p>Synergy Bonus: +${teamPower.synergy.percentage}%</p>
-            ${teamPower.regionInfo.dominantRegion ? `<p>Region Bonus: ${teamPower.regionInfo.dominantRegion} Team (+8%)</p>` : ''}
         </div>
         
         <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #e8f4f8; border-radius: 4px;">
@@ -5359,8 +5321,8 @@ function updateSkillsSummaryEnhanced(skills) {
     let hasAttackSkills = false;
     let hasDefenseSkills = false;
     let hasSupportSkills = false;
-    
-    // Attack skills
+
+// Attack skills
     if (skills.SKILL_DM > 0) {
         const li = document.createElement('li');
         li.textContent = `Skill DMG +${(skills.SKILL_DM * 100).toFixed(0)}%`;
@@ -5525,7 +5487,6 @@ function recommendBalancedEquipment(character) {
     
     return equipRecommendation;
 }
-
 // Helper to determine if we should recommend gold equipment (can be modified based on user preference)
 function hasGoldEquipment() {
     // By default, recommend gold equipment
@@ -5754,8 +5715,9 @@ function initializeMap() {
     if (document.getElementById('top-girl-map')) {
         const gameMap = L.map('top-girl-map', {
             crs: L.CRS.Simple,
-            minZoom: -1,
-            maxZoom: 2
+            minZoom: 0,   // Set minimum zoom level to prevent zooming too far out
+            maxZoom: 3,   // Set maximum zoom level to allow enough detail
+            zoomControl: true
         });
         
         // Set map bounds based on the square island image
@@ -5772,75 +5734,205 @@ function initializeMap() {
         // Track markers
         const markers = [];
         
+        // Custom Icon Factory Function
+        function createCustomIcon(type, size) {
+            // Determine icon size based on selection
+            let iconSize;
+            switch(size) {
+                case 'small': iconSize = 16; break;
+                case 'large': iconSize = 32; break;
+                case 'medium': 
+                default: iconSize = 24; break;
+            }
+            
+            // Determine icon color based on type
+            let bgColor, borderColor, textColor;
+            switch(type) {
+                case 'resource':
+                    bgColor = '#4cd964'; // Green
+                    borderColor = '#2eb944';
+                    textColor = 'black';
+                    break;
+                case 'enemy':
+                    bgColor = '#ff3b30'; // Red
+                    borderColor = '#d91d12';
+                    textColor = 'white';
+                    break;
+                case 'landmark':
+                    bgColor = '#ffcc00'; // Yellow
+                    borderColor = '#d6a900';
+                    textColor = 'black';
+                    break;
+                case 'direction':
+                    bgColor = '#007aff'; // Blue
+                    borderColor = '#0055cc';
+                    textColor = 'white';
+                    break;
+                default:
+                    bgColor = '#8e8e93'; // Gray
+                    borderColor = '#636366';
+                    textColor = 'black';
+            }
+            
+            // Create custom divIcon with better labeling
+            return L.divIcon({
+                className: `custom-marker ${type}`,
+                html: `<div style="
+                    width: ${iconSize}px; 
+                    height: ${iconSize}px; 
+                    background-color: ${bgColor}; 
+                    border: 2px solid ${borderColor};
+                    border-radius: 50%; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: ${textColor};
+                    font-weight: bold;
+                    font-size: ${iconSize/2}px;
+                    box-shadow: 0 0 4px rgba(0,0,0,0.3);">
+                </div>`,
+                iconSize: [iconSize, iconSize],
+                iconAnchor: [iconSize/2, iconSize/2]
+            });
+        }
+
         // Add marker button handler
         document.getElementById('add-marker').addEventListener('click', function() {
             const markerType = document.getElementById('marker-type').value;
+            const markerSize = document.getElementById('marker-size').value;
             alert('Click on the map to place a ' + markerType + ' marker');
             
             gameMap.once('click', function(e) {
-                // Create custom marker with color based on type
-                let markerColor;
-                switch(markerType) {
-                    case 'resource': markerColor = '#4cd964'; break; // Green
-                    case 'enemy': markerColor = '#ff3b30'; break;    // Red
-                    case 'ally': markerColor = '#007aff'; break;     // Blue
-                    case 'quest': markerColor = '#ffcc00'; break;    // Yellow
-                    default: markerColor = '#8e8e93'; break;         // Gray
-                }
+                // Create custom icon with specified type and size
+                const customIcon = createCustomIcon(markerType, markerSize);
                 
-                const customIcon = L.divIcon({
-                    className: 'custom-div-icon',
-                    html: `<div style="background-color: ${markerColor}; 
-                           width: 12px; 
-                           height: 12px; 
-                           border-radius: 50%; 
-                           border: 2px solid white;
-                           box-shadow: 0 0 4px rgba(0,0,0,0.5);">
-                           </div>`,
-                    iconSize: [12, 12],
-                    iconAnchor: [8, 8]
-                });
+                // Create marker with label
+                const marker = L.marker(e.latlng, {
+                    icon: customIcon, 
+                    draggable: true
+                }).addTo(gameMap);
                 
-                // Create marker
-                const marker = L.marker(e.latlng, {icon: customIcon, draggable: true}).addTo(gameMap);
                 markers.push(marker);
                 
-                // Add popup
-                marker.bindPopup(`
-                    <div class="marker-popup">
-                      <strong>${markerType.charAt(0).toUpperCase() + markerType.slice(1)}</strong>
-                      <input type="text" placeholder="Add description" onchange="this.parentNode.querySelector('p').textContent = this.value">
-                      <p></p>
-                      <button onclick="this.closest('.leaflet-popup').querySelector('.leaflet-popup-close-button').click();">Save</button>
-                    </div>
-                `).openPopup();
+                // Add popup with name field
+                const popupContent = document.createElement('div');
+                popupContent.className = 'marker-popup';
+                
+                const title = document.createElement('strong');
+                title.textContent = markerType.charAt(0).toUpperCase() + markerType.slice(1);
+                popupContent.appendChild(title);
+                
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.placeholder = 'Add name';
+                nameInput.style.margin = '8px 0';
+                nameInput.style.width = '100%';
+                nameInput.style.padding = '5px';
+                
+                // Add event listener to update marker label when name changes
+                nameInput.addEventListener('change', function() {
+                    const name = this.value.trim();
+                    if (name) {
+                        // Update the marker icon with the name
+                        const updatedIcon = L.divIcon({
+                            className: `custom-marker ${markerType}`,
+                            html: `<div style="
+                                width: ${customIcon.options.iconSize[0]}px; 
+                                height: ${customIcon.options.iconSize[1]}px; 
+                                background-color: ${getMarkerColor(markerType)}; 
+                                border: 2px solid ${getMarkerBorderColor(markerType)};
+                                border-radius: 50%; 
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                color: ${getMarkerTextColor(markerType)};
+                                font-weight: bold;
+                                font-size: ${customIcon.options.iconSize[0]/2}px;
+                                box-shadow: 0 0 4px rgba(0,0,0,0.3);">
+                                ${name.charAt(0).toUpperCase()}
+                            </div>`,
+                            iconSize: customIcon.options.iconSize,
+                            iconAnchor: customIcon.options.iconAnchor
+                        });
+                        marker.setIcon(updatedIcon);
+                        marker.name = name;
+                    }
+                });
+                
+                popupContent.appendChild(nameInput);
+                
+                const descriptionLabel = document.createElement('div');
+                descriptionLabel.textContent = 'Description:';
+                popupContent.appendChild(descriptionLabel);
+                
+                const descriptionInput = document.createElement('input');
+                descriptionInput.type = 'text';
+                descriptionInput.placeholder = 'Add description';
+                descriptionInput.style.width = '100%';
+                descriptionInput.style.padding = '5px';
+                popupContent.appendChild(descriptionInput);
+                
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Save';
+                saveButton.style.marginTop = '8px';
+                saveButton.style.padding = '5px 10px';
+                saveButton.addEventListener('click', function() {
+                    marker.closePopup();
+                });
+                popupContent.appendChild(saveButton);
+                
+                marker.bindPopup(L.popup({
+                    minWidth: 200
+                }).setContent(popupContent));
+                
+                marker.openPopup();
             });
         });
+
+// Helper functions for marker colors
+        function getMarkerColor(type) {
+            switch(type) {
+                case 'resource': return '#4cd964'; // Green
+                case 'enemy': return '#ff3b30';    // Red
+                case 'landmark': return '#ffcc00'; // Yellow
+                case 'direction': return '#007aff'; // Blue
+                default: return '#8e8e93';         // Gray
+            }
+        }
+        
+        function getMarkerBorderColor(type) {
+            switch(type) {
+                case 'resource': return '#2eb944';
+                case 'enemy': return '#d91d12';
+                case 'landmark': return '#d6a900';
+                case 'direction': return '#0055cc';
+                default: return '#636366';
+            }
+        }
+        
+        function getMarkerTextColor(type) {
+            switch(type) {
+                case 'enemy': return 'white';
+                case 'direction': return 'white';
+                default: return 'black';
+            }
+        }
         
         // Clear markers
         document.getElementById('clear-markers').addEventListener('click', function() {
-            markers.forEach(marker => gameMap.removeLayer(marker));
-            markers.length = 0;
+            if (markers.length === 0) {
+                alert('No markers to clear.');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to clear all markers?')) {
+                markers.forEach(marker => gameMap.removeLayer(marker));
+                markers.length = 0;
+            }
         });
         
         // Add game landmarks (chambers and UR locations)
         addGameLandmarks(gameMap);
-    }
-}
-
-// Helper function to get marker icon based on type
-function getMarkerIcon(type) {
-    switch(type) {
-        case 'resource':
-            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png';
-        case 'enemy':
-            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678088-map-marker-512.png';
-        case 'ally':
-            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678087-map-marker-512.png';
-        case 'quest':
-            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678089-map-marker-512.png';
-        default:
-            return 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png';
     }
 }
 
@@ -5849,42 +5941,59 @@ function addGameLandmarks(map) {
     // Define landmarks array properly
     const landmarks = [
         // UR locations - positioned at the volcano-shaped areas
-        { name: "Paradise Bay (UR)", type: "ur", pos: [240, 195] },  // Top/North volcano
-        { name: "Emerald Coast (UR)", type: "ur", pos: [390, 280] }, // Right/East volcano
-        { name: "Royal Garden (UR)", type: "ur", pos: [240, 370] },  // Left/West volcano
+        { name: "Paradise Bay (UR)", type: "landmark", pos: [240, 195], desc: "UR location in the North" },  
+        { name: "Emerald Coast (UR)", type: "landmark", pos: [390, 280], desc: "UR location in the Southeast" }, 
+        { name: "Royal Garden (UR)", type: "landmark", pos: [240, 370], desc: "UR location in the Southwest" },  
         
         // Chamber locations - positioned around the perimeter where labeled in the image
-        { name: "Ubud Chamber", type: "chamber", pos: [460, 130] },      // Top left
-        { name: "Uluwatu Chamber", type: "chamber", pos: [460, 410] },   // Top right
-        { name: "Kuta Chamber", type: "chamber", pos: [300, 100] },      // Middle left
-        { name: "Seminyak Chamber", type: "chamber", pos: [290, 460] },  // Middle right
-        { name: "Jimbaran Chamber", type: "chamber", pos: [100, 90] },  // Bottom left
-        { name: "Tanah Chamber", type: "chamber", pos: [100, 400] }      // Bottom right
+        { name: "Ubud Chamber", type: "landmark", pos: [460, 130], desc: "Northwest chamber" },      
+        { name: "Uluwatu Chamber", type: "landmark", pos: [460, 410], desc: "Northeast chamber" },   
+        { name: "Kuta Chamber", type: "landmark", pos: [300, 100], desc: "West chamber" },      
+        { name: "Seminyak Chamber", type: "landmark", pos: [290, 460], desc: "East chamber" },  
+        { name: "Jimbaran Chamber", type: "landmark", pos: [100, 90], desc: "Southwest chamber" },  
+        { name: "Tanah Chamber", type: "landmark", pos: [100, 400], desc: "Southeast chamber" }      
     ];
     
-    // Add markers for landmarks using default Leaflet markers
+    // Add markers for landmarks using better custom markers
     landmarks.forEach(landmark => {
-        // Different colors for different landmark types
-        const markerOptions = {
-            title: landmark.name,
-            // UR locations get red markers, chambers get blue
-            icon: L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color: ${landmark.type === 'ur' ? '#ff3b30' : '#007aff'}; 
-                       width: 15px; 
-                       height: 15px; 
-                       border-radius: 50%; 
-                       border: 2px solid white;
-                       box-shadow: 0 0 4px rgba(0,0,0,0.5);">
-                       </div>`,
-                iconSize: [15, 15],
-                iconAnchor: [8, 8]
-            })
-        };
+        // Create icon based on type
+        const isUR = landmark.name.includes("UR");
         
-        L.marker(landmark.pos, markerOptions)
-            .addTo(map)
-            .bindPopup(`<strong>${landmark.name}</strong>`);
+        const markerColor = isUR ? '#ff3b30' : '#007aff'; // Red for UR, Blue for chambers
+        const borderColor = isUR ? '#d91d12' : '#0055cc';
+        const textColor = 'white';
+        
+        // First letter of landmark name
+        const letter = landmark.name.charAt(0);
+        
+        const customIcon = L.divIcon({
+            className: 'landmark-marker',
+            html: `<div style="
+                width: 24px; 
+                height: 24px; 
+                background-color: ${markerColor}; 
+                border: 2px solid ${borderColor};
+                border-radius: 50%; 
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: ${textColor};
+                font-weight: bold;
+                font-size: 12px;
+                box-shadow: 0 0 4px rgba(0,0,0,0.5);">
+                ${letter}
+            </div>`,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+        
+        // Add marker with custom icon and popup
+        L.marker(landmark.pos, {
+            icon: customIcon,
+            title: landmark.name
+        })
+        .bindPopup(`<strong>${landmark.name}</strong><br>${landmark.desc || ''}`)
+        .addTo(map);
     });
 }
 
