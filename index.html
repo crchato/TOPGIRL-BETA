@@ -4034,7 +4034,8 @@
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 <script>
-        // Equipment data
+
+// Equipment data
 const equipmentData = {
     jewelry: [
         {
@@ -4271,7 +4272,7 @@ const characterData = [{
         "Attrib": "Sexy",
         "POSITION": "Dancer",
         "TYPE": "SSR",
-        "GIRL": "Ratih",  // Corrected spelling from Raith
+        "GIRL": "Ratih",
         "NORMAL_DM": 0.5,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "BASE_SING": 7735,
@@ -4522,103 +4523,118 @@ const characterData = [{
     }
 ];
 
-// DOM elements
-const tabs = document.querySelectorAll('.tab');
-const tabContents = document.querySelectorAll('.tab-content');
-const characterGrid = document.getElementById('character-grid');
-const characterSelectionList = document.getElementById('character-selection-list');
-const selectedTeam = document.getElementById('selected-team');
-const noCharactersMessage = document.getElementById('no-characters-message');
-const teamStats = document.getElementById('team-stats');
-const synergyInfo = document.getElementById('synergy-info');
-const skillSummary = document.getElementById('skill-summary');
-const teamCompositionWarning = document.getElementById('team-composition-warning');
-const resetTeamBtn = document.getElementById('reset-team');
-
-// Filters
-const genreFilter = document.getElementById('genre-filter');
-const typeFilter = document.getElementById('type-filter');
-const positionFilter = document.getElementById('position-filter');
-const charGenreFilter = document.getElementById('char-genre-filter');
-const charTypeFilter = document.getElementById('char-type-filter');
-const applyCharFilterBtn = document.getElementById('apply-char-filter');
-const resetCharFilterBtn = document.getElementById('reset-char-filter');
-
-// Tab functionality
-// Fix for tabs in the Recommended Teams section
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all tab groups in the recommended-teams section
-    const recommendedTeamsSection = document.getElementById('recommended-teams');
-    if (recommendedTeamsSection) {
-        const mainTabs = recommendedTeamsSection.querySelectorAll('.tabs > .tab');
-        
-        // Add click event to main tabs
-        mainTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Get data-tab attribute
-                const tabId = this.getAttribute('data-tab');
-                
-                // Remove active class from all tabs and contents
-                recommendedTeamsSection.querySelectorAll('.tabs > .tab').forEach(t => t.classList.remove('active'));
-                recommendedTeamsSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
-                // Add active class to clicked tab and corresponding content
-                this.classList.add('active');
-                const tabContent = document.getElementById(tabId + '-content');
-                if (tabContent) {
-                    tabContent.classList.add('active');
-                }
-                
-                // Handle the case of the nested tabs in "teams-without-ur-content"
-                if (tabId === 'teams-without-ur') {
-                    // Make sure the first sub-tab is active by default
-                    const firstSubTab = document.querySelector('#teams-without-ur-content .tabs .tab');
-                    if (firstSubTab) {
-                        const firstSubTabId = firstSubTab.getAttribute('data-tab');
-                        
-                        // Remove active class from all sub-tabs and sub-tab contents
-                        document.querySelectorAll('#teams-without-ur-content .tabs .tab').forEach(st => 
-                            st.classList.remove('active'));
-                        document.querySelectorAll('#teams-without-ur-content .tab-content').forEach(stc => 
-                            stc.classList.remove('active'));
-                        
-                        // Add active class to first sub-tab and its content
-                        firstSubTab.classList.add('active');
-                        const firstSubTabContent = document.getElementById(firstSubTabId + '-content');
-                        if (firstSubTabContent) {
-                            firstSubTabContent.classList.add('active');
-                        }
-                    }
-                }
-            });
-        });
-        
-        // Handle the sub-tabs in the "teams-without-ur-content" section
-        const subTabs = document.querySelectorAll('#teams-without-ur-content .tabs .tab');
-        subTabs.forEach(subTab => {
-            subTab.addEventListener('click', function() {
-                const subTabId = this.getAttribute('data-tab');
-                
-                // Remove active class from all sub-tabs and contents
-                document.querySelectorAll('#teams-without-ur-content .tabs .tab').forEach(st => 
-                    st.classList.remove('active'));
-                document.querySelectorAll('#teams-without-ur-content .tab-content').forEach(stc => 
-                    stc.classList.remove('active'));
-                
-                // Add active class to clicked sub-tab and its content
-                this.classList.add('active');
-                const subTabContent = document.getElementById(subTabId + '-content');
-                if (subTabContent) {
-                    subTabContent.classList.add('active');
-                }
-            });
-        });
-    }
-});
 // Team state
 let currentTeam = [];
 // Team state for equipment
 let teamEquipment = {};
+
+// Tab functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix for all tab systems
+    const allTabGroups = document.querySelectorAll('.tabs');
+    
+    allTabGroups.forEach(tabGroup => {
+        const tabs = tabGroup.querySelectorAll('.tab');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                const parentSection = tabGroup.closest('section');
+                
+                if (!parentSection) return;
+                
+                // Deactivate all tabs and contents in this section
+                parentSection.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                parentSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Also check for nested tab content within the section
+                document.querySelectorAll(`#${tabId}-content`).forEach(content => {
+                    if (parentSection.contains(content)) {
+                        content.classList.add('active');
+                    }
+                });
+                
+                // Activate selected tab
+                tab.classList.add('active');
+                const tabContent = parentSection.querySelector(`#${tabId}-content`);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                } else {
+                    console.warn(`Tab content #${tabId}-content not found`);
+                }
+            });
+        });
+    });
+    
+    // Special handling for nested tabs in "Teams without UR" section
+    const teamsWithoutUrContent = document.getElementById('teams-without-ur-content');
+    if (teamsWithoutUrContent) {
+        const nestedTabs = teamsWithoutUrContent.querySelectorAll('.tab');
+        nestedTabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent event bubbling
+                
+                const tabId = this.getAttribute('data-tab');
+                const tabContent = document.getElementById(tabId + '-content');
+                
+                if (!tabContent) return;
+                
+                // Remove active class from all sibling tabs
+                nestedTabs.forEach(t => t.classList.remove('active'));
+                
+                // Remove active class from all tab contents
+                teamsWithoutUrContent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                tabContent.classList.add('active');
+            });
+        });
+    }
+    
+    // Password Protection
+    const passwordOverlay = document.getElementById('password-overlay');
+    const passwordInput = document.getElementById('password-input');
+    const passwordSubmit = document.getElementById('password-submit');
+    const passwordError = document.getElementById('password-error');
+    
+    if (passwordOverlay && passwordInput && passwordSubmit && passwordError) {
+        // Check if the user has already entered the correct password
+        const hasAccess = localStorage.getItem('topGirlTeamBuilderAccess');
+        if (hasAccess === 'true') {
+            passwordOverlay.style.display = 'none';
+        }
+        
+        // Listen for Enter key on password input
+        passwordInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+        
+        // Listen for click on submit button
+        passwordSubmit.addEventListener('click', checkPassword);
+        
+        function checkPassword() {
+            const correctPassword = "iloveflex"; // Password set to "iloveflex"
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword === correctPassword) {
+                // Password is correct
+                passwordOverlay.style.display = 'none';
+                // Store access in localStorage so the user doesn't have to enter it again
+                localStorage.setItem('topGirlTeamBuilderAccess', 'true');
+            } else {
+                // Password is incorrect
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                setTimeout(() => {
+                    passwordError.style.display = 'none';
+                }, 3000);
+            }
+        }
+    }
+});
 
 // Create equipment dropdowns
 function createEquipmentDropdowns(characterName) {
@@ -4748,10 +4764,12 @@ function getEquipmentStats(item) {
     }
     
     if (item.dance > 0) {
+        if (statText) statText += ', ';
         statText += `+${item.dance.toLocaleString()} Dance`;
     }
     
     if (item.management > 0) {
+        if (statText) statText += ', ';
         statText += `+${item.management.toLocaleString()} Management`;
     }
     
@@ -4765,6 +4783,9 @@ function getEquipmentStats(item) {
 
 // Populate character grid
 function populateCharacterGrid(characters) {
+    const characterGrid = document.getElementById('character-grid');
+    if (!characterGrid) return;
+    
     characterGrid.innerHTML = '';
     
     characters.forEach(char => {
@@ -4882,1236 +4903,1363 @@ function populateCharacterGrid(characters) {
 
 // Populate character selection list
 function populateCharacterSelection(characters) {
-    characterSelectionList.innerHTML = '';
-    
-    characters.forEach(char => {
-        const option = document.createElement('div');
-        option.className = 'character-option';
-        option.dataset.name = char.GIRL;
-        
-        let optionText = `<strong>${char.GIRL}</strong> (${char.TYPE}) - `;
-        optionText += `<span class="genre-badge" style="padding: 2px 5px; font-size: 0.8rem;">${char.GENR}</span>`;
-        optionText += `<span class="position-badge" style="padding: 2px 5px; font-size: 0.8rem;">${char.POSITION}</span>`;
-        
-        // Special labels for specific regions or limited characters
-        if (char.REGION) {
-            optionText += `<span style="color: #666; font-size: 0.8rem; margin-left: 5px;">(${char.REGION})</span>`;
-        }
-        if (char.SEASONAL) {
-            optionText += `<span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 5px;">(Seasonal)</span>`;
-        }
-        if (char.LIMITED) {
-            optionText += `<span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 5px;">(Limited)</span>`;
-        }
-        
-        option.innerHTML = optionText;
-        
-        option.addEventListener('click', () => {
-            addCharacterToTeam(char);
-        });
-        
-        characterSelectionList.appendChild(option);
-    });
+   const characterSelectionList = document.getElementById('character-selection-list');
+   if (!characterSelectionList) return;
+   
+   characterSelectionList.innerHTML = '';
+   
+   characters.forEach(char => {
+       const option = document.createElement('div');
+       option.className = 'character-option';
+       option.dataset.name = char.GIRL;
+       
+       let optionText = `<strong>${char.GIRL}</strong> (${char.TYPE}) - `;
+       optionText += `<span class="genre-badge" style="padding: 2px 5px; font-size: 0.8rem;">${char.GENR}</span>`;
+       optionText += `<span class="position-badge" style="padding: 2px 5px; font-size: 0.8rem;">${char.POSITION}</span>`;
+       
+       // Special labels for specific regions or limited characters
+       if (char.REGION) {
+           optionText += `<span style="color: #666; font-size: 0.8rem; margin-left: 5px;">(${char.REGION})</span>`;
+       }
+       if (char.SEASONAL) {
+           optionText += `<span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 5px;">(Seasonal)</span>`;
+       }
+       if (char.LIMITED) {
+           optionText += `<span style="color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-left: 5px;">(Limited)</span>`;
+       }
+       
+       option.innerHTML = optionText;
+       
+       option.addEventListener('click', () => {
+           addCharacterToTeam(char);
+       });
+       
+       characterSelectionList.appendChild(option);
+   });
 }
 
 // Add character to team
 function addCharacterToTeam(character) {
-    // Check if character is already in team
-    if (currentTeam.some(char => char.GIRL === character.GIRL)) {
-        return;
-    }
-    
-    // Check team size
-    if (currentTeam.length >= 5) {
-        teamCompositionWarning.textContent = 'Team is already full (5/5).';
-        return;
-    }
-    
-    // Check UR characters limit
-    const urCharactersInTeam = currentTeam.filter(char => char.TYPE === 'UR').length;
-    if (character.TYPE === 'UR' && urCharactersInTeam >= 2) {
-        teamCompositionWarning.textContent = 'Maximum 2 UR characters allowed per team.';
-        return;
-    }
-    
-    // Add character to team
-    currentTeam.push(character);
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-    
-    // Clear warning
-    teamCompositionWarning.textContent = '';
+   const teamCompositionWarning = document.getElementById('team-composition-warning');
+   
+   // Check if character is already in team
+   if (currentTeam.some(char => char.GIRL === character.GIRL)) {
+       return;
+   }
+   
+   // Check team size
+   if (currentTeam.length >= 5) {
+       if (teamCompositionWarning) {
+           teamCompositionWarning.textContent = 'Team is already full (5/5).';
+       }
+       return;
+   }
+   
+   // Check UR characters limit
+   const urCharactersInTeam = currentTeam.filter(char => char.TYPE === 'UR').length;
+   if (character.TYPE === 'UR' && urCharactersInTeam >= 2) {
+       if (teamCompositionWarning) {
+           teamCompositionWarning.textContent = 'Maximum 2 UR characters allowed per team.';
+       }
+       return;
+   }
+   
+   // Add character to team
+   currentTeam.push(character);
+   updateTeamUI();
+   updateTeamStatsEnhanced();
+   
+   // Clear warning
+   if (teamCompositionWarning) {
+       teamCompositionWarning.textContent = '';
+   }
 }
 
 // Remove character from team
 function removeCharacterFromTeam(characterName) {
-    currentTeam = currentTeam.filter(char => char.GIRL !== characterName);
-    
-    // Also remove equipment for this character
-    if (teamEquipment[characterName]) {
-        delete teamEquipment[characterName];
-    }
-    
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-    
-    // Clear warning
-    teamCompositionWarning.textContent = '';
+   currentTeam = currentTeam.filter(char => char.GIRL !== characterName);
+   
+   // Also remove equipment for this character
+   if (teamEquipment[characterName]) {
+       delete teamEquipment[characterName];
+   }
+   
+   updateTeamUI();
+   updateTeamStatsEnhanced();
+   
+   // Clear warning
+   const teamCompositionWarning = document.getElementById('team-composition-warning');
+   if (teamCompositionWarning) {
+       teamCompositionWarning.textContent = '';
+   }
 }
 
 // Update team UI
 function updateTeamUI() {
-    if (currentTeam.length === 0) {
-        noCharactersMessage.style.display = 'block';
-        selectedTeam.innerHTML = '';
-        selectedTeam.appendChild(noCharactersMessage);
-    } else {
-        noCharactersMessage.style.display = 'none';
-        selectedTeam.innerHTML = '';
-        
-        currentTeam.forEach(char => {
-            const charDiv = document.createElement('div');
-            charDiv.className = 'selected-character';
-            charDiv.style.padding = '1rem';
-            charDiv.style.marginBottom = '1rem';
-            
-            const charHeader = document.createElement('div');
-            charHeader.style.display = 'flex';
-            charHeader.style.justifyContent = 'space-between';
-            charHeader.style.marginBottom = '0.5rem';
-            
-            const charInfo = document.createElement('div');
-            charInfo.innerHTML = `
-                <strong>${char.GIRL}</strong> (${char.TYPE}) - ${char.GENR}
-                <div>
-                    <small>Base Sing: ${char.BASE_SING.toLocaleString()} | Base Dance: ${char.BASE_DANCE.toLocaleString()}</small>
-                </div>
-            `;
-            
-            const removeButton = document.createElement('span');
-            removeButton.className = 'remove-character';
-            removeButton.dataset.name = char.GIRL;
-            removeButton.textContent = '×';
-            removeButton.style.cursor = 'pointer';
-            
-            charHeader.appendChild(charInfo);
-            charHeader.appendChild(removeButton);
-            
-            charDiv.appendChild(charHeader);
-            
-            // Add equipment selector
-            const equipmentDiv = createEquipmentDropdowns(char.GIRL);
-            charDiv.appendChild(equipmentDiv);
-            
-            selectedTeam.appendChild(charDiv);
-        });
-        
-        // Add remove event listeners
-        document.querySelectorAll('.remove-character').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const charName = e.target.dataset.name;
-                removeCharacterFromTeam(charName);
-            });
-        });
-    }
-    
-    // Update team count in header
-    const teamHeader = selectedTeam.previousElementSibling;
-    teamHeader.textContent = `Selected Team (${currentTeam.length}/5)`;
+   const selectedTeam = document.getElementById('selected-team');
+   const noCharactersMessage = document.getElementById('no-characters-message');
+   
+   if (!selectedTeam || !noCharactersMessage) return;
+   
+   if (currentTeam.length === 0) {
+       noCharactersMessage.style.display = 'block';
+       selectedTeam.innerHTML = '';
+       selectedTeam.appendChild(noCharactersMessage);
+   } else {
+       noCharactersMessage.style.display = 'none';
+       selectedTeam.innerHTML = '';
+       
+       currentTeam.forEach(char => {
+           const charDiv = document.createElement('div');
+           charDiv.className = 'selected-character';
+           charDiv.style.padding = '1rem';
+           charDiv.style.marginBottom = '1rem';
+           
+           const charHeader = document.createElement('div');
+           charHeader.style.display = 'flex';
+           charHeader.style.justifyContent = 'space-between';
+           charHeader.style.marginBottom = '0.5rem';
+           
+           const charInfo = document.createElement('div');
+           charInfo.innerHTML = `
+               <strong>${char.GIRL}</strong> (${char.TYPE}) - ${char.GENR}
+               <div>
+                   <small>Base Sing: ${char.BASE_SING.toLocaleString()} | Base Dance: ${char.BASE_DANCE.toLocaleString()}</small>
+               </div>
+           `;
+           
+           const removeButton = document.createElement('span');
+           removeButton.className = 'remove-character';
+           removeButton.dataset.name = char.GIRL;
+           removeButton.textContent = '×';
+           removeButton.style.cursor = 'pointer';
+           
+           charHeader.appendChild(charInfo);
+           charHeader.appendChild(removeButton);
+           
+           charDiv.appendChild(charHeader);
+           
+           // Add equipment selector
+           const equipmentDiv = createEquipmentDropdowns(char.GIRL);
+           charDiv.appendChild(equipmentDiv);
+           
+           selectedTeam.appendChild(charDiv);
+       });
+       
+       // Add remove event listeners
+       document.querySelectorAll('.remove-character').forEach(btn => {
+           btn.addEventListener('click', (e) => {
+               const charName = e.target.dataset.name;
+               removeCharacterFromTeam(charName);
+           });
+       });
+   }
+   
+   // Update team count in header
+   const teamHeader = selectedTeam.previousElementSibling;
+   if (teamHeader) {
+       teamHeader.textContent = `Selected Team (${currentTeam.length}/5)`;
+   }
 }
 
 // Calculate synergy bonus
 function calculateSynergyBonus(team) {
-    const genreCounts = {};
-    
-    team.forEach(char => {
-        genreCounts[char.GENR] = (genreCounts[char.GENR] || 0) + 1;
-    });
-    
-    let highestCount = 0;
-    let highestGenre = null;
-    
-    for (const [genre, count] of Object.entries(genreCounts)) {
-        if (count > highestCount) {
-            highestCount = count;
-            highestGenre = genre;
-        }
-    }
-    
-    let bonusPercentage = 0;
-    
-    if (highestCount >= 5) bonusPercentage = 6;
-    else if (highestCount >= 4) bonusPercentage = 4;
-    else if (highestCount >= 3) bonusPercentage = 2;
-    
-    return {
-        genre: highestGenre,
-        count: highestCount,
-        percentage: bonusPercentage
-    };
+   const genreCounts = {};
+   
+   team.forEach(char => {
+       genreCounts[char.GENR] = (genreCounts[char.GENR] || 0) + 1;
+   });
+   
+   let highestCount = 0;
+   let highestGenre = null;
+   
+   for (const [genre, count] of Object.entries(genreCounts)) {
+       if (count > highestCount) {
+           highestCount = count;
+           highestGenre = genre;
+       }
+   }
+   
+   let bonusPercentage = 0;
+   
+   if (highestCount >= 5) bonusPercentage = 6;
+   else if (highestCount >= 4) bonusPercentage = 4;
+   else if (highestCount >= 3) bonusPercentage = 2;
+   
+   return {
+       genre: highestGenre,
+       count: highestCount,
+       percentage: bonusPercentage
+   };
 }
 
 // Calculate equipment stats
 function calculateEquipmentStats() {
-    const stats = {
-        sing: 0,
-        dance: 0,
-        management: 0,
-        fans: 0,
-        jewelrySing: 0,
-        jewelryDance: 0,
-        carSing: 0,
-        carDance: 0,
-        propertySing: 0,
-        propertyDance: 0
-    };
-    
-    // Loop through each character's equipment
-    for (const charName in teamEquipment) {
-        const charEquip = teamEquipment[charName];
-        
-        // Jewelry stats
-        if (charEquip.jewelry) {
-            const jewelry = equipmentData.jewelry.find(item => item.name === charEquip.jewelry);
-            if (jewelry) {
-                stats.sing += jewelry.sing;
-                stats.dance += jewelry.dance;
-                stats.management += jewelry.management;
-                stats.fans += jewelry.fans;
-                stats.jewelrySing += jewelry.sing;
-                stats.jewelryDance += jewelry.dance;
-            }
-        }
-        
-        // Car stats
-        if (charEquip.car) {
-            const car = equipmentData.cars.find(item => item.name === charEquip.car);
-            if (car) {
-                stats.sing += car.sing;
-                stats.dance += car.dance;
-                stats.management += car.management;
-                stats.fans += car.fans;
-                stats.carSing += car.sing;
-                stats.carDance += car.dance;
-            }
-        }
-        
-        // Property stats
-        if (charEquip.property) {
-            const property = equipmentData.properties.find(item => item.name === charEquip.property);
-            if (property) {
-                stats.sing += property.sing;
-                stats.dance += property.dance;
-                stats.management += property.management;
-                stats.fans += property.fans;
-                stats.propertySing += property.sing;
-                stats.propertyDance += property.dance;
-            }
-        }
-    }
-    
-    return stats;
+   const stats = {
+       sing: 0,
+       dance: 0,
+       management: 0,
+       fans: 0,
+       jewelrySing: 0,
+       jewelryDance: 0,
+       carSing: 0,
+       carDance: 0,
+       propertySing: 0,
+       propertyDance: 0
+   };
+   
+   // Loop through each character's equipment
+   for (const charName in teamEquipment) {
+       const charEquip = teamEquipment[charName];
+       
+       // Jewelry stats
+       if (charEquip.jewelry) {
+           const jewelry = equipmentData.jewelry.find(item => item.name === charEquip.jewelry);
+           if (jewelry) {
+               stats.sing += jewelry.sing;
+               stats.dance += jewelry.dance;
+               stats.management += jewelry.management;
+               stats.fans += jewelry.fans;
+               stats.jewelrySing += jewelry.sing;
+               stats.jewelryDance += jewelry.dance;
+           }
+       }
+       
+       // Car stats
+       if (charEquip.car) {
+           const car = equipmentData.cars.find(item => item.name === charEquip.car);
+           if (car) {
+               stats.sing += car.sing;
+               stats.dance += car.dance;
+               stats.management += car.management;
+               stats.fans += car.fans;
+               stats.carSing += car.sing;
+               stats.carDance += car.dance;
+           }
+       }
+       
+       // Property stats
+       if (charEquip.property) {
+           const property = equipmentData.properties.find(item => item.name === charEquip.property);
+           if (property) {
+               stats.sing += property.sing;
+               stats.dance += property.dance;
+               stats.management += property.management;
+               stats.fans += property.fans;
+               stats.propertySing += property.sing;
+               stats.propertyDance += property.dance;
+           }
+       }
+   }
+   
+   return stats;
 }
 
 // Enhanced calculations for team power
 function calculateTeamPower() {
-    if (currentTeam.length === 0) return null;
-    
-    // Base stats calculation
-    let totalSing = 0;
-    let totalDance = 0;
-    
-    // Skills tallying
-    const skills = {
-        SKILL_DM: 0,
-        NORMAL_DM: 0,
-        PLAYER_DM: 0,
-        NPC_DM: 0,
-        REDUCE_SKILL_DMG: 0,
-        REDUCE_NORMAL_ATTCK_DMG: 0,
-        FAN_CAP: 0,
-        RALLY_CAP: 0,
-        DMG_ATK: 0,
-        DMG_DEF: 0,
-        CAR_SPEED: 0
-    };
-    
-    // Count genres for synergy
-    const genreCounts = {};
+   if (currentTeam.length === 0) return null;
+   
+   // Base stats calculation
+   let totalSing = 0;
+   let totalDance = 0;
+   
+   // Skills tallying
+   const skills = {
+       SKILL_DM: 0,
+       NORMAL_DM: 0,
+       PLAYER_DM: 0,
+       NPC_DM: 0,
+       REDUCE_SKILL_DMG: 0,
+       REDUCE_NORMAL_ATTCK_DMG: 0,
+       FAN_CAP: 0,
+       RALLY_CAP: 0,
+       DMG_ATK: 0,
+       DMG_DEF: 0,
+       CAR_SPEED: 0
+   };
+   
+   // Count genres for synergy
+   const genreCounts = {};
+   
    currentTeam.forEach(char => {
-        // Add base stats
-        totalSing += char.BASE_SING;
-        totalDance += char.BASE_DANCE;
-        
-        // Tally skills
-        for (const [key, value] of Object.entries(char)) {
-            if (key in skills && typeof value === 'number') {
-                skills[key] += value;
-            } else if (key in skills && (key === 'DMG_ATK' || key === 'DMG_DEF')) {
-                // For string values like "200/s"
-                const numValue = parseInt(value);
-                if (!isNaN(numValue)) {
-                    skills[key] += numValue;
-                }
-            }
-        }
-        
-        // Count genres
-        genreCounts[char.GENR] = (genreCounts[char.GENR] || 0) + 1;
-    });
-    
-    // Calculate genre synergy bonus
-    const synergy = calculateSynergyBonus(currentTeam);
-    let synergyBonus = synergy.percentage / 100;  // Convert percentage to decimal
-    
-    // Calculate equipment bonuses
-    const equipStats = calculateEquipmentStats();
-    
-    // Apply all bonuses
-    const baseWithEquipSing = totalSing + equipStats.sing;
-    const baseWithEquipDance = totalDance + equipStats.dance;
-    
-    // Apply synergy bonus only
-    const finalSing = baseWithEquipSing * (1 + synergyBonus);
-    const finalDance = baseWithEquipDance * (1 + synergyBonus);
-    
-    // Balance ratio calculation
-    const totalStats = baseWithEquipSing + baseWithEquipDance;
-    const singPercentage = totalStats > 0 ? Math.round((baseWithEquipSing / totalStats) * 100) : 50;
-    const dancePercentage = totalStats > 0 ? Math.round((baseWithEquipDance / totalStats) * 100) : 50;
-    
-    // Active skill power (approximation based on observations)
-    const activeSkill = Math.round(
-        (skills.SKILL_DM * 10000) + 
-        (skills.NORMAL_DM * 8000) +
-        (skills.PLAYER_DM * 5000) +
-        (skills.NPC_DM * 5000)
-    );
-    
-    // Skill bonuses percentage
-    const skillBonuses = Math.round(
-        (skills.SKILL_DM * 100) +
-        (skills.NORMAL_DM * 100)
-    );
-    
-    // Basic attack bonus (approximation)
-    const basicAttackBonus = Math.round(skills.NORMAL_DM * 240);
-    
-    // Damage reduction
-    const damageReduction = Math.round(
-        (skills.REDUCE_SKILL_DMG + skills.REDUCE_NORMAL_ATTCK_DMG) * 100
-    );
-    
-    return {
-        totalSing,
-        totalDance,
-        equipStats,
-        finalSing,
-        finalDance,
-        synergyBonus,
-        synergy,
-        activeSkill,
-        skillBonuses,
-        basicAttackBonus,
-        damageReduction,
-        fans: equipStats.fans,
-        skills,
-        singPercentage,
-        dancePercentage
-    };
+       // Add base stats
+       totalSing += char.BASE_SING;
+       totalDance += char.BASE_DANCE;
+       
+       // Tally skills
+       for (const [key, value] of Object.entries(char)) {
+           if (key in skills && typeof value === 'number') {
+               skills[key] += value;
+           } else if (key in skills && (key === 'DMG_ATK' || key === 'DMG_DEF')) {
+               // For string values like "200/s"
+               const numValue = parseInt(value);
+               if (!isNaN(numValue)) {
+                   skills[key] += numValue;
+               }
+           }
+       }
+       
+       // Count genres
+       genreCounts[char.GENR] = (genreCounts[char.GENR] || 0) + 1;
+   });
+   
+   // Calculate genre synergy bonus
+   const synergy = calculateSynergyBonus(currentTeam);
+   let synergyBonus = synergy.percentage / 100;  // Convert percentage to decimal
+   
+   // Calculate equipment bonuses
+   const equipStats = calculateEquipmentStats();
+   
+   // Apply all bonuses
+   const baseWithEquipSing = totalSing + equipStats.sing;
+   const baseWithEquipDance = totalDance + equipStats.dance;
+   
+   // Apply synergy bonus only
+   const finalSing = baseWithEquipSing * (1 + synergyBonus);
+   const finalDance = baseWithEquipDance * (1 + synergyBonus);
+   
+   // Balance ratio calculation
+   const totalStats = baseWithEquipSing + baseWithEquipDance;
+   const singPercentage = totalStats > 0 ? Math.round((baseWithEquipSing / totalStats) * 100) : 50;
+   const dancePercentage = totalStats > 0 ? Math.round((baseWithEquipDance / totalStats) * 100) : 50;
+   
+   // Active skill power (approximation based on observations)
+   const activeSkill = Math.round(
+       (skills.SKILL_DM * 10000) + 
+       (skills.NORMAL_DM * 8000) +
+       (skills.PLAYER_DM * 5000) +
+       (skills.NPC_DM * 5000)
+   );
+   
+   // Skill bonuses percentage
+   const skillBonuses = Math.round(
+       (skills.SKILL_DM * 100) +
+       (skills.NORMAL_DM * 100)
+   );
+   
+   // Basic attack bonus (approximation)
+   const basicAttackBonus = Math.round(skills.NORMAL_DM * 240);
+   
+   // Damage reduction
+   const damageReduction = Math.round(
+       (skills.REDUCE_SKILL_DMG + skills.REDUCE_NORMAL_ATTCK_DMG) * 100
+   );
+   
+   return {
+       totalSing,
+       totalDance,
+       equipStats,
+       finalSing,
+       finalDance,
+       synergyBonus,
+       synergy,
+       activeSkill,
+       skillBonuses,
+       basicAttackBonus,
+       damageReduction,
+       fans: equipStats.fans,
+       skills,
+       singPercentage,
+       dancePercentage
+   };
 }
 
 // Update team stats with enhanced battle information
 function updateTeamStatsEnhanced() {
-    if (currentTeam.length === 0) {
-        // Use the original empty team display logic
-        teamStats.innerHTML = `
-            <p>Base Stats:</p>
-            <ul>
-                <li>Total Sing (Attack): 0</li>
-                <li>Total Dance (Defense): 0</li>
-            </ul>
-            
-            <div id="equipment-stats" style="margin-top: 0.5rem;">
-                <p>Equipment Bonuses:</p>
-                <ul>
-                    <li>Jewelry: +0 Sing, +0 Dance</li>
-                    <li>Cars: +0 Sing, +0 Dance</li>
-                    <li>Properties: +0 Sing, +0 Dance</li>
-                    <li>Total Fans: +0</li>
-                </ul>
-            </div>
-            
-            <div class="synergy-bonus" id="synergy-info" style="margin-top: 0.5rem;">
-                <p>Genre Synergy: None</p>
-                <p>Synergy Bonus: +0%</p>
-            </div>
-            
-            <p>Final Stats (with all bonuses):</p>
-            <ul>
-                <li>Final Sing (Attack): 0</li>
-                <li>Final Dance (Defense): 0</li>
-                <li>Total Fan Capacity: 0</li>
-            </ul>
-        `;
-        
-        skillSummary.innerHTML = '<li>No skills to display. Add characters to your team.</li>';
-        return;
-    }
-    
-    const teamPower = calculateTeamPower();
-    if (!teamPower) return;
-    
-    // Enhanced stats display
-    teamStats.innerHTML = `
-        <p>Base Stats:</p>
-        <ul>
-            <li>Total Sing (Attack): ${teamPower.totalSing.toLocaleString()}</li>
-            <li>Total Dance (Defense): ${teamPower.totalDance.toLocaleString()}</li>
-        </ul>
-        
-        <div id="equipment-stats" style="margin-top: 0.5rem;">
-            <p>Equipment Bonuses:</p>
-            <ul>
-                <li>Jewelry: +${teamPower.equipStats.jewelrySing.toLocaleString()} Sing, +${teamPower.equipStats.jewelryDance.toLocaleString()} Dance</li>
-                <li>Cars: +${teamPower.equipStats.carSing.toLocaleString()} Sing, +${teamPower.equipStats.carDance.toLocaleString()} Dance</li>
-                <li>Properties: +${teamPower.equipStats.propertySing.toLocaleString()} Sing, +${teamPower.equipStats.propertyDance.toLocaleString()} Dance</li>
-                <li>Total Equipment Bonus: +${teamPower.equipStats.sing.toLocaleString()} Sing, +${teamPower.equipStats.dance.toLocaleString()} Dance</li>
-                <li>Total Fans: +${teamPower.equipStats.fans.toLocaleString()}</li>
-            </ul>
-        </div>
-        
-        <div class="synergy-bonus" style="margin-top: 0.5rem;">
-            <p>Genre Synergy: ${teamPower.synergy.genre ? `${teamPower.synergy.count}x ${teamPower.synergy.genre}` : 'None'}</p>
-            <p>Synergy Bonus: +${teamPower.synergy.percentage}%</p>
-        </div>
-        
-        <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #e8f4f8; border-radius: 4px;">
-            <p><strong>Battle Stats:</strong></p>
-            <ul>
-                <li>Active Skill: ~${teamPower.activeSkill.toLocaleString()}</li>
-                <li>Basic Attack Bonus: ~${teamPower.basicAttackBonus}%</li>
-                <li>Skill Bonuses: ~${teamPower.skillBonuses}%</li>
-                <li>Damage Reduction: ${Math.abs(teamPower.damageReduction)}%</li>
-            </ul>
-        </div>
-        
-        <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #f8f4e8; border-radius: 4px;">
-            <p><strong>Balance Ratio:</strong> ${teamPower.singPercentage}% Sing : ${teamPower.dancePercentage}% Dance</p>
-            <div style="height: 20px; background-color: #f0f0f0; border-radius: 10px; margin-top: 5px; overflow: hidden;">
-                <div style="width: ${teamPower.singPercentage}%; height: 100%; background-color: var(--primary-color); float: left;"></div>
-                <div style="width: ${teamPower.dancePercentage}%; height: 100%; background-color: var(--secondary-color); float: left;"></div>
-            </div>
-            <p style="font-size: 0.8rem; margin-top: 5px; text-align: center;">${getBattleEffectivenessMessage(teamPower.singPercentage, teamPower.dancePercentage)}</p>
-        </div>
-        
-        <p style="margin-top: 0.5rem;"><strong>Final Stats (with all bonuses):</strong></p>
-        <ul>
-            <li>Final Sing (Attack): ${Math.round(teamPower.finalSing).toLocaleString()}</li>
-            <li>Final Dance (Defense): ${Math.round(teamPower.finalDance).toLocaleString()}</li>
-            <li>Total Fan Capacity: ${teamPower.fans.toLocaleString()}</li>
-        </ul>
-    `;
-    
-    // Update skills summary with enhanced information
-    updateSkillsSummaryEnhanced(teamPower.skills);
+   const teamStats = document.getElementById('team-stats');
+   const skillSummary = document.getElementById('skill-summary');
+   
+   if (!teamStats || !skillSummary) return;
+   
+   if (currentTeam.length === 0) {
+       // Use the original empty team display logic
+       teamStats.innerHTML = `
+           <p>Base Stats:</p>
+           <ul>
+               <li>Total Sing (Attack): 0</li>
+               <li>Total Dance (Defense): 0</li>
+           </ul>
+           
+           <div id="equipment-stats" style="margin-top: 0.5rem;">
+               <p>Equipment Bonuses:</p>
+               <ul>
+                   <li>Jewelry: +0 Sing, +0 Dance</li>
+                   <li>Cars: +0 Sing, +0 Dance</li>
+                   <li>Properties: +0 Sing, +0 Dance</li>
+                   <li>Total Fans: +0</li>
+               </ul>
+           </div>
+           
+           <div class="synergy-bonus" id="synergy-info" style="margin-top: 0.5rem;">
+               <p>Genre Synergy: None</p>
+               <p>Synergy Bonus: +0%</p>
+           </div>
+           
+           <p>Final Stats (with all bonuses):</p>
+           <ul>
+               <li>Final Sing (Attack): 0</li>
+               <li>Final Dance (Defense): 0</li>
+               <li>Total Fan Capacity: 0</li>
+           </ul>
+       `;
+       
+       skillSummary.innerHTML = '<li>No skills to display. Add characters to your team.</li>';
+       return;
+   }
+   
+   const teamPower = calculateTeamPower();
+   if (!teamPower) return;
+   
+   // Enhanced stats display
+   teamStats.innerHTML = `
+       <p>Base Stats:</p>
+       <ul>
+           <li>Total Sing (Attack): ${teamPower.totalSing.toLocaleString()}</li>
+           <li>Total Dance (Defense): ${teamPower.totalDance.toLocaleString()}</li>
+       </ul>
+       
+       <div id="equipment-stats" style="margin-top: 0.5rem;">
+           <p>Equipment Bonuses:</p>
+           <ul>
+               <li>Jewelry: +${teamPower.equipStats.jewelrySing.toLocaleString()} Sing, +${teamPower.equipStats.jewelryDance.toLocaleString()} Dance</li>
+               <li>Cars: +${teamPower.equipStats.carSing.toLocaleString()} Sing, +${teamPower.equipStats.carDance.toLocaleString()} Dance</li>
+               <li>Properties: +${teamPower.equipStats.propertySing.toLocaleString()} Sing, +${teamPower.equipStats.propertyDance.toLocaleString()} Dance</li>
+               <li>Total Equipment Bonus: +${teamPower.equipStats.sing.toLocaleString()} Sing, +${teamPower.equipStats.dance.toLocaleString()} Dance</li>
+               <li>Total Fans: +${teamPower.equipStats.fans.toLocaleString()}</li>
+           </ul>
+       </div>
+       
+       <div class="synergy-bonus" style="margin-top: 0.5rem;">
+           <p>Genre Synergy: ${teamPower.synergy.genre ? `${teamPower.synergy.count}x ${teamPower.synergy.genre}` : 'None'}</p>
+           <p>Synergy Bonus: +${teamPower.synergy.percentage}%</p>
+       </div>
+       
+       <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #e8f4f8; border-radius: 4px;">
+           <p><strong>Battle Stats:</strong></p>
+           <ul>
+               <li>Active Skill: ~${teamPower.activeSkill.toLocaleString()}</li>
+               <li>Basic Attack Bonus: ~${teamPower.basicAttackBonus}%</li>
+               <li>Skill Bonuses: ~${teamPower.skillBonuses}%</li>
+               <li>Damage Reduction: ${Math.abs(teamPower.damageReduction)}%</li>
+           </ul>
+       </div>
+       
+       <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #f8f4e8; border-radius: 4px;">
+           <p><strong>Balance Ratio:</strong> ${teamPower.singPercentage}% Sing : ${teamPower.dancePercentage}% Dance</p>
+           <div style="height: 20px; background-color: #f0f0f0; border-radius: 10px; margin-top: 5px; overflow: hidden;">
+               <div style="width: ${teamPower.singPercentage}%; height: 100%; background-color: var(--primary-color); float: left;"></div>
+               <div style="width: ${teamPower.dancePercentage}%; height: 100%; background-color: var(--secondary-color); float: left;"></div>
+           </div>
+           <p style="font-size: 0.8rem; margin-top: 5px; text-align: center;">${getBattleEffectivenessMessage(teamPower.singPercentage, teamPower.dancePercentage)}</p>
+       </div>
+       
+       <p style="margin-top: 0.5rem;"><strong>Final Stats (with all bonuses):</strong></p>
+       <ul>
+           <li>Final Sing (Attack): ${Math.round(teamPower.finalSing).toLocaleString()}</li>
+           <li>Final Dance (Defense): ${Math.round(teamPower.finalDance).toLocaleString()}</li>
+           <li>Total Fan Capacity: ${teamPower.fans.toLocaleString()}</li>
+       </ul>
+   `;
+   
+   // Update skills summary with enhanced information
+   updateSkillsSummaryEnhanced(teamPower.skills);
 }
 
 // Get a message about battle effectiveness based on stat balance
 function getBattleEffectivenessMessage(singPercentage, dancePercentage) {
-    const diff = Math.abs(singPercentage - dancePercentage);
-    
-    if (diff <= 5) {
-        return "Perfect Balance: Excellent battle effectiveness with equal attack and defense!";
-    } else if (diff <= 10) {
-        return "Good Balance: Strong overall performance with slightly favored " + (singPercentage > dancePercentage ? "attack" : "defense");
-    } else if (diff <= 20) {
-        return "Decent Balance: Favors " + (singPercentage > dancePercentage ? "attack over defense" : "defense over attack");
-    } else if (diff <= 30) {
-        return "Imbalanced: Heavily favors " + (singPercentage > dancePercentage ? "attack, vulnerable on defense" : "defense, weak on attack");
-    } else {
-        return "Extreme Imbalance: Very " + (singPercentage > dancePercentage ? "attack-focused, poor defense" : "defense-focused, weak attack");
-    }
+   const diff = Math.abs(singPercentage - dancePercentage);
+   
+   if (diff <= 5) {
+       return "Perfect Balance: Excellent battle effectiveness with equal attack and defense!";
+   } else if (diff <= 10) {
+       return "Good Balance: Strong overall performance with slightly favored " + (singPercentage > dancePercentage ? "attack" : "defense");
+   } else if (diff <= 20) {
+       return "Decent Balance: Favors " + (singPercentage > dancePercentage ? "attack over defense" : "defense over attack");
+   } else if (diff <= 30) {
+       return "Imbalanced: Heavily favors " + (singPercentage > dancePercentage ? "attack, vulnerable on defense" : "defense, weak on attack");
+   } else {
+       return "Extreme Imbalance: Very " + (singPercentage > dancePercentage ? "attack-focused, poor defense" : "defense-focused, weak attack");
+   }
 }
 
 // Update skills summary with enhanced information
 function updateSkillsSummaryEnhanced(skills) {
-    if (currentTeam.length === 0) {
-        skillSummary.innerHTML = '<li>No skills to display. Add characters to your team.</li>';
-        return;
-    }
-    
-    skillSummary.innerHTML = '';
-    
-    // Create skill groups
-    const attackSkills = document.createElement('div');
-    attackSkills.innerHTML = '<h4 style="margin-top:0.5rem;">Attack Skills:</h4>';
-    
-    const defenseSkills = document.createElement('div');
-    defenseSkills.innerHTML = '<h4 style="margin-top:0.5rem;">Defense Skills:</h4>';
-    
-    const supportSkills = document.createElement('div');
-    supportSkills.innerHTML = '<h4 style="margin-top:0.5rem;">Support Skills:</h4>';
-    
-    let hasAttackSkills = false;
-    let hasDefenseSkills = false;
-    let hasSupportSkills = false;
-
-// Attack skills
-    if (skills.SKILL_DM > 0) {
-        const li = document.createElement('li');
-        li.textContent = `Skill DMG +${(skills.SKILL_DM * 100).toFixed(0)}%`;
-        attackSkills.appendChild(li);
-        hasAttackSkills = true;
-    }
-    
-    if (skills.NORMAL_DM > 0) {
-        const li = document.createElement('li');
-        li.textContent = `Normal DMG +${(skills.NORMAL_DM * 100).toFixed(0)}%`;
-        attackSkills.appendChild(li);
-        hasAttackSkills = true;
-    }
-    
-    if (skills.PLAYER_DM > 0) {
-        const li = document.createElement('li');
-        li.textContent = `Player DMG +${(skills.PLAYER_DM * 100).toFixed(0)}%`;
-        attackSkills.appendChild(li);
-        hasAttackSkills = true;
-    }
-    
-    if (skills.NPC_DM > 0) {
-        const li = document.createElement('li');
-        li.textContent = `NPC DMG +${(skills.NPC_DM * 100).toFixed(0)}%`;
-        attackSkills.appendChild(li);
-        hasAttackSkills = true;
-    }
-    
-    if (skills.DMG_ATK > 0) {
-        const li = document.createElement('li');
-        li.textContent = `DMG Attack ${skills.DMG_ATK}/s`;
-        attackSkills.appendChild(li);
-        hasAttackSkills = true;
-    }
-    
-    // Defense skills
-    if (skills.REDUCE_SKILL_DMG < 0) {
-        const li = document.createElement('li');
-        li.textContent = `Reduce Skill DMG ${(skills.REDUCE_SKILL_DMG * 100).toFixed(0)}%`;
-        defenseSkills.appendChild(li);
-        hasDefenseSkills = true;
-    }
-    
-    if (skills.REDUCE_NORMAL_ATTCK_DMG < 0) {
-        const li = document.createElement('li');
-        li.textContent = `Reduce Normal Attack DMG ${(skills.REDUCE_NORMAL_ATTCK_DMG * 100).toFixed(0)}%`;
-        defenseSkills.appendChild(li);
-        hasDefenseSkills = true;
-    }
-    
-    if (skills.DMG_DEF > 0) {
-        const li = document.createElement('li');
-        li.textContent = `DMG Defense ${skills.DMG_DEF}/s`;
-        defenseSkills.appendChild(li);
-        hasDefenseSkills = true;
-    }
-    
-    // Support skills
-    if (skills.FAN_CAP > 0) {
-        const li = document.createElement('li');
-        li.textContent = `Fan Cap +${(skills.FAN_CAP * 100).toFixed(0)}%`;
-        supportSkills.appendChild(li);
-        hasSupportSkills = true;
-    }
-    
-    if (skills.RALLY_CAP > 0) {
-        const li = document.createElement('li');
-        li.textContent = `Rally Cap +${(skills.RALLY_CAP * 100).toFixed(0)}%`;
-        supportSkills.appendChild(li);
-        hasSupportSkills = true;
-    }
-    
-    if (skills.CAR_SPEED > 0) {
-        const li = document.createElement('li');
-        li.textContent = `Car Speed +${(skills.CAR_SPEED * 100).toFixed(0)}%`;
-        supportSkills.appendChild(li);
-        hasSupportSkills = true;
-    }
-    
-    // Add skill groups to summary
-    if (hasAttackSkills) {
-        skillSummary.appendChild(attackSkills);
-    }
-    
-    if (hasDefenseSkills) {
-        skillSummary.appendChild(defenseSkills);
-    }
-    
-    if (hasSupportSkills) {
-        skillSummary.appendChild(supportSkills);
-    }
-    
-    if (!hasAttackSkills && !hasDefenseSkills && !hasSupportSkills) {
-        skillSummary.innerHTML = '<li>No active skills in this team.</li>';
-    }
+   const skillSummary = document.getElementById('skill-summary');
+   if (!skillSummary) return;
+   
+   if (currentTeam.length === 0) {
+       skillSummary.innerHTML = '<li>No skills to display. Add characters to your team.</li>';
+       return;
+   }
+   
+   skillSummary.innerHTML = '';
+   
+   // Create skill groups
+   const attackSkills = document.createElement('div');
+   attackSkills.innerHTML = '<h4 style="margin-top:0.5rem;">Attack Skills:</h4>';
+   
+   const defenseSkills = document.createElement('div');
+   defenseSkills.innerHTML = '<h4 style="margin-top:0.5rem;">Defense Skills:</h4>';
+   
+   const supportSkills = document.createElement('div');
+   supportSkills.innerHTML = '<h4 style="margin-top:0.5rem;">Support Skills:</h4>';
+   
+   let hasAttackSkills = false;
+   let hasDefenseSkills = false;
+   let hasSupportSkills = false;
+   
+   // Attack skills
+   if (skills.SKILL_DM > 0) {
+       const li = document.createElement('li');
+       li.textContent = `Skill DMG +${(skills.SKILL_DM * 100).toFixed(0)}%`;
+       attackSkills.appendChild(li);
+       hasAttackSkills = true;
+   }
+   
+   if (skills.NORMAL_DM > 0) {
+       const li = document.createElement('li');
+       li.textContent = `Normal DMG +${(skills.NORMAL_DM * 100).toFixed(0)}%`;
+       attackSkills.appendChild(li);
+       hasAttackSkills = true;
+   }
+   
+   if (skills.PLAYER_DM > 0) {
+       const li = document.createElement('li');
+       li.textContent = `Player DMG +${(skills.PLAYER_DM * 100).toFixed(0)}%`;
+       attackSkills.appendChild(li);
+       hasAttackSkills = true;
+   }
+   
+   if (skills.NPC_DM > 0) {
+       const li = document.createElement('li');
+       li.textContent = `NPC DMG +${(skills.NPC_DM * 100).toFixed(0)}%`;
+       attackSkills.appendChild(li);
+       hasAttackSkills = true;
+   }
+   
+   if (skills.DMG_ATK > 0) {
+       const li = document.createElement('li');
+       li.textContent = `DMG Attack ${skills.DMG_ATK}/s`;
+       attackSkills.appendChild(li);
+       hasAttackSkills = true;
+   }
+   
+   // Defense skills
+   if (skills.REDUCE_SKILL_DMG < 0) {
+       const li = document.createElement('li');
+       li.textContent = `Reduce Skill DMG ${(skills.REDUCE_SKILL_DMG * 100).toFixed(0)}%`;
+       defenseSkills.appendChild(li);
+       hasDefenseSkills = true;
+   }
+   
+   if (skills.REDUCE_NORMAL_ATTCK_DMG < 0) {
+       const li = document.createElement('li');
+       li.textContent = `Reduce Normal Attack DMG ${(skills.REDUCE_NORMAL_ATTCK_DMG * 100).toFixed(0)}%`;
+       defenseSkills.appendChild(li);
+       hasDefenseSkills = true;
+   }
+   
+   if (skills.DMG_DEF > 0) {
+       const li = document.createElement('li');
+       li.textContent = `DMG Defense ${skills.DMG_DEF}/s`;
+       defenseSkills.appendChild(li);
+       hasDefenseSkills = true;
+   }
+   
+   // Support skills
+   if (skills.FAN_CAP > 0) {
+       const li = document.createElement('li');
+       li.textContent = `Fan Cap +${(skills.FAN_CAP * 100).toFixed(0)}%`;
+       supportSkills.appendChild(li);
+       hasSupportSkills = true;
+   }
+   
+   if (skills.RALLY_CAP > 0) {
+       const li = document.createElement('li');
+       li.textContent = `Rally Cap +${(skills.RALLY_CAP * 100).toFixed(0)}%`;
+       supportSkills.appendChild(li);
+       hasSupportSkills = true;
+   }
+   
+   if (skills.CAR_SPEED > 0) {
+       const li = document.createElement('li');
+       li.textContent = `Car Speed +${(skills.CAR_SPEED * 100).toFixed(0)}%`;
+       supportSkills.appendChild(li);
+       hasSupportSkills = true;
+   }
+   
+   // Add skill groups to summary
+   if (hasAttackSkills) {
+       skillSummary.appendChild(attackSkills);
+   }
+   
+   if (hasDefenseSkills) {
+       skillSummary.appendChild(defenseSkills);
+   }
+   
+   if (hasSupportSkills) {
+       skillSummary.appendChild(supportSkills);
+   }
+   
+   if (!hasAttackSkills && !hasDefenseSkills && !hasSupportSkills) {
+       skillSummary.innerHTML = '<li>No active skills in this team.</li>';
+   }
 }
 
 // Auto-recommend balanced equipment based on character stats and position
 function recommendBalancedEquipment(character) {
-    const equipRecommendation = {
-        jewelry: null,
-        car: null,
-        property: null
-    };
-    
-    // Vocalist strategy - add Dance to balance high Sing
-    if (character.BASE_SING > character.BASE_DANCE) {
-        // Gold equipment recommendation
-        if (hasGoldEquipment()) {
-            equipRecommendation.jewelry = "Choker";
-            equipRecommendation.car = "Lamborghini";
-            equipRecommendation.property = "Park Mansion";
-        } else {
-            // Purple equipment fallback
-            equipRecommendation.jewelry = "Bracelet";
-            equipRecommendation.car = "Beetle";
-            equipRecommendation.property = "Loft";
-        }
-    } 
-    // Dancer strategy - add Sing to balance high Dance
-    else if (character.BASE_DANCE > character.BASE_SING) {
-        // Gold equipment recommendation
-        if (hasGoldEquipment()) {
-            equipRecommendation.jewelry = "Ring";
-            equipRecommendation.car = "Audi";
-            equipRecommendation.property = "Villa";
-        } else {
-            // Purple equipment fallback
-            equipRecommendation.jewelry = "Watch";
-            equipRecommendation.car = "Lotus";
-            equipRecommendation.property = "Penthouse";
-        }
-    } 
-    // Center/balanced strategy - maintain equal stat distribution
-    else {
-        // Choose based on overall team needs
-        const teamStats = calculateTeamStats();
-        if (teamStats.sing < teamStats.dance) {
-            // Need more Sing for balance
-            if (hasGoldEquipment()) {
-                equipRecommendation.jewelry = "Ring";
-                equipRecommendation.car = "Audi";
-                equipRecommendation.property = "Villa";
-            } else {
-                equipRecommendation.jewelry = "Watch";
-                equipRecommendation.car = "Lotus";
-                equipRecommendation.property = "Penthouse";
-            }
-        } else {
-            // Need more Dance for balance
-            if (hasGoldEquipment()) {
-                equipRecommendation.jewelry = "Choker";
-                equipRecommendation.car = "Lamborghini";
-                equipRecommendation.property = "Park Mansion";
-            } else {
-                equipRecommendation.jewelry = "Bracelet";
-                equipRecommendation.car = "Beetle";
-                equipRecommendation.property = "Loft";
-            }
-        }
-    }
-    
-    return equipRecommendation;
+   const equipRecommendation = {
+       jewelry: null,
+       car: null,
+       property: null
+   };
+   
+   // Vocalist strategy - add Dance to balance high Sing
+   if (character.BASE_SING > character.BASE_DANCE) {
+       // Gold equipment recommendation
+       if (hasGoldEquipment()) {
+           equipRecommendation.jewelry = "Choker";
+           equipRecommendation.car = "Lamborghini";
+           equipRecommendation.property = "Park Mansion";
+       } else {
+           // Purple equipment fallback
+           equipRecommendation.jewelry = "Bracelet";
+           equipRecommendation.car = "Beetle";
+           equipRecommendation.property = "Loft";
+       }
+   } 
+   // Dancer strategy - add Sing to balance high Dance
+   else if (character.BASE_DANCE > character.BASE_SING) {
+       // Gold equipment recommendation
+       if (hasGoldEquipment()) {
+           equipRecommendation.jewelry = "Ring";
+           equipRecommendation.car = "Audi";
+           equipRecommendation.property = "Villa";
+       } else {
+           // Purple equipment fallback
+           equipRecommendation.jewelry = "Watch";
+           equipRecommendation.car = "Lotus";
+           equipRecommendation.property = "Penthouse";
+       }
+   } 
+   // Center/balanced strategy - maintain equal stat distribution
+   else {
+       // Choose based on overall team needs
+       const teamStats = calculateTeamStats();
+       if (teamStats.sing < teamStats.dance) {
+           // Need more Sing for balance
+           if (hasGoldEquipment()) {
+               equipRecommendation.jewelry = "Ring";
+               equipRecommendation.car = "Audi";
+               equipRecommendation.property = "Villa";
+           } else {
+               equipRecommendation.jewelry = "Watch";
+               equipRecommendation.car = "Lotus";
+               equipRecommendation.property = "Penthouse";
+           }
+       } else {
+           // Need more Dance for balance
+           if (hasGoldEquipment()) {
+               equipRecommendation.jewelry = "Choker";
+               equipRecommendation.car = "Lamborghini";
+               equipRecommendation.property = "Park Mansion";
+           } else {
+               equipRecommendation.jewelry = "Bracelet";
+               equipRecommendation.car = "Beetle";
+               equipRecommendation.property = "Loft";
+           }
+       }
+   }
+   
+   return equipRecommendation;
 }
+
 // Helper to determine if we should recommend gold equipment (can be modified based on user preference)
 function hasGoldEquipment() {
-    // By default, recommend gold equipment
-    // This could be tied to a user preference checkbox
-    return true;
+   // By default, recommend gold equipment
+   // This could be tied to a user preference checkbox
+   return true;
 }
 
 // Calculate total team stats (simplified)
 function calculateTeamStats() {
-    let sing = 0;
-    let dance = 0;
-    
-    currentTeam.forEach(char => {
-        sing += char.BASE_SING;
-        dance += char.BASE_DANCE;
-    });
-    
-    return { sing, dance };
+   let sing = 0;
+   let dance = 0;
+   
+   currentTeam.forEach(char => {
+       sing += char.BASE_SING;
+       dance += char.BASE_DANCE;
+   });
+   
+   return { sing, dance };
 }
 
 // Recommend team equipment
 function recommendTeamEquipment() {
-    if (currentTeam.length === 0) {
-        teamCompositionWarning.textContent = 'Add characters to your team first.';
-        return;
-    }
-    
-    // Reset warning
-    teamCompositionWarning.textContent = '';
-    
-    // First calculate total sing and dance to determine if we need to balance
-    const baseStats = calculateTeamStats();
-    const singPercent = baseStats.sing / (baseStats.sing + baseStats.dance) * 100;
-    const dancePercent = baseStats.dance / (baseStats.sing + baseStats.dance) * 100;
-    
-    const diff = Math.abs(singPercent - dancePercent);
-    
-    // Apply recommendations based on balancing the whole team
-    currentTeam.forEach(char => {
-        let recommendation;
-        
-        if (diff <= 5) {
-            // Team is already balanced, follow individual character's needs
-            recommendation = recommendBalancedEquipment(char);
-        } else if (singPercent > dancePercent) {
-            // Too much sing, add dance regardless of character type
-            if (hasGoldEquipment()) {
-                recommendation = {
-                    jewelry: "Choker",
-                    car: "Lamborghini",
-                    property: "Park Mansion"
-                };
-            } else {
-                recommendation = {
-                    jewelry: "Bracelet",
-                    car: "Beetle",
-                    property: "Loft"
-                };
-            }
-        } else {
-            // Too much dance, add sing regardless of character type
-            if (hasGoldEquipment()) {
-                recommendation = {
-                    jewelry: "Ring",
-                    car: "Audi",
-                    property: "Villa"
-                };
-            } else {
-                recommendation = {
-                    jewelry: "Watch",
-                    car: "Lotus",
-                    property: "Penthouse"
-                };
-            }
-        }
-        
-        // Apply recommendations to teamEquipment
-        if (!teamEquipment[char.GIRL]) {
-            teamEquipment[char.GIRL] = {};
-        }
-        
-        teamEquipment[char.GIRL].jewelry = recommendation.jewelry;
-        teamEquipment[char.GIRL].car = recommendation.car;
-        teamEquipment[char.GIRL].property = recommendation.property;
-    });
-    
-    // Update UI to reflect new equipment
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-    
-    // Show confirmation message
-    teamCompositionWarning.textContent = 'Balanced equipment recommendations applied!';
-    teamCompositionWarning.style.color = '#4caf50'; // Success green color
-    
-    // Reset warning color after 3 seconds
-    setTimeout(() => {
-        teamCompositionWarning.style.color = 'var(--primary-color)';
-    }, 3000);
+   const teamCompositionWarning = document.getElementById('team-composition-warning');
+   
+   if (currentTeam.length === 0) {
+       if (teamCompositionWarning) {
+           teamCompositionWarning.textContent = 'Add characters to your team first.';
+       }
+       return;
+   }
+   
+   // Reset warning
+   if (teamCompositionWarning) {
+       teamCompositionWarning.textContent = '';
+   }
+   
+   // First calculate total sing and dance to determine if we need to balance
+   const baseStats = calculateTeamStats();
+   const singPercent = baseStats.sing / (baseStats.sing + baseStats.dance) * 100;
+   const dancePercent = baseStats.dance / (baseStats.sing + baseStats.dance) * 100;
+   
+   const diff = Math.abs(singPercent - dancePercent);
+   
+   // Apply recommendations based on balancing the whole team
+   currentTeam.forEach(char => {
+       let recommendation;
+       
+       if (diff <= 5) {
+           // Team is already balanced, follow individual character's needs
+           recommendation = recommendBalancedEquipment(char);
+       } else if (singPercent > dancePercent) {
+           // Too much sing, add dance regardless of character type
+           if (hasGoldEquipment()) {
+               recommendation = {
+                   jewelry: "Choker",
+                   car: "Lamborghini",
+                   property: "Park Mansion"
+               };
+           } else {
+               recommendation = {
+                   jewelry: "Bracelet",
+                   car: "Beetle",
+                   property: "Loft"
+               };
+           }
+       } else {
+           // Too much dance, add sing regardless of character type
+           if (hasGoldEquipment()) {
+               recommendation = {
+                   jewelry: "Ring",
+                   car: "Audi",
+                   property: "Villa"
+               };
+           } else {
+               recommendation = {
+                   jewelry: "Watch",
+                   car: "Lotus",
+                   property: "Penthouse"
+               };
+           }
+       }
+       
+       // Apply recommendations to teamEquipment
+       if (!teamEquipment[char.GIRL]) {
+           teamEquipment[char.GIRL] = {};
+       }
+       
+       teamEquipment[char.GIRL].jewelry = recommendation.jewelry;
+       teamEquipment[char.GIRL].car = recommendation.car;
+       teamEquipment[char.GIRL].property = recommendation.property;
+   });
+   
+   // Update UI to reflect new equipment
+   updateTeamUI();
+   updateTeamStatsEnhanced();
+   
+   // Show confirmation message
+   if (teamCompositionWarning) {
+       teamCompositionWarning.textContent = 'Balanced equipment recommendations applied!';
+       teamCompositionWarning.style.color = '#4caf50'; // Success green color
+       
+       // Reset warning color after 3 seconds
+       setTimeout(() => {
+           teamCompositionWarning.style.color = 'var(--primary-color)';
+       }, 3000);
+   }
 }
 
 // Filter characters for selection
 function filterCharactersForSelection() {
-    let filtered = [...characterData];
-    
-    const genre = genreFilter.value;
-    const type = typeFilter.value;
-    const position = positionFilter.value;
-    
-    if (genre !== 'all') {
-        filtered = filtered.filter(char => char.GENR === genre);
-    }
-    
-    if (type !== 'all') {
-        filtered = filtered.filter(char => char.TYPE === type);
-    }
-    
-    if (position !== 'all') {
-        filtered = filtered.filter(char => char.POSITION === position);
-    }
-    
-    return filtered;
+   let filtered = [...characterData];
+   
+   const genreFilter = document.getElementById('genre-filter');
+   const typeFilter = document.getElementById('type-filter');
+   const positionFilter = document.getElementById('position-filter');
+   
+   if (!genreFilter || !typeFilter || !positionFilter) return filtered;
+   
+   const genre = genreFilter.value;
+   const type = typeFilter.value;
+   const position = positionFilter.value;
+   
+   if (genre !== 'all') {
+       filtered = filtered.filter(char => char.GENR === genre);
+   }
+   
+   if (type !== 'all') {
+       filtered = filtered.filter(char => char.TYPE === type);
+   }
+   
+   if (position !== 'all') {
+       filtered = filtered.filter(char => char.POSITION === position);
+   }
+   
+   return filtered;
 }
 
 // Filter characters for grid
 function filterCharactersForGrid() {
-    let filtered = [...characterData];
-    
-    const genre = charGenreFilter.value;
-    const type = charTypeFilter.value;
-    
-    if (genre !== 'all') {
-        filtered = filtered.filter(char => char.GENR === genre);
-    }
-    
-    if (type !== 'all') {
-        filtered = filtered.filter(char => char.TYPE === type);
-    }
-    
-    return filtered;
+   let filtered = [...characterData];
+   
+   const charGenreFilter = document.getElementById('char-genre-filter');
+   const charTypeFilter = document.getElementById('char-type-filter');
+   
+   if (!charGenreFilter || !charTypeFilter) return filtered;
+   
+   const genre = charGenreFilter.value;
+   const type = charTypeFilter.value;
+   
+   if (genre !== 'all') {
+       filtered = filtered.filter(char => char.GENR === genre);
+   }
+   
+   if (type !== 'all') {
+       filtered = filtered.filter(char => char.TYPE === type);
+   }
+   
+   return filtered;
 }
 
 // Load preset team function
 function loadPresetTeam(teamType) {
-    // Reset current team
-    currentTeam = [];
-    teamEquipment = {};
-    
-    // Clear warning
-    teamCompositionWarning.textContent = '';
-    
-    // Load team based on type
-    switch(teamType) {
-        case 'rnb':
-            // R&B Team (with URs)
-            addPresetCharacter("Marguerite");
-            addPresetCharacter("Elizabeth");
-            addPresetCharacter("Sora");
-            addPresetCharacter("Nova");
-            addPresetCharacter("Ratih");
-            break;
-            
-        case 'balanced':
-            // Balanced Team (with URs)
-            addPresetCharacter("Marguerite");
-            addPresetCharacter("Elizabeth");
-            addPresetCharacter("Aurora");
-            addPresetCharacter("Kokoro");
-            addPresetCharacter("Chizuru");
-            break;
-            
-        case 'defense':
-            // Defensive Team (with URs)
-            addPresetCharacter("Marguerite");
-            addPresetCharacter("Elizabeth");
-            addPresetCharacter("Moana");
-            addPresetCharacter("Avery");
-            addPresetCharacter("Ayaka");
-            break;
-            
-        case 'bali':
-            // Bali Team
-            addPresetCharacter("Moana");
-            addPresetCharacter("Sari");
-            addPresetCharacter("Leilani");
-            addPresetCharacter("Ratih");
-            addPresetCharacter("Talia");
-            break;
-            
-        case 'tokyo':
-            // Tokyo Team
-            addPresetCharacter("Sora");
-            addPresetCharacter("Yuuko");
-            addPresetCharacter("Kokoro");
-            addPresetCharacter("Ayaka");
-            addPresetCharacter("Chizuru");
-            break;
-    }
-    
-    // Update UI
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-    
-    // Show confirmation message
-    teamCompositionWarning.textContent = `${teamType.toUpperCase()} preset team loaded!`;
-    teamCompositionWarning.style.color = '#4caf50';
-    
-    // Auto-recommend equipment
-    recommendTeamEquipment();
-    
-    // Reset warning color after 3 seconds
-    setTimeout(() => {
-        teamCompositionWarning.style.color = 'var(--primary-color)';
-    }, 3000);
+   // Reset current team
+   currentTeam = [];
+   teamEquipment = {};
+   
+   // Clear warning
+   const teamCompositionWarning = document.getElementById('team-composition-warning');
+   if (teamCompositionWarning) {
+       teamCompositionWarning.textContent = '';
+   }
+   
+   // Load team based on type
+   switch(teamType) {
+       case 'rnb':
+           // R&B Team (with URs)
+           addPresetCharacter("Marguerite");
+           addPresetCharacter("Elizabeth");
+           addPresetCharacter("Sora");
+           addPresetCharacter("Nova");
+           addPresetCharacter("Ratih");
+           break;
+           
+       case 'balanced':
+           // Balanced Team (with URs)
+           addPresetCharacter("Marguerite");
+           addPresetCharacter("Elizabeth");
+           addPresetCharacter("Aurora");
+           addPresetCharacter("Kokoro");
+           addPresetCharacter("Chizuru");
+           break;
+           
+       case 'defense':
+           // Defensive Team (with URs)
+           addPresetCharacter("Marguerite");
+           addPresetCharacter("Elizabeth");
+           addPresetCharacter("Moana");
+           addPresetCharacter("Avery");
+           addPresetCharacter("Ayaka");
+           break;
+           
+       case 'bali':
+           // Bali Team
+           addPresetCharacter("Moana");
+           addPresetCharacter("Sari");
+           addPresetCharacter("Leilani");
+           addPresetCharacter("Ratih");
+           addPresetCharacter("Talia");
+           break;
+           
+       case 'tokyo':
+           // Tokyo Team
+           addPresetCharacter("Sora");
+           addPresetCharacter("Yuuko");
+           addPresetCharacter("Kokoro");
+           addPresetCharacter("Ayaka");
+           addPresetCharacter("Chizuru");
+           break;
+   }
+   
+   // Update UI
+   updateTeamUI();
+   updateTeamStatsEnhanced();
+   
+   // Show confirmation message
+   if (teamCompositionWarning) {
+       teamCompositionWarning.textContent = `${teamType.toUpperCase()} preset team loaded!`;
+       teamCompositionWarning.style.color = '#4caf50';
+       
+       // Auto-recommend equipment
+       recommendTeamEquipment();
+       
+       // Reset warning color after 3 seconds
+       setTimeout(() => {
+           teamCompositionWarning.style.color = 'var(--primary-color)';
+       }, 3000);
+   }
 }
 
 // Helper function to add a preset character by name
 function addPresetCharacter(name) {
-    const character = characterData.find(char => char.GIRL === name);
-    if (character) {
-        currentTeam.push(character);
-    }
+   const character = characterData.find(char => char.GIRL === name);
+   if (character) {
+       currentTeam.push(character);
+   }
 }
 
 // Initialize interactive map
 function initializeMap() {
-    if (document.getElementById('top-girl-map')) {
-        const gameMap = L.map('top-girl-map', {
-            crs: L.CRS.Simple,
-            minZoom: 0,   // Set minimum zoom level to prevent zooming too far out
-            maxZoom: 3,   // Set maximum zoom level to allow enough detail
-            zoomControl: true
-        });
-        
-        // Set map bounds based on the square island image
-        const imageUrl = 'https://i.imgur.com/nl0lRlW.png'; // Replace with your actual map image URL
-        const imageBounds = [[0, 0], [550, 550]]; // Square bounds matching the island image
-        
-        // Add the map image as a base layer
-        L.imageOverlay(imageUrl, imageBounds).addTo(gameMap);
-        gameMap.fitBounds(imageBounds);
-        
-        // Center the map on the central palace
-        gameMap.setView([275, 275], 0);
-        
-        // Track markers
-        const markers = [];
-        
-        // Custom Icon Factory Function
-        function createCustomIcon(type, size) {
-            // Determine icon size based on selection
-            let iconSize;
-            switch(size) {
-                case 'small': iconSize = 16; break;
-                case 'large': iconSize = 32; break;
-                case 'medium': 
-                default: iconSize = 24; break;
-            }
-            
-            // Determine icon color based on type
-            let bgColor, borderColor, textColor;
-            switch(type) {
-                case 'resource':
-                    bgColor = '#4cd964'; // Green
-                    borderColor = '#2eb944';
-                    textColor = 'black';
-                    break;
-                case 'enemy':
-                    bgColor = '#ff3b30'; // Red
-                    borderColor = '#d91d12';
-                    textColor = 'white';
-                    break;
-                case 'landmark':
-                    bgColor = '#ffcc00'; // Yellow
-                    borderColor = '#d6a900';
-                    textColor = 'black';
-                    break;
-                case 'direction':
-                    bgColor = '#007aff'; // Blue
-                    borderColor = '#0055cc';
-                    textColor = 'white';
-                    break;
-                default:
-                    bgColor = '#8e8e93'; // Gray
-                    borderColor = '#636366';
-                    textColor = 'black';
-            }
-            
-            // Create custom divIcon with better labeling
-            return L.divIcon({
-                className: `custom-marker ${type}`,
-                html: `<div style="
-                    width: ${iconSize}px; 
-                    height: ${iconSize}px; 
-                    background-color: ${bgColor}; 
-                    border: 2px solid ${borderColor};
-                    border-radius: 50%; 
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: ${textColor};
-                    font-weight: bold;
-                    font-size: ${iconSize/2}px;
-                    box-shadow: 0 0 4px rgba(0,0,0,0.3);">
-                </div>`,
-                iconSize: [iconSize, iconSize],
-                iconAnchor: [iconSize/2, iconSize/2]
-            });
-        }
+   if (document.getElementById('top-girl-map')) {
+       try {
+           // Check if Leaflet is available
+           if (typeof L === 'undefined') {
+               console.error('Leaflet library not loaded.');
+               return;
+           }
+           
+           const gameMap = L.map('top-girl-map', {
+               crs: L.CRS.Simple,
+               minZoom: 0,
+               maxZoom: 3,
+               zoomControl: true
+           });
+           
+           // Set map bounds based on the square island image
+           const imageUrl = 'https://i.imgur.com/nl0lRlW.png'; // Replace with actual map image URL
+           const imageBounds = [[0, 0], [550, 550]]; // Square bounds matching the island image
+           
+           // Add the map image as a base layer
+           L.imageOverlay(imageUrl, imageBounds).addTo(gameMap);
+           gameMap.fitBounds(imageBounds);
+           
+           // Center the map on the central palace
+           gameMap.setView([275, 275], 0);
+           
+           // Track markers
+           const markers = [];
+           
+           // Custom Icon Factory Function
+           function createCustomIcon(type, size) {
+               // Determine icon size based on selection
+               let iconSize;
+               switch(size) {
+                   case 'small': iconSize = 16; break;
+                   case 'large': iconSize = 32; break;
+                   case 'medium': 
+                   default: iconSize = 24; break;
+               }
+               
+               // Determine icon color based on type
+               let bgColor, borderColor, textColor;
+               switch(type) {
+                   case 'resource':
+                       bgColor = '#4cd964'; // Green
+                       borderColor = '#2eb944';
+                       textColor = 'black';
+                       break;
+                   case 'enemy':
+                       bgColor = '#ff3b30'; // Red
+                       borderColor = '#d91d12';
+                       textColor = 'white';
+                       break;
+                   case 'landmark':
+                       bgColor = '#ffcc00'; // Yellow
+                       borderColor = '#d6a900';
+                       textColor = 'black';
+                       break;
+                   case 'direction':
+                       bgColor = '#007aff'; // Blue
+                       borderColor = '#0055cc';
+                       textColor = 'white';
+                       break;
+                   default:
+                       bgColor = '#8e8e93'; // Gray
+                       borderColor = '#636366';
+                       textColor = 'black';
+               }
+               
+               // Create custom divIcon with better labeling
+               return L.divIcon({
+                   className: `custom-marker ${type}`,
+                   html: `<div style="
+                       width: ${iconSize}px; 
+                       height: ${iconSize}px; 
+                       background-color: ${bgColor}; 
+                       border: 2px solid ${borderColor};
+                       border-radius: 50%; 
+                       display: flex;
+                       align-items: center;
+                       justify-content: center;
+                       color: ${textColor};
+                       font-weight: bold;
+                       font-size: ${iconSize/2}px;
+                       box-shadow: 0 0 4px rgba(0,0,0,0.3);">
+                   </div>`,
+                   iconSize: [iconSize, iconSize],
+                   iconAnchor: [iconSize/2, iconSize/2]
+               });
+           }
 
-        // Add marker button handler
-        document.getElementById('add-marker').addEventListener('click', function() {
-            const markerType = document.getElementById('marker-type').value;
-            const markerSize = document.getElementById('marker-size').value;
-            alert('Click on the map to place a ' + markerType + ' marker');
-            
-            gameMap.once('click', function(e) {
-                // Create custom icon with specified type and size
-                const customIcon = createCustomIcon(markerType, markerSize);
-                
-                // Create marker with label
-                const marker = L.marker(e.latlng, {
-                    icon: customIcon, 
-                    draggable: true
-                }).addTo(gameMap);
-                
-                markers.push(marker);
-                
-                // Add popup with name field
-                const popupContent = document.createElement('div');
-                popupContent.className = 'marker-popup';
-                
-                const title = document.createElement('strong');
-                title.textContent = markerType.charAt(0).toUpperCase() + markerType.slice(1);
-                popupContent.appendChild(title);
-                
-                const nameInput = document.createElement('input');
-                nameInput.type = 'text';
-                nameInput.placeholder = 'Add name';
-                nameInput.style.margin = '8px 0';
-                nameInput.style.width = '100%';
-                nameInput.style.padding = '5px';
-                
-                // Add event listener to update marker label when name changes
-                nameInput.addEventListener('change', function() {
-                    const name = this.value.trim();
-                    if (name) {
-                        // Update the marker icon with the name
-                        const updatedIcon = L.divIcon({
-                            className: `custom-marker ${markerType}`,
-                            html: `<div style="
-                                width: ${customIcon.options.iconSize[0]}px; 
-                                height: ${customIcon.options.iconSize[1]}px; 
-                                background-color: ${getMarkerColor(markerType)}; 
-                                border: 2px solid ${getMarkerBorderColor(markerType)};
-                                border-radius: 50%; 
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                color: ${getMarkerTextColor(markerType)};
-                                font-weight: bold;
-                                font-size: ${customIcon.options.iconSize[0]/2}px;
-                                box-shadow: 0 0 4px rgba(0,0,0,0.3);">
-                                ${name.charAt(0).toUpperCase()}
-                            </div>`,
-                            iconSize: customIcon.options.iconSize,
-                            iconAnchor: customIcon.options.iconAnchor
-                        });
-                        marker.setIcon(updatedIcon);
-                        marker.name = name;
-                    }
-                });
-                
-                popupContent.appendChild(nameInput);
-                
-                const descriptionLabel = document.createElement('div');
-                descriptionLabel.textContent = 'Description:';
-                popupContent.appendChild(descriptionLabel);
-                
-                const descriptionInput = document.createElement('input');
-                descriptionInput.type = 'text';
-                descriptionInput.placeholder = 'Add description';
-                descriptionInput.style.width = '100%';
-                descriptionInput.style.padding = '5px';
-                popupContent.appendChild(descriptionInput);
-                
-                const saveButton = document.createElement('button');
-                saveButton.textContent = 'Save';
-                saveButton.style.marginTop = '8px';
-                saveButton.style.padding = '5px 10px';
-                saveButton.addEventListener('click', function() {
-                    marker.closePopup();
-                });
-                popupContent.appendChild(saveButton);
-                
-                marker.bindPopup(L.popup({
-                    minWidth: 200
-                }).setContent(popupContent));
-                
-                marker.openPopup();
-            });
-        });
-
+           // Add marker button handler
+           const addMarkerBtn = document.getElementById('add-marker');
+           if (addMarkerBtn) {
+               addMarkerBtn.addEventListener('click', function() {
+                   const markerType = document.getElementById('marker-type').value;
+                   const markerSize = document.getElementById('marker-size').value;
+                   alert('Click on the map to place a ' + markerType + ' marker');
+                   
+                   gameMap.once('click', function(e) {
+                       // Create custom icon with specified type and size
+                       const customIcon = createCustomIcon(markerType, markerSize);
+                       
+                       // Create marker with label
+                       const marker = L.marker(e.latlng, {
+                           icon: customIcon, 
+                           draggable: true
+                       }).addTo(gameMap);
+                       
+                       markers.push(marker);
+                       
+                       // Add popup with name field
+                       const popupContent = document.createElement('div');
+                       popupContent.className = 'marker-popup';
+                       
+                       const title = document.createElement('strong');
+                       title.textContent = markerType.charAt(0).toUpperCase() + markerType.slice(1);
+                       popupContent.appendChild(title);
+                       
+                       const nameInput = document.createElement('input');
+                       nameInput.type = 'text';
+                       nameInput.placeholder = 'Add name';
+                       nameInput.style.margin = '8px 0';
+                       nameInput.style.width = '100%';
+                       nameInput.style.padding = '5px';
+                       
+                       // Add event listener to update marker label when name changes
+                       nameInput.addEventListener('change', function() {
+                           const name = this.value.trim();
+                           if (name) {
+                               // Update the marker icon with the name
+                               const updatedIcon = L.divIcon({
+                                   className: `custom-marker ${markerType}`,
+                                   html: `<div style="
+                                       width: ${customIcon.options.iconSize[0]}px; 
+                                       height: ${customIcon.options.iconSize[1]}px; 
+                                       background-color: ${getMarkerColor(markerType)}; 
+                                       border: 2px solid ${getMarkerBorderColor(markerType)};
+                                       border-radius: 50%; 
+                                       display: flex;
+                                       align-items: center;
+                                       justify-content: center;
+                                       color: ${getMarkerTextColor(markerType)};
+                                       font-weight: bold;
+                                       font-size: ${customIcon.options.iconSize[0]/2}px;
+                                       box-shadow: 0 0 4px rgba(0,0,0,0.3);">
+                                       ${name.charAt(0).toUpperCase()}
+                                   </div>`,
+                                   iconSize: customIcon.options.iconSize,
+                                   iconAnchor: customIcon.options.iconAnchor
+                               });
+                               marker.setIcon(updatedIcon);
+                               marker.name = name;
+                           }
+                       });
+                       
+                       popupContent.appendChild(nameInput);
+                       
+                       const descriptionLabel = document.createElement('div');
+                       descriptionLabel.textContent = 'Description:';
+                       popupContent.appendChild(descriptionLabel);
+                       
+                       const descriptionInput = document.createElement('input');
+                       descriptionInput.type = 'text';
+                       descriptionInput.placeholder = 'Add description';
+                       descriptionInput.style.width = '100%';
+                       descriptionInput.style.padding = '5px';
+                       popupContent.appendChild(descriptionInput);
+                       
+                       const saveButton = document.createElement('button');
+                       saveButton.textContent = 'Save';
+                       saveButton.style.marginTop = '8px';
+                       saveButton.style.padding = '5px 10px';
+                       saveButton.addEventListener('click', function() {
+                           marker.closePopup();
+                       });
+                       popupContent.appendChild(saveButton);
+                       
+                       marker.bindPopup(L.popup({
+                           minWidth: 200
+                       }).setContent(popupContent));
+                       
+                       marker.openPopup();
+                   });
+               });
+           }
 // Helper functions for marker colors
-        function getMarkerColor(type) {
-            switch(type) {
-                case 'resource': return '#4cd964'; // Green
-                case 'enemy': return '#ff3b30';    // Red
-                case 'landmark': return '#ffcc00'; // Yellow
-                case 'direction': return '#007aff'; // Blue
-                default: return '#8e8e93';         // Gray
-            }
-        }
-        
-        function getMarkerBorderColor(type) {
-            switch(type) {
-                case 'resource': return '#2eb944';
-                case 'enemy': return '#d91d12';
-                case 'landmark': return '#d6a900';
-                case 'direction': return '#0055cc';
-                default: return '#636366';
-            }
-        }
-        
-        function getMarkerTextColor(type) {
-            switch(type) {
-                case 'enemy': return 'white';
-                case 'direction': return 'white';
-                default: return 'black';
-            }
-        }
-        
-        // Clear markers
-        document.getElementById('clear-markers').addEventListener('click', function() {
-            if (markers.length === 0) {
-                alert('No markers to clear.');
-                return;
-            }
-            
-            if (confirm('Are you sure you want to clear all markers?')) {
-                markers.forEach(marker => gameMap.removeLayer(marker));
-                markers.length = 0;
-            }
-        });
-        
-        // Add game landmarks (chambers and UR locations)
-        addGameLandmarks(gameMap);
-    }
+           function getMarkerColor(type) {
+               switch(type) {
+                   case 'resource': return '#4cd964'; // Green
+                   case 'enemy': return '#ff3b30';    // Red
+                   case 'landmark': return '#ffcc00'; // Yellow
+                   case 'direction': return '#007aff'; // Blue
+                   default: return '#8e8e93';         // Gray
+               }
+           }
+           
+           function getMarkerBorderColor(type) {
+               switch(type) {
+                   case 'resource': return '#2eb944';
+                   case 'enemy': return '#d91d12';
+                   case 'landmark': return '#d6a900';
+                   case 'direction': return '#0055cc';
+                   default: return '#636366';
+               }
+           }
+           
+           function getMarkerTextColor(type) {
+               switch(type) {
+                   case 'enemy': return 'white';
+                   case 'direction': return 'white';
+                   default: return 'black';
+               }
+           }
+           
+           // Clear markers
+           const clearMarkersBtn = document.getElementById('clear-markers');
+           if (clearMarkersBtn) {
+               clearMarkersBtn.addEventListener('click', function() {
+                   if (markers.length === 0) {
+                       alert('No markers to clear.');
+                       return;
+                   }
+                   
+                   if (confirm('Are you sure you want to clear all markers?')) {
+                       markers.forEach(marker => gameMap.removeLayer(marker));
+                       markers.length = 0;
+                   }
+               });
+           }
+           
+           // Add game landmarks (chambers and UR locations)
+           addGameLandmarks(gameMap);
+           
+       } catch (error) {
+           console.error('Error initializing map:', error);
+           const mapContainer = document.getElementById('top-girl-map');
+           if (mapContainer) {
+               mapContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: red;">Error loading map. Please check console for details.</div>';
+           }
+       }
+   }
 }
 
 // Add game landmarks to map
 function addGameLandmarks(map) {
-    // Define landmarks array properly
-    const landmarks = [
-        // UR locations - positioned at the volcano-shaped areas
-        { name: "Royal Garden (UR)", type: "landmark", pos: [240, 195], desc: "UR location in the North" },  
-        { name: "Paradise Bay (UR)", type: "landmark", pos: [390, 280], desc: "UR location in the Southeast" }, 
-        { name: "Emerald Coast (UR)", type: "landmark", pos: [240, 370], desc: "UR location in the Southwest" },  
-        
-        // Chamber locations - positioned around the perimeter where labeled in the image
-        { name: "Ubud Chamber", type: "landmark", pos: [460, 130], desc: "Northwest chamber" },      
-        { name: "Uluwatu Chamber", type: "landmark", pos: [460, 410], desc: "Northeast chamber" },   
-        { name: "Kuta Chamber", type: "landmark", pos: [300, 100], desc: "West chamber" },      
-        { name: "Seminyak Chamber", type: "landmark", pos: [290, 460], desc: "East chamber" },  
-        { name: "Jimbaran Chamber", type: "landmark", pos: [100, 90], desc: "Southwest chamber" },  
-        { name: "Tanah Chamber", type: "landmark", pos: [100, 400], desc: "Southeast chamber" }      
-    ];
-    
-    // Add markers for landmarks using better custom markers
-    landmarks.forEach(landmark => {
-        // Create icon based on type
-        const isUR = landmark.name.includes("UR");
-        
-        const markerColor = isUR ? '#ff3b30' : '#007aff'; // Red for UR, Blue for chambers
-        const borderColor = isUR ? '#d91d12' : '#0055cc';
-        const textColor = 'white';
-        
-        // First letter of landmark name
-        const letter = landmark.name.charAt(0);
-        
-        const customIcon = L.divIcon({
-            className: 'landmark-marker',
-            html: `<div style="
-                width: 24px; 
-                height: 24px; 
-                background-color: ${markerColor}; 
-                border: 2px solid ${borderColor};
-                border-radius: 50%; 
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: ${textColor};
-                font-weight: bold;
-                font-size: 12px;
-                box-shadow: 0 0 4px rgba(0,0,0,0.5);">
-                ${letter}
-            </div>`,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
-        });
-        
-        // Add marker with custom icon and popup
-        L.marker(landmark.pos, {
-            icon: customIcon,
-            title: landmark.name
-        })
-        .bindPopup(`<strong>${landmark.name}</strong><br>${landmark.desc || ''}`)
-        .addTo(map);
-    });
+   try {
+       // Define landmarks array properly
+       const landmarks = [
+           // UR locations - positioned at the volcano-shaped areas
+           { name: "Royal Garden (UR)", type: "landmark", pos: [240, 195], desc: "UR location in the North" },  
+           { name: "Paradise Bay (UR)", type: "landmark", pos: [390, 280], desc: "UR location in the Southeast" }, 
+           { name: "Emerald Coast (UR)", type: "landmark", pos: [240, 370], desc: "UR location in the Southwest" },  
+           
+           // Chamber locations - positioned around the perimeter where labeled in the image
+           { name: "Ubud Chamber", type: "landmark", pos: [460, 130], desc: "Northwest chamber" },      
+           { name: "Uluwatu Chamber", type: "landmark", pos: [460, 410], desc: "Northeast chamber" },   
+           { name: "Kuta Chamber", type: "landmark", pos: [300, 100], desc: "West chamber" },      
+           { name: "Seminyak Chamber", type: "landmark", pos: [290, 460], desc: "East chamber" },  
+           { name: "Jimbaran Chamber", type: "landmark", pos: [100, 90], desc: "Southwest chamber" },  
+           { name: "Tanah Chamber", type: "landmark", pos: [100, 400], desc: "Southeast chamber" }      
+       ];
+       
+       // Add markers for landmarks using better custom markers
+       landmarks.forEach(landmark => {
+           // Create icon based on type
+           const isUR = landmark.name.includes("UR");
+           
+           const markerColor = isUR ? '#ff3b30' : '#007aff'; // Red for UR, Blue for chambers
+           const borderColor = isUR ? '#d91d12' : '#0055cc';
+           const textColor = 'white';
+           
+           // First letter of landmark name
+           const letter = landmark.name.charAt(0);
+           
+           const customIcon = L.divIcon({
+               className: 'landmark-marker',
+               html: `<div style="
+                   width: 24px; 
+                   height: 24px; 
+                   background-color: ${markerColor}; 
+                   border: 2px solid ${borderColor};
+                   border-radius: 50%; 
+                   display: flex;
+                   align-items: center;
+                   justify-content: center;
+                   color: ${textColor};
+                   font-weight: bold;
+                   font-size: 12px;
+                   box-shadow: 0 0 4px rgba(0,0,0,0.5);">
+                   ${letter}
+               </div>`,
+               iconSize: [24, 24],
+               iconAnchor: [12, 12]
+           });
+           
+           // Add marker with custom icon and popup
+           L.marker(landmark.pos, {
+               icon: customIcon,
+               title: landmark.name
+           })
+           .bindPopup(`<strong>${landmark.name}</strong><br>${landmark.desc || ''}`)
+           .addTo(map);
+       });
+   } catch (error) {
+       console.error('Error adding landmarks to map:', error);
+   }
 }
 
-// Event listeners for filters
-genreFilter.addEventListener('change', () => {
-    populateCharacterSelection(filterCharactersForSelection());
+// Event handler setup when the document is loaded
+document.addEventListener('DOMContentLoaded', function() {
+   // Populate character data
+   populateCharacterGrid(characterData);
+   populateCharacterSelection(characterData);
+   
+   // Initialize team equipment object
+   teamEquipment = {};
+   
+   // Initialize map
+   initializeMap();
+   
+   // Initial stats update
+   updateTeamStatsEnhanced();
+   
+   // Event listeners for filters
+   const genreFilter = document.getElementById('genre-filter');
+   if (genreFilter) {
+       genreFilter.addEventListener('change', function() {
+           populateCharacterSelection(filterCharactersForSelection());
+       });
+   }
+   
+   const typeFilter = document.getElementById('type-filter');
+   if (typeFilter) {
+       typeFilter.addEventListener('change', function() {
+           populateCharacterSelection(filterCharactersForSelection());
+       });
+   }
+   
+   const positionFilter = document.getElementById('position-filter');
+   if (positionFilter) {
+       positionFilter.addEventListener('change', function() {
+           populateCharacterSelection(filterCharactersForSelection());
+       });
+   }
+   
+   const applyCharFilterBtn = document.getElementById('apply-char-filter');
+   if (applyCharFilterBtn) {
+       applyCharFilterBtn.addEventListener('click', function() {
+           populateCharacterGrid(filterCharactersForGrid());
+       });
+   }
+   
+   const resetCharFilterBtn = document.getElementById('reset-char-filter');
+   if (resetCharFilterBtn) {
+       resetCharFilterBtn.addEventListener('click', function() {
+           const charGenreFilter = document.getElementById('char-genre-filter');
+           const charTypeFilter = document.getElementById('char-type-filter');
+           
+           if (charGenreFilter) charGenreFilter.value = 'all';
+           if (charTypeFilter) charTypeFilter.value = 'all';
+           
+           populateCharacterGrid(characterData);
+       });
+   }
+   
+   // Reset team button
+   const resetTeamBtn = document.getElementById('reset-team');
+   if (resetTeamBtn) {
+       resetTeamBtn.addEventListener('click', function() {
+           currentTeam = [];
+           teamEquipment = {};
+           updateTeamUI();
+           updateTeamStatsEnhanced();
+           
+           const teamCompositionWarning = document.getElementById('team-composition-warning');
+           if (teamCompositionWarning) {
+               teamCompositionWarning.textContent = '';
+           }
+       });
+   }
+   
+   // Reset equipment button
+   const resetEquipmentBtn = document.getElementById('reset-equipment');
+   if (resetEquipmentBtn) {
+       resetEquipmentBtn.addEventListener('click', function() {
+           teamEquipment = {};
+           updateTeamUI();
+           updateTeamStatsEnhanced();
+       });
+   }
+   
+   // Load preset team buttons
+   const loadRnbTeamBtn = document.getElementById('load-rnb-team');
+   if (loadRnbTeamBtn) {
+       loadRnbTeamBtn.addEventListener('click', function() {
+           loadPresetTeam('rnb');
+       });
+   }
+   
+   const loadBalancedTeamBtn = document.getElementById('load-balanced-team');
+   if (loadBalancedTeamBtn) {
+       loadBalancedTeamBtn.addEventListener('click', function() {
+           loadPresetTeam('balanced');
+       });
+   }
+   
+   const loadDefenseTeamBtn = document.getElementById('load-defense-team');
+   if (loadDefenseTeamBtn) {
+       loadDefenseTeamBtn.addEventListener('click', function() {
+           loadPresetTeam('defense');
+       });
+   }
+   
+   const loadBaliTeamBtn = document.getElementById('load-bali-team');
+   if (loadBaliTeamBtn) {
+       loadBaliTeamBtn.addEventListener('click', function() {
+           loadPresetTeam('bali');
+       });
+   }
+   
+   const loadTokyoTeamBtn = document.getElementById('load-tokyo-team');
+   if (loadTokyoTeamBtn) {
+       loadTokyoTeamBtn.addEventListener('click', function() {
+           loadPresetTeam('tokyo');
+       });
+   }
+   
+   // Recommend equipment button
+   const recommendEquipmentBtn = document.getElementById('recommend-equipment');
+   if (recommendEquipmentBtn) {
+       recommendEquipmentBtn.addEventListener('click', function() {
+           recommendTeamEquipment();
+       });
+   }
 });
 
-typeFilter.addEventListener('change', () => {
-    populateCharacterSelection(filterCharactersForSelection());
-});
-
-positionFilter.addEventListener('change', () => {
-    populateCharacterSelection(filterCharactersForSelection());
-});
-
-applyCharFilterBtn.addEventListener('click', () => {
-    populateCharacterGrid(filterCharactersForGrid());
-});
-
-resetCharFilterBtn.addEventListener('click', () => {
-    charGenreFilter.value = 'all';
-    charTypeFilter.value = 'all';
-    populateCharacterGrid(characterData);
-});
-
-// Reset team
-resetTeamBtn.addEventListener('click', () => {
-    currentTeam = [];
-    teamEquipment = {};
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-    teamCompositionWarning.textContent = '';
-});
-
-// Reset equipment
-document.getElementById('reset-equipment').addEventListener('click', () => {
-    teamEquipment = {};
-    updateTeamUI();
-    updateTeamStatsEnhanced();
-});
-
-// Add event listeners for preset team buttons
-document.getElementById('load-rnb-team').addEventListener('click', () => {
-    loadPresetTeam('rnb');
-});
-
-document.getElementById('load-balanced-team').addEventListener('click', () => {
-    loadPresetTeam('balanced');
-});
-
-document.getElementById('load-defense-team').addEventListener('click', () => {
-    loadPresetTeam('defense');
-});
-
-document.getElementById('load-bali-team').addEventListener('click', () => {
-    loadPresetTeam('bali');
-});
-
-document.getElementById('load-tokyo-team').addEventListener('click', () => {
-    loadPresetTeam('tokyo');
-});
-
-// Recommend balanced equipment
-document.getElementById('recommend-equipment').addEventListener('click', () => {
-    recommendTeamEquipment();
-});
-
-// Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-    // Populate character data
-    populateCharacterGrid(characterData);
-    populateCharacterSelection(characterData);
-    
-    // Initialize team equipment object
-    teamEquipment = {};
-    
-    // Initialize map
-    initializeMap();
-    
-    // Initial stats update
-    updateTeamStatsEnhanced();
-});
 
 </script>
 </body>
