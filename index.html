@@ -4132,16 +4132,18 @@ const equipmentData = {
     ]
 };
 // Character data from the Excel spreadsheet
-const characterData = [{
+// COMPLETE Updated character data from Excel file - REPLACE the entire characterData array with this
+const characterData = [
+    {
         "GENR": "R&B",
         "Attrib": "Elegant",
         "POSITION": "Vocalist",
         "TYPE": "UR",
         "GIRL": "Marguerite",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
         "SKILL_DM": 0.2,
-        "NORMAL_DM": 0.5,
-        "BASE_SING": 11261,
-        "BASE_DANCE": 6446
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "R&B",
@@ -4149,10 +4151,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "UR",
         "GIRL": "Elizabeth",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
         "NORMAL_DM": 0.5,
-        "PLAYER_DM": 0.2,
-        "BASE_SING": 6446,
-        "BASE_DANCE": 11261
+        "PLAYER_DM": 0.2
     },
     {
         "GENR": "R&B",
@@ -4160,10 +4162,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Sora",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
         "NORMAL_DM": 0.5,
         "FAN_CAP": 0.1,
-        "BASE_SING": 13513,
-        "BASE_DANCE": 7735,
         "REGION": "Tokyo"
     },
     {
@@ -4172,10 +4174,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Julia",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
         "SKILL_DM": 0.2,
-        "CAR_SPEED": 0.75,
-        "BASE_SING": 11261,
-        "BASE_DANCE": 6446
+        "CAR_SPEED": 0.75
     },
     {
         "GENR": "R&B",
@@ -4183,10 +4185,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Nova",
+        "BASE_SING": 12474,
+        "BASE_DANCE": 12474,
         "NORMAL_DM": 0.5,
-        "DMG_DEF": "200/s",
-        "BASE_SING": 8854,
-        "BASE_DANCE": 8854
+        "DMG_DEF": "200 /s"
     },
     {
         "GENR": "R&B",
@@ -4194,23 +4196,68 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Zendaya",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
         "NORMAL_DM": 0.5,
-        "NPC_DM": 0.2,
-        "CAR_SPEED": 0.5,
-        "BASE_SING": 6446,
-        "BASE_DANCE": 11261
+        "WBG_DAMAGE": 0.2,
+        "CAR_SPEED": 0.5
     },
     {
         "GENR": "R&B",
         "Attrib": "Sexy",
         "POSITION": "Dancer",
         "TYPE": "SSR",
-        "GIRL": "Ratih",
+        "GIRL": "Raith",
+        "BASE_SING": 10903,
+        "BASE_DANCE": 19033,
         "NORMAL_DM": 0.5,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
-        "BASE_SING": 7735,
-        "BASE_DANCE": 13513,
         "REGION": "Bali"
+    },
+    {
+        "GENR": "R&B",
+        "Attrib": "Cute",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Dewi",
+        "BASE_SING": 17962,
+        "BASE_DANCE": 17962,
+        "SKILL_DM": 0.24,
+        "NORMAL_DM": 0.6,
+        "REGION": "Bali"
+    },
+    {
+        "GENR": "R&B",
+        "Attrib": "Sexy",
+        "POSITION": "Dancer",
+        "TYPE": "SSR",
+        "GIRL": "Eri",
+        "BASE_SING": 13083,
+        "BASE_DANCE": 22839,
+        "FAN_CAP": 0.12,
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
+    },
+    {
+        "GENR": "R&B",
+        "Attrib": "Cute",
+        "POSITION": "Vocalist",
+        "TYPE": "SSR",
+        "GIRL": "Eirene",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
+        "NORMAL_DM": 0.5,
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
+    },
+    {
+        "GENR": "ROCK",
+        "Attrib": "Sexy",
+        "POSITION": "Dancer",
+        "TYPE": "UR",
+        "GIRL": "Genevieve",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
+        "REDUCE_SKILL_DMG": -0.12,
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
     },
     {
         "GENR": "ROCK",
@@ -4218,10 +4265,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Yuuko",
+        "BASE_SING": 10903,
+        "BASE_DANCE": 19033,
         "NORMAL_DM": 0.5,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
-        "BASE_SING": 7735,
-        "BASE_DANCE": 13513,
         "REGION": "Tokyo"
     },
     {
@@ -4230,10 +4277,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Riku",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "PLAYER_DM": 0.2,
-        "BASE_SING": 13513,
-        "BASE_DANCE": 7735,
         "REGION": "Tokyo"
     },
     {
@@ -4242,10 +4289,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Claire",
+        "BASE_SING": 12474,
+        "BASE_DANCE": 12474,
         "SKILL_DM": 0.2,
-        "NORMAL_DM": 0.5,
-        "BASE_SING": 8854,
-        "BASE_DANCE": 8854
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "ROCK",
@@ -4253,10 +4300,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Paisley",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
         "REDUCE_SKILL_DMG": -0.12,
-        "REDUCE_NORMAL_ATTCK_DMG": -0.12,
-        "BASE_SING": 6446,
-        "BASE_DANCE": 11261
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
     },
     {
         "GENR": "ROCK",
@@ -4264,10 +4311,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Skylar",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
         "SKILL_DM": 0.2,
-        "NPC_DM": 0.3,
-        "BASE_SING": 11261,
-        "BASE_DANCE": 6446
+        "WBG_DAMAGE": 0.3
     },
     {
         "GENR": "ROCK",
@@ -4275,11 +4322,46 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Talia",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
         "NORMAL_DM": 0.5,
         "FAN_CAP": 0.1,
-        "BASE_SING": 10625,
-        "BASE_DANCE": 10625,
         "REGION": "Bali"
+    },
+    {
+        "GENR": "ROCK",
+        "Attrib": "Elegant",
+        "POSITION": "Dancer",
+        "TYPE": "SSR",
+        "GIRL": "Akira",
+        "BASE_SING": 13083,
+        "BASE_DANCE": 22839,
+        "NORMAL_DM": 0.5,
+        "REDUCE_SKILL_DMG": -0.12,
+        "REGION": "Tokyo"
+    },
+    {
+        "GENR": "ROCK",
+        "Attrib": "Cute",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Kadek",
+        "BASE_SING": 17962,
+        "BASE_DANCE": 17962,
+        "REDUCE_SKILL_DMG": -0.12,
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12,
+        "REGION": "Bali"
+    },
+    {
+        "GENR": "POP",
+        "Attrib": "Elegant",
+        "POSITION": "Vocalist",
+        "TYPE": "UR",
+        "GIRL": "Stephanie",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
+        "SKILL_DM": 0.2,
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "POP",
@@ -4287,10 +4369,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Chizuru",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
         "PLAYER_DM": 0.2,
         "RALLY_CAP": 0.1,
-        "BASE_SING": 10625,
-        "BASE_DANCE": 10625,
         "REGION": "Tokyo",
         "LIMITED": true
     },
@@ -4300,10 +4382,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Savannah",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
         "FAN_CAP": 0.1,
-        "DMG_ATK": "200/s",
-        "BASE_SING": 6446,
-        "BASE_DANCE": 11261
+        "DMG_ATK": "200 /s"
     },
     {
         "GENR": "POP",
@@ -4311,10 +4393,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Aurora",
+        "BASE_SING": 12474,
+        "BASE_DANCE": 12474,
         "SKILL_DM": 0.2,
-        "NORMAL_DM": 0.5,
-        "BASE_SING": 8854,
-        "BASE_DANCE": 8854
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "POP",
@@ -4322,10 +4404,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Brooklyn",
-        "NPC_DM": 0.3,
-        "DMG_DEF": "200/s",
-        "BASE_SING": 11261,
-        "BASE_DANCE": 6446
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
+        "WBG_DAMAGE": 0.3,
+        "DMG_DEF": "200 /s"
     },
     {
         "GENR": "POP",
@@ -4333,11 +4415,34 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Moana",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
         "REDUCE_SKILL_DMG": -0.12,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
-        "BASE_SING": 13513,
-        "BASE_DANCE": 7735,
         "REGION": "Bali"
+    },
+    {
+        "GENR": "POP",
+        "Attrib": "Elegant",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Kana",
+        "BASE_SING": 17962,
+        "BASE_DANCE": 17962,
+        "SKILL_DM": 0.2,
+        "REDUCE_SKILL_DMG": -0.12,
+        "REGION": "Tokyo"
+    },
+    {
+        "GENR": "EDM",
+        "Attrib": "Cute",
+        "POSITION": "Dancer",
+        "TYPE": "UR",
+        "GIRL": "Victoria",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
+        "NORMAL_DM": 0.5,
+        "PLAYER_DM": 0.2
     },
     {
         "GENR": "EDM",
@@ -4345,10 +4450,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Caroline",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
         "FAN_CAP": 0.1,
-        "DMG_ATK": "200/s",
-        "BASE_SING": 6446,
-        "BASE_DANCE": 11261
+        "DMG_ATK": "200 /s"
     },
     {
         "GENR": "EDM",
@@ -4356,10 +4461,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Kokoro",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
         "SKILL_DM": 0.2,
         "NORMAL_DM": 0.5,
-        "BASE_SING": 10625,
-        "BASE_DANCE": 10625,
         "REGION": "Tokyo"
     },
     {
@@ -4368,10 +4473,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Miyuki",
+        "BASE_SING": 10903,
+        "BASE_DANCE": 19033,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
         "NORMAL_DM": 0.5,
-        "BASE_SING": 7735,
-        "BASE_DANCE": 13513,
         "REGION": "Tokyo"
     },
     {
@@ -4380,10 +4485,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Everly",
+        "BASE_SING": 12474,
+        "BASE_DANCE": 12474,
         "SKILL_DM": 0.2,
-        "NORMAL_DM": 0.5,
-        "BASE_SING": 8854,
-        "BASE_DANCE": 8854
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "EDM",
@@ -4391,10 +4496,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Alice",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
         "SKILL_DM": 0.2,
-        "NORMAL_DM": 0.5,
-        "BASE_SING": 11261,
-        "BASE_DANCE": 6446
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "EDM",
@@ -4402,10 +4507,10 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Cindy",
+        "BASE_SING": 12474,
+        "BASE_DANCE": 12474,
         "SKILL_DM": 0.2,
         "REDUCE_SKILL_DMG": -0.12,
-        "BASE_SING": 8854,
-        "BASE_DANCE": 8854,
         "SEASONAL": true
     },
     {
@@ -4414,12 +4519,35 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Sari",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
         "PLAYER_DM": 0.2,
         "RALLY_CAP": 0.1,
-        "BASE_SING": 13513,
-        "BASE_DANCE": 7735,
         "REGION": "Bali",
         "LIMITED": true
+    },
+    {
+        "GENR": "EDM",
+        "Attrib": "Elegant",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Yuki",
+        "BASE_SING": 17962,
+        "BASE_DANCE": 17962,
+        "NORMAL_DM": 0.5,
+        "FAN_CAP": 0.1,
+        "REGION": "Tokyo"
+    },
+    {
+        "GENR": "HipHop",
+        "Attrib": "Cute",
+        "POSITION": "Center",
+        "TYPE": "UR",
+        "GIRL": "Isabella",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
+        "SKILL_DM": 0.2,
+        "NORMAL_DM": 0.5
     },
     {
         "GENR": "HipHop",
@@ -4427,10 +4555,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Haruki",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
         "NORMAL_DM": 0.5,
         "FAN_CAP": 0.1,
-        "BASE_SING": 10625,
-        "BASE_DANCE": 10625,
         "REGION": "Tokyo"
     },
     {
@@ -4439,10 +4567,10 @@ const characterData = [{
         "POSITION": "Vocalist",
         "TYPE": "SSR",
         "GIRL": "Bella",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
         "SKILL_DM": 0.2,
-        "FAN_CAP": 0.1,
-        "BASE_SING": 11261,
-        "BASE_DANCE": 6446
+        "FAN_CAP": 0.1
     },
     {
         "GENR": "HipHop",
@@ -4450,10 +4578,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Avery",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
         "REDUCE_SKILL_DMG": -0.12,
-        "REDUCE_NORMAL_ATTCK_DMG": -0.12,
-        "BASE_SING": 6446,
-        "BASE_DANCE": 11261
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
     },
     {
         "GENR": "HipHop",
@@ -4461,10 +4589,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Ayaka",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
         "REDUCE_SKILL_DMG": -0.12,
         "REDUCE_NORMAL_ATTCK_DMG": -0.12,
-        "BASE_SING": 13513,
-        "BASE_DANCE": 7735,
         "REGION": "Tokyo"
     },
     {
@@ -4473,10 +4601,10 @@ const characterData = [{
         "POSITION": "Center",
         "TYPE": "SSR",
         "GIRL": "Audrey",
-        "NPC_DM": 0.3,
-        "REDUCE_SKILL_DMG": -0.12,
-        "BASE_SING": 8854,
-        "BASE_DANCE": 8854
+        "BASE_SING": 12474,
+        "BASE_DANCE": 12474,
+        "WBG_DAMAGE": 0.3,
+        "REDUCE_SKILL_DMG": -0.12
     },
     {
         "GENR": "HipHop",
@@ -4484,14 +4612,134 @@ const characterData = [{
         "POSITION": "Dancer",
         "TYPE": "SSR",
         "GIRL": "Leilani",
+        "BASE_SING": 10903,
+        "BASE_DANCE": 19033,
         "SKILL_DM": 0.2,
         "NORMAL_DM": 0.5,
-        "BASE_SING": 7735,
-        "BASE_DANCE": 13513,
         "REGION": "Bali"
+    },
+    {
+        "GENR": "HipHop",
+        "Attrib": "Cute",
+        "POSITION": "Vocalist",
+        "TYPE": "SSR",
+        "GIRL": "Ariana",
+        "BASE_SING": 22839,
+        "BASE_DANCE": 13083,
+        "NORMAL_DM": 0.5,
+        "REDUCE_SKILL_DMG": -0.12
+    },
+    {
+        "GENR": "Ballad",
+        "Attrib": "Elegant",
+        "POSITION": "Vocalist",
+        "TYPE": "UR",
+        "GIRL": "Francesca",
+        "BASE_SING": 15861,
+        "BASE_DANCE": 9086,
+        "SKILL_DM": 0.2,
+        "NORMAL_DM": 0.5
+    },
+    {
+        "GENR": "Ballad",
+        "Attrib": "Elegant",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Serena",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
+        "SKILL_DM": 0.2,
+        "NORMAL_DM": 0.5
+    },
+    {
+        "GENR": "Ballad",
+        "Attrib": "Cute",
+        "POSITION": "Vocalist",
+        "TYPE": "SSR",
+        "GIRL": "Grace",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
+        "SKILL_DM": 0.2,
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
+    },
+    {
+        "GENR": "Ballad",
+        "Attrib": "Sexy",
+        "POSITION": "Dancer",
+        "TYPE": "SSR",
+        "GIRL": "Melody",
+        "BASE_SING": 10903,
+        "BASE_DANCE": 19033,
+        "NORMAL_DM": 0.5,
+        "REDUCE_SKILL_DMG": -0.12
+    },
+    {
+        "GENR": "Ballad",
+        "Attrib": "Elegant",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Harmony",
+        "BASE_SING": 17962,
+        "BASE_DANCE": 17962,
+        "REDUCE_SKILL_DMG": -0.12,
+        "REDUCE_NORMAL_ATTCK_DMG": -0.12
+    },
+    {
+        "GENR": "Latin",
+        "Attrib": "Sexy",
+        "POSITION": "Dancer",
+        "TYPE": "UR",
+        "GIRL": "Valentina",
+        "BASE_SING": 9086,
+        "BASE_DANCE": 15861,
+        "NORMAL_DM": 0.5,
+        "PLAYER_DM": 0.2
+    },
+    {
+        "GENR": "Latin",
+        "Attrib": "Sexy",
+        "POSITION": "Dancer",
+        "TYPE": "SSR",
+        "GIRL": "Carmen",
+        "BASE_SING": 10903,
+        "BASE_DANCE": 19033,
+        "SKILL_DM": 0.2,
+        "NORMAL_DM": 0.5
+    },
+    {
+        "GENR": "Latin",
+        "Attrib": "Elegant",
+        "POSITION": "Vocalist",
+        "TYPE": "SSR",
+        "GIRL": "Sofia",
+        "BASE_SING": 19033,
+        "BASE_DANCE": 10903,
+        "NORMAL_DM": 0.5,
+        "FAN_CAP": 0.1
+    },
+    {
+        "GENR": "Latin",
+        "Attrib": "Cute",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Luna",
+        "BASE_SING": 14969,
+        "BASE_DANCE": 14969,
+        "PLAYER_DM": 0.2,
+        "RALLY_CAP": 0.1
+    },
+    {
+        "GENR": "Latin",
+        "Attrib": "Sexy",
+        "POSITION": "Center",
+        "TYPE": "SSR",
+        "GIRL": "Rosa",
+        "BASE_SING": 17962,
+        "BASE_DANCE": 17962,
+        "SKILL_DM": 0.2,
+        "FAN_CAP": 0.1
     }
 ];
-
 // DOM elements
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
